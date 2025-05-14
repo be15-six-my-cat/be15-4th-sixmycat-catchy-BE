@@ -4,23 +4,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5fe1c766-214a-4963-8185-d587e3fe9b77" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test" beforeDir="false" />
-    </list>
+    <list default="true" id="5fdfc25e-4c76-4d29-98cb-813072754ab7" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 0
-}]]></component>
-  <component name="ProjectId" id="2x5RHS8SzEpsnIzFyR4KfpftbSS" />
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="catchy" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2x5RXPewMy4a7NZjuoUtuW1bC6D" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -28,22 +43,33 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
+    "last_directory_selection": "C:/git repository/한화-be-15/catchy/src/main/java/com/sixmycat/catchy/exception",
+    "last_opened_file_path": "C:/git repository/한화-be-15/catchy/src/main/java/com/sixmycat/catchy/exception",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\git repository\한화-be-15\catchy\src\main\java\com\sixmycat\catchy\exception" />
+      <recent name="C:\git repository\한화-be-15\catchy\src\main\java\com\sixmycat\catchy\config" />
+      <recent name="C:\git repository\한화-be-15\catchy\src\main\java\com\sixmycat\catchy\common\dto" />
+      <recent name="C:\git repository\한화-be-15\catchy\src\main\java\com\sixmycat\catchy" />
+      <recent name="C:\git repository\한화-be-15\catchy\src\main\java\com\sixmycat\catchy\common" />
+    </key>
+  </component>
   <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
+    <configuration name="CatchyApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="catchy.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.sixmycat.catchy.CatchyApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <option name="filePath" />
-      <method v="2" />
     </configuration>
   </component>
   <component name="SharedIndexes">
@@ -57,12 +83,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
-      <changelist id="5fe1c766-214a-4963-8185-d587e3fe9b77" name="변경" comment="" />
-      <created>1747225862108</created>
+      <changelist id="5fdfc25e-4c76-4d29-98cb-813072754ab7" name="변경" comment="" />
+      <created>1747225990218</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1747225862108</updated>
-      <workItem from="1747225864895" duration="123000" />
+      <updated>1747225990218</updated>
+      <workItem from="1747225991501" duration="3362000" />
     </task>
     <servers />
   </component>
