@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.query.zhoor.application.dto.response;
+package com.sixmycat.catchy.query.jjure.application.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
