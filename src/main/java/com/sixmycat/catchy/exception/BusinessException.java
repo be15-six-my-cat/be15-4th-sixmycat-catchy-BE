@@ -1,15 +1,14 @@
 package com.sixmycat.catchy.exception;
 
-import com.sixmycat.catchy.exception.errorCode.UserErrorCode;
 import lombok.Getter;
 
 @Getter
 public class BusinessException extends RuntimeException {
-    private final UserErrorCode errorCode;
+    private final ErrorCode errorCode;
 
-    public BusinessException(UserErrorCode errorCode) {
+
+    public BusinessException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
-
 }
