@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.command.zhoor.application.service;
+package com.sixmycat.catchy.command.jjure.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

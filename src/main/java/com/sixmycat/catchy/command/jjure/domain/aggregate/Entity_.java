@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.command.zhoor.domain.aggregate;
+package com.sixmycat.catchy.command.jjure.domain.aggregate;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

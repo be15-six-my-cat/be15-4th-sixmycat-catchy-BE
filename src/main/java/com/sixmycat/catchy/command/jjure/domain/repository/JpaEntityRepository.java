@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.command.zhoor.domain.repository;
+package com.sixmycat.catchy.command.jjure.domain.repository;
 
 import com.sixmycat.catchy.command.user.domain.aggregate.Entity_;
 import com.sixmycat.catchy.command.user.domain.repository.EntityRepository;

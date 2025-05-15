@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.command.zhoor.application.controller;
+package com.sixmycat.catchy.command.jjure.application.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

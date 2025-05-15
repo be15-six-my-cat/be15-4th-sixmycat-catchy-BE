@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.command.zhoor.application.dto.response;
+package com.sixmycat.catchy.command.jjure.application.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

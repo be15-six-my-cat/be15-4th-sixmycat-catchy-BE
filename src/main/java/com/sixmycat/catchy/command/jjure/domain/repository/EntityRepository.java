@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.command.zhoor.domain.repository;
+package com.sixmycat.catchy.command.jjure.domain.repository;
 
 
 public interface EntityRepository {// 이름 변경하여 사용
