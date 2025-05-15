@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5fdfc25e-4c76-4d29-98cb-813072754ab7" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/block/application/controller/CommandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/application/controller/CommandController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/block/application/dto/request/CreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/application/dto/request/CreateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/block/application/dto/response/CommandResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/application/dto/response/CommandResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/block/application/service/CommandService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/application/service/CommandService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/block/domain/aggregate/Entity_.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/block/domain/repository/EntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/block/domain/repository/JpaEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/feed/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/feed/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/feed/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/feed/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/feed/domain/aggregate/Entity_.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/feed/domain/repository/EntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/feed/domain/repository/JpaEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/follow/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/follow/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/follow/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/follow/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/follow/domain/aggregate/Entity_.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/follow/domain/repository/EntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/follow/domain/repository/JpaEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/game/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/game/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/game/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/game/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/game/domain/aggregate/Entity_.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/game/domain/repository/EntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/game/domain/repository/JpaEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/jjure/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/jjure/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/jjure/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/jjure/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/jjure/domain/aggregate/Entity_.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/jjure/domain/repository/EntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/jjure/domain/repository/JpaEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/like/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/like/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/like/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/like/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/like/domain/aggregate/Entity_.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/like/domain/repository/EntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/like/domain/repository/JpaEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/notify/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/notify/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/notify/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/notify/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/notify/domain/aggregate/Entity_.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/notify/domain/repository/EntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/notify/domain/repository/JpaEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/profile/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/profile/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/profile/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/profile/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/profile/domain/aggregate/Entity_.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/profile/domain/repository/EntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/profile/domain/repository/JpaEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/user/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/user/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/user/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/user/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/user/domain/aggregate/Entity_.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/user/domain/repository/EntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/command/user/domain/repository/JpaEntityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/block/application/controller/CommandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/feature/block/application/controller/CommandController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/block/application/dto/request/CreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/feature/block/application/dto/request/CreateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/block/application/dto/response/CommandResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/feature/block/application/dto/response/CommandResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/block/application/service/CommandService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/feature/block/application/service/CommandService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/feed/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/feed/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/feed/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/feed/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/follow/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/follow/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/follow/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/follow/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/game/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/game/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/game/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/game/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/jjure/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/jjure/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/jjure/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/jjure/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/like/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/like/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/like/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/like/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/notify/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/notify/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/notify/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/notify/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/profile/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/profile/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/profile/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/profile/application/service/CommandService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/user/application/controller/CommandController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/user/application/dto/request/CreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/user/application/dto/response/CommandResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/sixmycat/catchy/query/user/application/service/CommandService.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="catchy" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;sezeme&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/be15-six-my-cat/be15-4th-sixmycat-catchy.git&quot;,
+    &quot;accountId&quot;: &quot;ba710269-fa9d-4aef-88e6-9c45906bb5a9&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2x5RXPewMy4a7NZjuoUtuW1bC6D" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "setting2",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "C:/git repository/한화-be-15/catchy/src/main/java/com/sixmycat/catchy/exception",
+    "last_opened_file_path": "C:/Repositories/be15-2nd-letsgetit-newbit/monolithic",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Repositories\be15-4th-sixmycat-catchy-be\src\main\java\com\sixmycat\catchy\query" />
+      <recent name="C:\git repository\한화-be-15\catchy\src\main\java\com\sixmycat\catchy\exception" />
+      <recent name="C:\git repository\한화-be-15\catchy\src\main\java\com\sixmycat\catchy\config" />
+      <recent name="C:\git repository\한화-be-15\catchy\src\main\java\com\sixmycat\catchy\common\dto" />
+      <recent name="C:\git repository\한화-be-15\catchy\src\main\java\com\sixmycat\catchy" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="CatchyApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="catchy.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.sixmycat.catchy.CatchyApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.24978.46" />
+        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-IU-243.24978.46" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="5fdfc25e-4c76-4d29-98cb-813072754ab7" name="변경" comment="" />
+      <created>1747225990218</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1747225990218</updated>
+      <workItem from="1747225991501" duration="3362000" />
+      <workItem from="1747289038741" duration="1101000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
