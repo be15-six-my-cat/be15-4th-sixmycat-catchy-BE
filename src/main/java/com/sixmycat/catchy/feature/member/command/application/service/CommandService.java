@@ -1,4 +1,4 @@
-//package com.sixmycat.catchy.feature.block.command.application.service;
+//package com.sixmycat.catchy.feature.member.command.application.service;
 //
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Service;

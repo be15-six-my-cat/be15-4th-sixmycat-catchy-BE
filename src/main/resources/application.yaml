@@ -1,0 +1,56 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: CATCHY
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:/mappers/**/*.xml
+  type-aliases-package: >
+    com.sixmycat.catchy.feature.block.query.dto,
+    com.sixmycat.catchy.feature.feed.query.dto,
+    com.sixmycat.catchy.feature.follow.query.dto,
+    com.sixmycat.catchy.feature.game.query.dto,
+    com.sixmycat.catchy.feature.jjure.query.dto,
+    com.sixmycat.catchy.feature.like.query.dto,
+    com.sixmycat.catchy.feature.member.query.dto,
+    com.sixmycat.catchy.feature.notify.query.dto
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_ACCESS_EXPIRATION}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION}
+
+image:
+  image-dir: ${IMAGE_DIR}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: method
+    display-request-duration: true
+  api-docs:
+    path: /v3/api-docs
+
+pagehelper:
+  helper-dialect: mariadb
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

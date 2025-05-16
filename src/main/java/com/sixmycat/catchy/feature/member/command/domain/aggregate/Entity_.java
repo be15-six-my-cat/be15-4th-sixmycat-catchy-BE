@@ -1,4 +1,4 @@
-//package com.sixmycat.catchy.feature.game.command.domain.aggregate;
+//package com.sixmycat.catchy.feature.member.command.domain.aggregate;
 //
 //import jakarta.persistence.*;
 //import lombok.AccessLevel;
