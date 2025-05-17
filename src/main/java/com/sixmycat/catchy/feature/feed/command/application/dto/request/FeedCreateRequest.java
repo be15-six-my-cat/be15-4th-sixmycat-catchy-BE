@@ -1,14 +1,16 @@
 package com.sixmycat.catchy.feature.feed.command.application.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class FeedCreateRequest {
     private String content;
+    private List<String> imageUrls;
     private String musicUrl;
-    private List<String> imageUrls; // CloudFront URL 목록
 }
