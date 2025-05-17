@@ -67,3 +67,19 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
+
+
+
+cloud:
+  aws:
+    s3:
+      bucket: catchy-s3-bucket
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    cloudfront:
+      domain: ${CLOUDFRONT_URL}
