@@ -15,6 +15,21 @@ jobs:
       checks: write
       pull-requests: write
 
+    env:
+      REDIS_HOST: ${{ secrets.REDIS_HOST }}
+      REDIS_PORT: ${{ secrets.REDIS_PORT }}
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: 레포지토리 체크아웃
         uses: actions/checkout@v4
@@ -31,8 +46,17 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: Gradle로 프로젝트 Build
-        run: ./gradlew build
+      - name: Redis 포트 열릴 때까지 대기
+        run: |
+          for i in {1..10}; do
+            nc -z $REDIS_HOST $REDIS_PORT && echo "✅ Redis ready" && exit 0
+            echo "⏳ Waiting for Redis..."
+            sleep 2
+          done
+          echo "❌ Redis did not start in time" && exit 1
+
+      - name: Gradle로 테스트 실행
+        run: ./gradlew test
 
       - name: 테스트 결과를 PR 코멘트로 출력
         uses: EnricoMi/publish-unit-test-result-action@v2
