@@ -1,23 +1,12 @@
 package com.sixmycat.catchy.feature.feed.command.application.service;
 
-import com.sixmycat.catchy.common.s3.S3Uploader;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class FeedImageService {
+public interface FeedImageService {
 
-    private final S3Uploader s3Uploader;
+    String uploadSingleImage(MultipartFile file);
 
-    public String uploadSingleImage(MultipartFile file) {
-        return s3Uploader.uploadFile(file, "feed");
-    }
-
-    public List<String> uploadMultipleImages(List<MultipartFile> files) {
-        return s3Uploader.uploadFiles(files, "feed");
-    }
+    List<String> uploadMultipleImages(List<MultipartFile> files);
 }
