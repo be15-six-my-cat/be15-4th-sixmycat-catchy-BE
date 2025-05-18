@@ -23,7 +23,7 @@ public class FeedComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;
+    private Long Id;
 
     @Column(name = "member_id", nullable = false)
     private Long memberId; // 기존 Member → Long
