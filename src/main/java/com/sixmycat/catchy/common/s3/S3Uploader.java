@@ -1,48 +1,45 @@
 package com.sixmycat.catchy.common.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class S3Uploader {
 
-    private final AmazonS3 amazonS3;
-    private final String bucket;
-    private final String cloudFrontDomain;
+    private final S3Client s3Client;
 
-    public S3Uploader(
-            AmazonS3 amazonS3,
-            @Value("${cloud.aws.s3.bucket}") String bucket,
-            @Value("${cloud.aws.cloudfront.domain}") String cloudFrontDomain
-    ) {
-        this.amazonS3 = amazonS3;
-        this.bucket = bucket;
-        this.cloudFrontDomain = cloudFrontDomain;
-    }
+    @Value("${spring.cloud.aws.s3.bucket}")
+    private String bucket;
+
+    @Value("${spring.cloud.aws.cloudfront.domain}")
+    private String cloudFrontDomain;
 
     public String uploadFile(MultipartFile file, String dirName) {
         String fileName = generateFileName(dirName, file.getOriginalFilename());
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(file.getSize());
-        metadata.setContentType(file.getContentType());
 
-        try (InputStream inputStream = file.getInputStream()) {
-            amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, metadata));
+        try {
+            PutObjectRequest request = PutObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(fileName)
+                    .contentType(file.getContentType())
+                    .build();
+
+            s3Client.putObject(request, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
         } catch (IOException e) {
             throw new RuntimeException("S3 업로드 실패", e);
         }
 
-        // CloudFront 기반 URL로 반환
         return "https://" + cloudFrontDomain + "/" + fileName;
     }
 

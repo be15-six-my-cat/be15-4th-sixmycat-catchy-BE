@@ -31,6 +31,17 @@ spring:
           max-idle: 5  # 최대 유휴 연결 수
           min-idle: 1  # 최소 유휴 연결 수
           max-wait: 2000ms  # 최대 대기 시간
+  cloud:
+    aws:
+      s3:
+        bucket: catchy-s3-bucket
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      region:
+        static: ap-northeast-2
+      cloudfront:
+        domain: ${CLOUDFRONT_URL}
 
 mybatis:
   configuration:
@@ -70,16 +81,3 @@ pagehelper:
 
 
 
-cloud:
-  aws:
-    s3:
-      bucket: catchy-s3-bucket
-    credentials:
-      access-key: ${AWS_ACCESS_KEY}
-      secret-key: ${AWS_SECRET_KEY}
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-    cloudfront:
-      domain: ${CLOUDFRONT_URL}
