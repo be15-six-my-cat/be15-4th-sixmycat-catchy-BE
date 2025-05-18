@@ -22,6 +22,7 @@ public class OAuth2UserInfoExtractorImpl implements OAuth2UserInfoExtractor {
 
     @Override
     public TempMember extractTempMember(DefaultOAuth2User user, String platform) {
+        System.out.println("attributes: " + user.getAttributes());
         return TempMember.builder()
                 .email(extractEmail(user, platform))
                 .social(platform.toUpperCase())
@@ -32,20 +33,50 @@ public class OAuth2UserInfoExtractorImpl implements OAuth2UserInfoExtractor {
     }
 
     private String extractName(DefaultOAuth2User user, String platform) {
-        return platform.equals("kakao")
-                ? ((Map<String, Object>) ((Map<String, Object>) user.getAttributes().get("kakao_account")).get("profile")).get("nickname").toString()
-                : ((Map<String, Object>) user.getAttributes().get("response")).get("name").toString();
+        if (!platform.equals("kakao")) {
+            return ((Map<String, Object>) user.getAttributes().get("response")).get("name").toString();
+        }
+
+        Map<String, Object> kakaoAccount = (Map<String, Object>) user.getAttributes().get("kakao_account");
+        if (kakaoAccount == null) return null;
+
+        Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+        if (profile == null) return null;
+
+        Object nickname = profile.get("nickname");
+        return nickname != null ? nickname.toString() : null;
     }
+
 
     private String extractPhone(DefaultOAuth2User user, String platform) {
-        return platform.equals("kakao")
-                ? ((Map<String, Object>) user.getAttributes().get("kakao_account")).get("phone_number").toString()
-                : ((Map<String, Object>) user.getAttributes().get("response")).get("mobile").toString();
+        if (!platform.equals("kakao")) {
+            return ((Map<String, Object>) user.getAttributes().get("response")).get("mobile").toString();
+        }
+
+        Map<String, Object> kakaoAccount = (Map<String, Object>) user.getAttributes().get("kakao_account");
+        if (kakaoAccount == null) return null;
+
+        Object phoneNumber = kakaoAccount.get("phone_number");
+        return phoneNumber != null ? phoneNumber.toString() : null;
     }
 
+
     private String extractProfileImage(DefaultOAuth2User user, String platform) {
-        return platform.equals("kakao")
-                ? ((Map<String, Object>) ((Map<String, Object>) user.getAttributes().get("kakao_account")).get("profile")).get("profile_image_url").toString()
-                : ((Map<String, Object>) user.getAttributes().get("response")).get("profile_image").toString();
+        if (!platform.equals("kakao")) {
+            Map<String, Object> response = (Map<String, Object>) user.getAttributes().get("response");
+            if (response == null) return null;
+            Object image = response.get("profile_image");
+            return image != null ? image.toString() : null;
+        }
+
+        Map<String, Object> kakaoAccount = (Map<String, Object>) user.getAttributes().get("kakao_account");
+        if (kakaoAccount == null) return null;
+
+        Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+        if (profile == null) return null;
+
+        Object profileImage = profile.get("profile_image_url");
+        return profileImage != null ? profileImage.toString() : null;
     }
+
 }
