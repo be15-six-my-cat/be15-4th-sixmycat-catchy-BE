@@ -55,4 +55,20 @@
         )
     </select>
 
+    <select id="findMyFeeds" resultType="com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse">
+        SELECT
+        f.id AS feedId,
+        (
+        SELECT fi.image_url
+        FROM feed_image fi
+        WHERE fi.feed_id = f.id
+        ORDER BY fi.sequence ASC
+        LIMIT 1
+        ) AS thumbnailUrl,
+        f.created_at
+        FROM feed f
+        WHERE f.member_id = #{memberId}
+        ORDER BY f.created_at DESC
+    </select>
+
 </mapper>

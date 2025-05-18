@@ -1,11 +1,11 @@
 package com.sixmycat.catchy.feature.feed.query.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.sixmycat.catchy.common.dto.PageResponse;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
-import com.sixmycat.catchy.feature.feed.query.dto.response.AuthorInfo;
-import com.sixmycat.catchy.feature.feed.query.dto.response.CommentPreview;
-import com.sixmycat.catchy.feature.feed.query.dto.response.FeedBaseInfo;
-import com.sixmycat.catchy.feature.feed.query.dto.response.FeedDetailResponse;
+import com.sixmycat.catchy.feature.feed.query.dto.response.*;
 import com.sixmycat.catchy.feature.feed.query.mapper.FeedQueryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,5 +55,12 @@ public class FeedQueryServiceImpl implements FeedQueryService {
                 .isMine(isMine)
                 .createdAt(baseInfo.getCreatedAt())
                 .build();
+    }
+
+    @Override
+    public PageResponse<FeedSummaryResponse> getMyFeeds(Long memberId, int page, int size) {
+        PageHelper.startPage(page + 1, size); // PageHelper는 1부터 시작
+        List<FeedSummaryResponse> list = feedQueryMapper.findMyFeeds(memberId);
+        return PageResponse.from(new PageInfo<>(list));
     }
 }
