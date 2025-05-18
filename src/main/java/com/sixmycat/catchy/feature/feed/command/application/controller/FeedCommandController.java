@@ -2,6 +2,7 @@ package com.sixmycat.catchy.feature.feed.command.application.controller;
 
 import com.sixmycat.catchy.common.dto.ApiResponse;
 import com.sixmycat.catchy.feature.feed.command.application.dto.request.FeedCreateRequest;
+import com.sixmycat.catchy.feature.feed.command.application.dto.request.FeedUpdateRequest;
 import com.sixmycat.catchy.feature.feed.command.application.service.FeedCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,5 +19,15 @@ public class FeedCommandController {
                                         @RequestHeader("X-USER-ID") Long memberId) {
         Long feedId = feedCommandService.createFeed(request, memberId);
         return ApiResponse.success(feedId);
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<Long> updateFeed(
+            @PathVariable Long id,
+            @RequestBody FeedUpdateRequest request,
+            @RequestHeader("X-USER-ID") Long memberId
+    ) {
+        feedCommandService.updateFeed(id, request, memberId);
+        return ApiResponse.success(id);
     }
 }
