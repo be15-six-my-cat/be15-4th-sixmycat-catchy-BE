@@ -2,6 +2,7 @@ package com.sixmycat.catchy.feature.jjure.command.application.service;
 
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
+import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureUpdateRequest;
 import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureUploadRequest;
 import com.sixmycat.catchy.feature.jjure.command.domain.aggregate.Jjure;
 import com.sixmycat.catchy.feature.jjure.command.domain.repository.JjureRepository;
@@ -43,6 +44,20 @@ public class JjureServiceImpl implements JjureService {
         } catch (DataAccessException e) {
             throw new BusinessException(ErrorCode.JJURE_UPLOAD_FAILED);
         }
+    }
+
+    @Override
+    public void updateJjure(JjureUpdateRequest request, Long memberId) {
+        memberValidationService.validateUploadable(memberId);
+
+        Jjure jjure = jjureRepository.findById(request.getJjureId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.JJURE_NOT_FOUND));
+
+        if (!jjure.getMemberId().equals(memberId)) {
+            throw new BusinessException(ErrorCode.NO_PERMISSION_TO_UPDATE_JJURE);
+        }
+
+        jjure.update(request.getCaption(), request.getFileKey());
     }
 }
 
