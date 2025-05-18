@@ -2,7 +2,6 @@ package com.sixmycat.catchy.member;
 
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Cat;
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.User;
-import com.sixmycat.catchy.feature.member.command.domain.repository.CatRepository;
 import com.sixmycat.catchy.feature.member.command.domain.repository.FollowRepository;
 import com.sixmycat.catchy.feature.member.command.domain.repository.UserRepository;
 import com.sixmycat.catchy.feature.member.query.dto.response.Badges;
