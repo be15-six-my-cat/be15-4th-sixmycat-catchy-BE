@@ -1,5 +1,6 @@
 package com.sixmycat.catchy.feature.jjure.command.application.controller;
 
+import com.sixmycat.catchy.common.dto.ApiResponse;
 import com.sixmycat.catchy.common.s3.dto.PresignedUrlResponse;
 import com.sixmycat.catchy.common.s3.service.S3PresignedUrlService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,8 +19,9 @@ public class JjureCommandController {
     private final S3PresignedUrlService presignedUrlService;
 
     @GetMapping("/presigned-url")
-    public ResponseEntity<PresignedUrlResponse> getPresignedUrl(@RequestParam String fileName) {
-        return ResponseEntity.ok(presignedUrlService.generatePresignedUrl(fileName));
+    public ResponseEntity<ApiResponse<PresignedUrlResponse>> getPresignedUrl(@RequestParam String filename, @RequestParam String contentType) {
+        PresignedUrlResponse response = presignedUrlService.generatePresignedUploadUrl(filename, contentType);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 }
