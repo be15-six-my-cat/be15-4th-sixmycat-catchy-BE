@@ -30,7 +30,7 @@ public class JwtTokenProvider {
     }
 
     /* accessToken 생성 메서드 */
-    public String createToken(int userId){
+    public String createToken(Long userId){
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);
         return Jwts.builder()
@@ -42,7 +42,7 @@ public class JwtTokenProvider {
     }
 
     /* refreshToken 생성 메서드 */
-    public String createRefreshToken(int userId){
+    public String createRefreshToken(Long userId){
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshExpiration);
         return Jwts.builder()
