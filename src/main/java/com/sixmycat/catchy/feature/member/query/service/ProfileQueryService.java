@@ -19,7 +19,6 @@ public class ProfileQueryService {
 
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
-    private final CatRepository catRepository;
     private final ProfileMapper profileMapper;
 
     // 다른 도메인에서 주입될 Repository (post, video 등)
