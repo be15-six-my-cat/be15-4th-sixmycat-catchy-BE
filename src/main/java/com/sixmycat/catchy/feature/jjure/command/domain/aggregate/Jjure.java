@@ -33,4 +33,10 @@ public class Jjure {
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
+
+    public void update(String caption, String fileKey) {
+        this.caption = caption;
+        this.fileKey = fileKey;
+        this.updatedAt = LocalDateTime.now();
+    }
 }
