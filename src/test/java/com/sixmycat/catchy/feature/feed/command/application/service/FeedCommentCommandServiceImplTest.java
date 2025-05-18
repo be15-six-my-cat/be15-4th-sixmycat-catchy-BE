@@ -44,7 +44,7 @@ class FeedCommentCommandServiceImplTest {
         Long result = commentService.createComment(request, memberId);
 
         // then
-        assertThat(result).isEqualTo(mockComment.getId());
+        assertThat(result).isEqualTo(mockComment.getCommentId());
         verify(commentRepository).save(any(FeedComment.class));
     }
 

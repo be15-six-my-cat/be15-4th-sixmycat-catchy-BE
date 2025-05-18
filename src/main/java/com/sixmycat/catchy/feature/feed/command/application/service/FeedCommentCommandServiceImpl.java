@@ -33,7 +33,7 @@ public class FeedCommentCommandServiceImpl implements FeedCommentCommandService 
                 request.getParentCommentId()
         );
 
-        return commentRepository.save(comment).getId();
+        return commentRepository.save(comment).getCommentId();
     }
 
     @Override
