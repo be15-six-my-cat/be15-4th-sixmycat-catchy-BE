@@ -1,10 +1,12 @@
 package com.sixmycat.catchy.feature.feed.query.service;
 
+import com.sixmycat.catchy.common.dto.PageResponse;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.feed.query.dto.response.CommentPreview;
 import com.sixmycat.catchy.feature.feed.query.dto.response.FeedBaseInfo;
 import com.sixmycat.catchy.feature.feed.query.dto.response.FeedDetailResponse;
+import com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse;
 import com.sixmycat.catchy.feature.feed.query.mapper.FeedQueryMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -81,5 +83,33 @@ class FeedQueryServiceImplTest {
         assertThatThrownBy(() -> feedQueryService.getFeedDetail(feedId, 10L))
                 .isInstanceOf(BusinessException.class)
                 .hasMessageContaining(ErrorCode.FEED_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void shouldReturnMyFeedListSuccessfully() {
+        // given
+        Long memberId = 1L;
+        int page = 0;
+        int size = 10;
+
+        List<FeedSummaryResponse> mockList = List.of(
+                FeedSummaryResponse.builder()
+                        .feedId(1L)
+                        .thumbnailUrl("https://example.com/image1.jpg")
+                        .build(),
+                FeedSummaryResponse.builder()
+                        .feedId(2L)
+                        .thumbnailUrl("https://example.com/image2.jpg")
+                        .build()
+        );
+
+        when(feedQueryMapper.findMyFeeds(memberId)).thenReturn(mockList);
+
+        // when
+        PageResponse<FeedSummaryResponse> result = feedQueryService.getMyFeeds(memberId, page, size);
+
+        // then
+        assertThat(result.getContent()).hasSize(2);
+        assertThat(result.getContent().get(0).getFeedId()).isEqualTo(1L);
     }
 }
