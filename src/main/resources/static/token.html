@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>토큰 정보</title>
+</head>
+<body>
+<h1>로그인 완료</h1>
+<p><strong>Access Token:</strong></p>
+<pre id="accessToken"></pre>
+
+<p><strong>Refresh Token:</strong></p>
+<pre id="refreshToken"></pre>
+
+<p><strong>User ID:</strong></p>
+<pre id="userId"></pre>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById('accessToken').textContent = params.get('accessToken');
+    document.getElementById('refreshToken').textContent = params.get('refreshToken');
+    document.getElementById('userId').textContent = params.get('userId');
+</script>
+</body>
+</html>
