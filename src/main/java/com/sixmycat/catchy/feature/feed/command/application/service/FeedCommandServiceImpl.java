@@ -55,4 +55,14 @@ public class FeedCommandServiceImpl implements FeedCommandService {
             feed.addImage(newUrls.get(i), i); // 순서도 저장
         }
     }
+
+    @Override
+    @Transactional
+    public void deleteFeed(Long feedId, Long memberId) {
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FEED_NOT_FOUND));
+
+        feedDomainService.validateFeedOwner(feed, memberId);
+        feed.markAsDeleted();
+    }
 }

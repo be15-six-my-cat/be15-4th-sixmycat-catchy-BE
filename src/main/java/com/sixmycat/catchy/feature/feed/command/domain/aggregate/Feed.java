@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,13 @@ public class Feed {
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedImage> feedImages = new ArrayList<>();
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public void markAsDeleted() {
+        this.deletedAt = LocalDateTime.now();
+    }
 
     // 정적 팩토리 메서드
     public static Feed create(String content, Long memberId, String musicUrl, List<String> imageUrls) {

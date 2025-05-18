@@ -105,4 +105,33 @@ class FeedCommandServiceImplTest {
 
         verify(feedRepository).findById(feedId);
     }
+
+    @Test
+    void shouldDeleteFeedSuccessfully() {
+        // given
+        Long feedId = 1L;
+        Long memberId = 1L;
+        Feed feed = spy(Feed.create("content", memberId, "music", List.of("url1")));
+
+        when(feedRepository.findById(feedId)).thenReturn(Optional.of(feed));
+
+        // when
+        feedCommandService.deleteFeed(feedId, memberId);
+
+        // then
+        verify(feedDomainService).validateFeedOwner(feed, memberId);
+        verify(feed).markAsDeleted();
+    }
+
+    @Test
+    void shouldThrowWhenFeedNotFoundOnDelete() {
+        // given
+        Long feedId = 99L;
+        when(feedRepository.findById(feedId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> feedCommandService.deleteFeed(feedId, 1L))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining(ErrorCode.FEED_NOT_FOUND.getMessage());
+    }
 }
