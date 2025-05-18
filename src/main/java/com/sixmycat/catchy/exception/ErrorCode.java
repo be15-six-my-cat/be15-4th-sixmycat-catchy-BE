@@ -21,11 +21,20 @@ public enum ErrorCode {
     TEMP_MEMBER_NOT_FOUND("01009", "임시 회원 정보를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
 
 
+    // 멤버
+    MEMBER_NOT_FOUND("01000", "회원을 찾을 수 업습니다", HttpStatus.NOT_FOUND),
+    MEMBER_ALREADY_DELETED("01001", "탈퇴한 회원입니다", HttpStatus.CONFLICT),
+
     // 피드
     FEED_NOT_FOUND("04000", "피드를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
     FEED_CONTENT_TOO_LONG("04001", "피드 내용은 500자 이하여야 합니다.", HttpStatus.BAD_REQUEST),
     FEED_IMAGE_REQUIRED("04002", "피드에는 최소 1개의 이미지가 필요합니다.", HttpStatus.BAD_REQUEST),
-    FEED_IMAGE_TOO_MANY("04003", "피드에는 최대 5개의 이미지만 등록할 수 있습니다.", HttpStatus.BAD_REQUEST);
+    FEED_IMAGE_TOO_MANY("04003", "피드에는 최대 5개의 이미지만 등록할 수 있습니다.", HttpStatus.BAD_REQUEST),
+
+    // 쮸르
+    JJURE_NOT_FOUND("05000","쭈르를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
+    JJURE_UPLOAD_FAILED("05001","쭈르를 등록에 실패했습니다", HttpStatus.BAD_REQUEST);
+
 
 
     private final String code;
