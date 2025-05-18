@@ -51,6 +51,10 @@ public class SecurityConfig {
                                 "/signup-extra.html",
                                 "/token.html",
                                 "/login.html"
+                                "/login.html",
+                                "/api/v1/members/signup/extra",
+                                "/api/v1/members/temp-info",
+                                "/api/v1/members/login/test"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
