@@ -1,5 +1,8 @@
 package com.sixmycat.catchy.feature.auth.command.application.service;
 
+import com.sixmycat.catchy.common.utils.NicknameValidator;
+import com.sixmycat.catchy.exception.BusinessException;
+import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.RefreshToken;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import com.sixmycat.catchy.feature.auth.command.application.dto.request.ExtraSignupRequest;
@@ -35,12 +38,34 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         String key = switch (request.getSocial().toUpperCase()) {
             case "NAVER" -> "TEMP_N_MEMBER:" + request.getEmail();
             case "KAKAO" -> "TEMP_K_MEMBER:" + request.getEmail();
-            default -> throw new IllegalArgumentException("지원하지 않는 소셜 플랫폼: " + request.getSocial());
+            default -> throw new BusinessException(ErrorCode.SOCIAL_PLATFORM_NOT_SUPPORTED);
         };
 
         TempMember temp = redisTemplate.opsForValue().get(key);
         if (temp == null) {
-            throw new IllegalStateException("임시 회원 정보가 존재하지 않습니다.");
+            throw new BusinessException(ErrorCode.TEMP_MEMBER_NOT_FOUND);
+        }
+
+        String nickname = request.getNickname();
+
+        // 닉네임 공백 검사
+        if (NicknameValidator.isEmptyOrBlank(nickname)) {
+            throw new BusinessException(ErrorCode.EMPTY_OR_BLANK_NICKNAME);
+        }
+
+        // 닉네임 길이 검사
+        if (!NicknameValidator.isLengthValid(nickname)) {
+            throw new BusinessException(ErrorCode.WRONG_NICKNAME_LENGTH);
+        }
+
+        // 닉네임 유효성 검사
+        if (!NicknameValidator.isPatternValid(nickname)) {
+            throw new BusinessException(ErrorCode.INVALID_NICKNAME_FORMAT);
+        }
+
+        // 닉네임 중복 검사
+        if (memberRepository.existsByNicknameAndDeletedAtIsNull(nickname)) {
+            throw new BusinessException(ErrorCode.USING_NICKNAME);
         }
 
         Member member = Member.builder()
@@ -49,7 +74,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
                 .profileImage(temp.getProfileImage())
                 .name(request.getName())
                 .contactNumber(request.getContactNumber())
-                .nickname(request.getNickname())
+                .nickname(nickname)
                 .build();
 
         memberRepository.save(member);
@@ -73,12 +98,12 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         String key = switch (social.toUpperCase()) {
             case "NAVER" -> "TEMP_N_MEMBER:" + email;
             case "KAKAO" -> "TEMP_K_MEMBER:" + email;
-            default -> throw new IllegalArgumentException("지원하지 않는 소셜");
+            default -> throw new BusinessException(ErrorCode.SOCIAL_PLATFORM_NOT_SUPPORTED);
         };
 
         TempMember temp = redisTemplate.opsForValue().get(key);
         if (temp == null) {
-            throw new IllegalStateException("임시 회원 정보가 존재하지 않습니다.");
+            throw new BusinessException(ErrorCode.TEMP_MEMBER_NOT_FOUND);
         }
         return temp;
     }
