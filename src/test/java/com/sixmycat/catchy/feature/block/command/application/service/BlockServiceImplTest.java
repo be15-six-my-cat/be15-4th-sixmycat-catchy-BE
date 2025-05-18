@@ -67,4 +67,31 @@ class BlockServiceImplTest {
                 .isInstanceOf(BusinessException.class)
                 .hasMessage(ErrorCode.ALREADY_BLOCKED.getMessage());
     }
+
+    @Test
+    void unblockUser_shouldSucceed_whenBlockExists() {
+        Long blockerId = 1L;
+        Long blockedId = 2L;
+        Block block = Block.create(blockerId, blockedId);
+
+        when(blockRepository.findByBlockerIdAndBlockedId(blockerId, blockedId))
+                .thenReturn(Optional.of(block));
+
+        blockService.unblockUser(blockerId, blockedId);
+
+        verify(blockRepository).delete(block);
+    }
+
+    @Test
+    void unblockUser_shouldFail_whenBlockDoesNotExist() {
+        Long blockerId = 1L;
+        Long blockedId = 2L;
+
+        when(blockRepository.findByBlockerIdAndBlockedId(blockerId, blockedId))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> blockService.unblockUser(blockerId, blockedId))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage(ErrorCode.BLOCK_NOT_FOUND.getMessage());
+    }
 }
