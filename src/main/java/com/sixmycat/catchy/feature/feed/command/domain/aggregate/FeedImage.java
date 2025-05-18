@@ -16,14 +16,17 @@ public class FeedImage {
 
     private String imageUrl;
 
+    private int sequence; // 이미지 순서
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
-    public static FeedImage create(Feed feed, String imageUrl) {
+    public static FeedImage create(Feed feed, String imageUrl, int sequence) {
         FeedImage feedImage = new FeedImage();
         feedImage.feed = feed;
         feedImage.imageUrl = imageUrl;
+        feedImage.sequence = sequence;
         return feedImage;
     }
 }

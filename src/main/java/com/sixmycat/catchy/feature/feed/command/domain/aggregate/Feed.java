@@ -34,8 +34,9 @@ public class Feed {
         feed.memberId = memberId;
         feed.musicUrl = musicUrl;
 
-        for (String imageUrl : imageUrls) {
-            feed.feedImages.add(FeedImage.create(feed, imageUrl));
+        for (int i = 0; i < imageUrls.size(); i++) {
+            String imageUrl = imageUrls.get(i);
+            feed.feedImages.add(FeedImage.create(feed, imageUrl, i)); // 순서 정보 추가
         }
 
         return feed;
