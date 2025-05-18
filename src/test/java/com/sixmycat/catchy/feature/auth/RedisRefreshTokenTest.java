@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.common.auth;
+package com.sixmycat.catchy.feature.auth;
 
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.RefreshToken;
 import org.junit.jupiter.api.AfterEach;
