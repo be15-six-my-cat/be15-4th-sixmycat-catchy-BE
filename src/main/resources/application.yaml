@@ -35,14 +35,17 @@ spring:
   cloud:
     aws:
       s3:
-        bucket: catchy-s3-bucket
+        bucket: ${AWS_BUCKET_NAME}
       credentials:
         access-key: ${AWS_ACCESS_KEY}
         secret-key: ${AWS_SECRET_KEY}
       region:
         static: ap-northeast-2
+        auto: false
       cloudfront:
         domain: ${CLOUDFRONT_URL}
+      stack:
+        auto: false
 
   security:
     oauth2:
@@ -117,3 +120,6 @@ app:
   front:
     signup-extra-url: ${FRONT_SIGNUP_EXTRA_URL}
     login-success-url: ${FRONT_LOGIN_SUCCESS_URL}
+
+
+

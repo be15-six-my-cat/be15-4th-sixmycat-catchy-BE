@@ -59,7 +59,7 @@ dependencies {
 	// File Upload
 	implementation 'commons-io:commons-io:2.14.0'
 
-	// aws
+	// Spring Cloud AWS
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.3.0'
 }
 
