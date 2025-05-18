@@ -50,6 +50,10 @@ public class SecurityConfig {
                                 "/signup.html",
                                 "/signup-extra.html",
                                 "/token.html",
+                                "/login.html",
+                                "/api/v1/members/signup/extra",
+                                "/api/v1/members/temp-info",
+                                "/api/v1/members/login/test"
                                 "/login.html"
                                 "/login.html",
                                 "/api/v1/members/signup/extra",
