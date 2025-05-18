@@ -25,14 +25,17 @@ public class FeedComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
+    @Column(name = "member_id", nullable = false)
     private Long memberId; // 기존 Member → Long
 
+    @Column(name = "target_id", nullable = false)
     private Long targetId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "target_type", nullable = false)
     private TargetType targetType;
 
+    @Column(name = "parent_comment_id")
     private Long parentCommentId;
 
     @CreatedDate
