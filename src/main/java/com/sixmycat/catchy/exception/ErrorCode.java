@@ -25,8 +25,12 @@ public enum ErrorCode {
     FEED_NOT_FOUND("04000", "피드를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
     FEED_CONTENT_TOO_LONG("04001", "피드 내용은 500자 이하여야 합니다.", HttpStatus.BAD_REQUEST),
     FEED_IMAGE_REQUIRED("04002", "피드에는 최소 1개의 이미지가 필요합니다.", HttpStatus.BAD_REQUEST),
-    FEED_IMAGE_TOO_MANY("04003", "피드에는 최대 5개의 이미지만 등록할 수 있습니다.", HttpStatus.BAD_REQUEST);
+    FEED_IMAGE_TOO_MANY("04003", "피드에는 최대 5개의 이미지만 등록할 수 있습니다.", HttpStatus.BAD_REQUEST),
 
+    //차단
+    CANNOT_BLOCK_SELF("03001", "자기 자신은 차단할 수 없습니다.",HttpStatus.BAD_REQUEST),
+    ALREADY_BLOCKED("03002", "이미 차단한 사용자입니다.",HttpStatus.BAD_REQUEST),
+    BLOCK_NOT_FOUND("03003", "차단 내역이 없습니다.",HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;
