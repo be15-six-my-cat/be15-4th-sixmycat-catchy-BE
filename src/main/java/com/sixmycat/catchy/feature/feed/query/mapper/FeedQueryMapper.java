@@ -21,4 +21,6 @@ public interface FeedQueryMapper {
     boolean isFeedLikedByUser(@Param("feedId") Long feedId, @Param("userId") Long userId);
 
     List<FeedSummaryResponse> findMyFeeds(Long memberId);
+
+    List<FeedBaseInfo> findFeedList();
 }
