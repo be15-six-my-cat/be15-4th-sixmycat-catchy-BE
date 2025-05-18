@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.feature.notify.command.application.dto.request;
+package com.sixmycat.catchy.feature.notification.command.application.dto.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
