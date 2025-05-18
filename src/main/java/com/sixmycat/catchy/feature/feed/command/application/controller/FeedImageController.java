@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/feed")
+@RequestMapping("/api/v1/feed")
 public class FeedImageController {
 
     private final FeedImageService feedImageService;
