@@ -4,4 +4,5 @@ import com.sixmycat.catchy.feature.feed.command.application.dto.request.FeedComm
 
 public interface FeedCommentCommandService {
     Long createComment(FeedCommentCreateRequest request, Long memberId);
+    void deleteComment(Long commentId, Long memberId);
 }

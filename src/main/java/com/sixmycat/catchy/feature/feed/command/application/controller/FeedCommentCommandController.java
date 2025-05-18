@@ -19,4 +19,10 @@ public class FeedCommentCommandController {
         Long id = commentService.createComment(request, memberId);
         return ApiResponse.success(id);
     }
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deleteComment(@PathVariable("id") Long commentId,
+                                           @RequestHeader("X-USER-ID") Long memberId) {
+        commentService.deleteComment(commentId, memberId);
+        return ApiResponse.success(null);
+    }
 }
