@@ -41,4 +41,20 @@ public class Feed {
 
         return feed;
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateMusicUrl(String musicUrl) {
+        this.musicUrl = musicUrl;
+    }
+
+    public void clearImages() {
+        this.feedImages.clear();
+    }
+
+    public void addImage(String imageUrl, int order) {
+        this.feedImages.add(FeedImage.create(this, imageUrl, order));
+    }
 }

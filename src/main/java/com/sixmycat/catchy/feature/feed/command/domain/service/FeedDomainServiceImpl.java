@@ -2,6 +2,7 @@ package com.sixmycat.catchy.feature.feed.command.domain.service;
 
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
+import com.sixmycat.catchy.feature.feed.command.domain.aggregate.Feed;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,13 @@ public class FeedDomainServiceImpl implements FeedDomainService {
         }
         if (imageUrls.size() > MAX_IMAGE_COUNT) {
             throw new BusinessException(ErrorCode.FEED_IMAGE_TOO_MANY);
+        }
+    }
+
+    @Override
+    public void validateFeedOwner(Feed feed, Long memberId) {
+        if (!feed.getMemberId().equals(memberId)) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
         }
     }
 }
