@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -106,5 +107,19 @@ public class AuthCommandServiceImpl implements AuthCommandService {
             throw new BusinessException(ErrorCode.TEMP_MEMBER_NOT_FOUND);
         }
         return temp;
+    }
+
+    @Override
+    public void logout(String refreshToken) {
+        Set<String> keys = refreshTokenRedisTemplate.keys("REFRESH_TOKEN:*");
+        if (keys != null) {
+            for (String key : keys) {
+                RefreshToken storedToken = refreshTokenRedisTemplate.opsForValue().get(key);
+                if (storedToken != null && refreshToken.equals(storedToken.getToken())) {
+                    refreshTokenRedisTemplate.delete(key);
+                    break;
+                }
+            }
+        }
     }
 }
