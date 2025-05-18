@@ -22,6 +22,7 @@ public enum ErrorCode {
     USING_NICKNAME("01010", "이미 사용중인 닉네임입니다.", HttpStatus.BAD_REQUEST),
     INVALID_NICKNAME_FORMAT("01011", "닉네임 형식이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
     EMPTY_OR_BLANK_NICKNAME("01012", "닉네임은 공백이거나 비워둘 수 없습니다.", HttpStatus.BAD_REQUEST),
+    WRONG_NICKNAME_LENGTH("01013", "닉네임 길이는 3~30자입니다.", HttpStatus.BAD_REQUEST),
 
     // 피드
     FEED_NOT_FOUND("04000", "피드를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),

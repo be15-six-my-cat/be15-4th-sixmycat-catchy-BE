@@ -46,18 +46,25 @@ public class AuthCommandServiceImpl implements AuthCommandService {
             throw new BusinessException(ErrorCode.TEMP_MEMBER_NOT_FOUND);
         }
 
+        String nickname = request.getNickname();
+
         // 닉네임 공백 검사
-        if (NicknameValidator.isEmptyOrBlank(request.getNickname())) {
+        if (NicknameValidator.isEmptyOrBlank(nickname)) {
             throw new BusinessException(ErrorCode.EMPTY_OR_BLANK_NICKNAME);
         }
 
+        // 닉네임 길이 검사
+        if (!NicknameValidator.isLengthValid(nickname)) {
+            throw new BusinessException(ErrorCode.WRONG_NICKNAME_LENGTH);
+        }
+
         // 닉네임 유효성 검사
-        if (!NicknameValidator.isPatternValid(request.getNickname())) {
+        if (!NicknameValidator.isPatternValid(nickname)) {
             throw new BusinessException(ErrorCode.INVALID_NICKNAME_FORMAT);
         }
 
         // 닉네임 중복 검사
-        if (memberRepository.existsByNicknameAndDeletedAtIsNull(request.getNickname())) {
+        if (memberRepository.existsByNicknameAndDeletedAtIsNull(nickname)) {
             throw new BusinessException(ErrorCode.USING_NICKNAME);
         }
 
@@ -67,7 +74,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
                 .profileImage(temp.getProfileImage())
                 .name(request.getName())
                 .contactNumber(request.getContactNumber())
-                .nickname(request.getNickname())
+                .nickname(nickname)
                 .build();
 
         memberRepository.save(member);
