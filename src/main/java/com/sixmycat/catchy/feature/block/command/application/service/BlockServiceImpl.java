@@ -28,4 +28,13 @@ public class BlockServiceImpl implements BlockService {
         blockRepository.save(Block.create(blockerId, blockedId));
     }
 
+    @Override
+    @Transactional
+    public void unblockUser(Long blockerId, Long blockedId) {
+        Block block = blockRepository.findByBlockerIdAndBlockedId(blockerId, blockedId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.BLOCK_NOT_FOUND));
+
+        blockRepository.delete(block);
+    }
+
 }
