@@ -24,6 +24,7 @@ class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @SuppressWarnings("removal")
     @MockBean
     private AuthCommandService authCommandService;
 
