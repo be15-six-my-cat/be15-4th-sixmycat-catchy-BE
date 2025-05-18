@@ -30,4 +30,11 @@ public class FeedCommandController {
         feedCommandService.updateFeed(id, request, memberId);
         return ApiResponse.success(id);
     }
+
+    @DeleteMapping("/id")
+    public ApiResponse<Void> deleteFeed(@PathVariable Long feedId,
+                                        @RequestHeader("X-USER-ID") Long memberId) {
+        feedCommandService.deleteFeed(feedId, memberId);
+        return ApiResponse.success(null);
+    }
 }
