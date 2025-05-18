@@ -3,6 +3,7 @@ package com.sixmycat.catchy.feature.jjure.command.application.controller;
 import com.sixmycat.catchy.common.dto.ApiResponse;
 import com.sixmycat.catchy.common.s3.dto.PresignedUrlResponse;
 import com.sixmycat.catchy.common.s3.service.S3PresignedUrlService;
+import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureUpdateRequest;
 import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureUploadRequest;
 import com.sixmycat.catchy.feature.jjure.command.application.service.JjureService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,4 +42,17 @@ public class JjureCommandController {
         jjureService.uploadJjure(request, Long.parseLong(memberId));
         return ResponseEntity.ok(ApiResponse.success(null));
     }
+
+    @Operation(summary = "쭈르 수정", description = "캡션과 파일 키(fileKey)를 수정합니다.")
+    /* 쭈르 수정 핸들러 */
+    @PutMapping
+    public ResponseEntity<ApiResponse<Void>> updateJjure(
+            @RequestBody @Valid JjureUpdateRequest request,
+            @AuthenticationPrincipal String memberId
+    ) {
+        jjureService.updateJjure(request, Long.parseLong(memberId));
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+
 }
