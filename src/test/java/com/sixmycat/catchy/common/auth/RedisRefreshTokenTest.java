@@ -1,6 +1,6 @@
 package com.sixmycat.catchy.common.auth;
 
-import com.sixmycat.catchy.common.auth.domain.RefreshToken;
+import com.sixmycat.catchy.feature.auth.command.domain.aggregate.RefreshToken;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

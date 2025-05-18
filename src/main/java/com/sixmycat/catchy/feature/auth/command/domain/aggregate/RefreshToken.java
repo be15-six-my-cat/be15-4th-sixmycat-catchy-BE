@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.common.auth.domain;
+package com.sixmycat.catchy.feature.auth.command.domain.aggregate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
