@@ -20,6 +20,9 @@ public class Notification {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
+    @Column(name = "sender_member_id", nullable = false)
+    private Long senderMemberId;
+
     @Column(name = "related_id")
     private Long relatedId;
 
@@ -35,8 +38,9 @@ public class Notification {
     private LocalDateTime createdAt;
 
     @Builder
-    public Notification(Long memberId, Long relatedId, NotificationType type, String content) {
+    public Notification(Long memberId, Long senderMemberId, Long relatedId, NotificationType type, String content) {
         this.memberId = memberId;
+        this.senderMemberId = senderMemberId;
         this.relatedId = relatedId;
         this.type = type;
         this.content = content;

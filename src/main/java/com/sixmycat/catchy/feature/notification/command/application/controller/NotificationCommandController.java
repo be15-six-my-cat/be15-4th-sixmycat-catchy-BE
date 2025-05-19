@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/notification")
+@RequestMapping("/api/v1/notifications")
 @Tag(name = "알림 API", description = "알림 연결, 발송 API")
 public class NotificationCommandController {
     private final NotificationCommandService notificationCommandService;
@@ -31,7 +31,7 @@ public class NotificationCommandController {
     public ResponseEntity<String> sendTestNotification(
             @AuthenticationPrincipal String memberId) {
 
-        notificationCommandService.createAndSendNotification(Long.parseLong(memberId), "좋아요 추가되었습니다", NotificationType.LIKE, 123L);
+        notificationCommandService.createAndSendNotification(Long.parseLong(memberId), 1L, "좋아요 추가되었습니다", NotificationType.LIKE, 123L);
         return ResponseEntity.ok("알림 전송 완료");
     }
 }

@@ -1,5 +1,8 @@
 package com.sixmycat.catchy.feature.notification.command.application.service;
 
+import com.sixmycat.catchy.exception.BusinessException;
+import com.sixmycat.catchy.exception.ErrorCode;
+import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
 import com.sixmycat.catchy.feature.notification.command.domain.aggregate.Notification;
 import com.sixmycat.catchy.feature.notification.command.domain.aggregate.NotificationType;
 import com.sixmycat.catchy.feature.notification.command.domain.repository.NotificationRepository;
@@ -14,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -22,13 +26,17 @@ import java.util.UUID;
 public class NotificationCommandService {
     private final NotificationRepository notificationRepository;
     private final SseEmitterRepository sseEmitterRepository;
+    private final MemberRepository memberRepository;
 
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60; // 1시간
 
     @Transactional
-    public void createAndSendNotification(Long memberId, String content, NotificationType type, Long relatedId) {
+    public void createAndSendNotification(Long senderMemberId, Long receiverMemberId, String content, NotificationType type, Long relatedId) {
+
+
         Notification notification = Notification.builder()
-                .memberId(memberId)
+                .memberId(receiverMemberId)
+                .senderMemberId(senderMemberId)
                 .type(type)
                 .relatedId(relatedId)
                 .content(content)
@@ -36,15 +44,20 @@ public class NotificationCommandService {
 
         notificationRepository.save(notification);
 
+        Optional<String> optionalProfileImage = memberRepository.findProfileImageByIdAndDeletedAtIsNull(senderMemberId);
+        String profileImage = optionalProfileImage.orElse(null);
+
         Map<String, Object> payload = Map.of(
-                "memberId", memberId,
+                "memberId", receiverMemberId,
+                "senderMemberId", senderMemberId,
+                "profileImage", profileImage,
                 "content", content,
                 "type", type,
                 "relatedId", relatedId,
                 "createdAt", LocalDateTime.now()
         );
 
-        send(memberId, payload);
+        send(receiverMemberId, payload);
     }
 
     public SseEmitter subscribe(Long memberId, String lastEventId) {
