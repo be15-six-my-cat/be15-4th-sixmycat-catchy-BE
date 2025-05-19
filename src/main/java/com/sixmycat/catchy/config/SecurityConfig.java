@@ -49,14 +49,10 @@ public class SecurityConfig {
                                 "/api/v1/members/signup/extra",
                                 "/api/v1/members/temp-info",
                                 "/api/v1/members/token",
-                                "/signup.html",
-                                "/signup-extra.html",
-                                "/token.html",
-                                "/login.html",
-                                "/api/v1/members/signup/extra",
-                                "/api/v1/members/temp-info",
-                                "/login.html",
-                                "/api/v1/members/temp-info",
+                                "/static/signup.html",
+                                "/static/signup-extra.html",
+                                "/static/token.html",
+                                "/static/login.html",
                                 "/api/v1/members/login/test"
                         ).permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/members/members").permitAll()
