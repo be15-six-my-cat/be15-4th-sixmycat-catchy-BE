@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.feature.feed.query.dto.response;
+package com.sixmycat.catchy.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
