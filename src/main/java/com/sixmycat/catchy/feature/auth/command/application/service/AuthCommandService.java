@@ -10,5 +10,4 @@ public interface AuthCommandService {
     TempMember getTempMember(String email, String social);
     TokenResponse testLogin();
     void logout(String refreshToken);
-    TokenResponse testLogin();
 }
