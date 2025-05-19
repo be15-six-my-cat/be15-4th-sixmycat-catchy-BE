@@ -1,10 +1,9 @@
 package com.sixmycat.catchy.feature.feed.query.service;
 
+import com.sixmycat.catchy.common.dto.PageResponse;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
-import com.sixmycat.catchy.feature.feed.query.dto.response.CommentPreview;
-import com.sixmycat.catchy.feature.feed.query.dto.response.FeedBaseInfo;
-import com.sixmycat.catchy.feature.feed.query.dto.response.FeedDetailResponse;
+import com.sixmycat.catchy.feature.feed.query.dto.response.*;
 import com.sixmycat.catchy.feature.feed.query.mapper.FeedQueryMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -38,6 +37,7 @@ class FeedQueryServiceImplTest {
         Long userId = 10L;
 
         FeedBaseInfo baseInfo = new FeedBaseInfo(
+                1L,
                 10L,
                 "nickname",
                 "https://profile.img",
@@ -81,5 +81,71 @@ class FeedQueryServiceImplTest {
         assertThatThrownBy(() -> feedQueryService.getFeedDetail(feedId, 10L))
                 .isInstanceOf(BusinessException.class)
                 .hasMessageContaining(ErrorCode.FEED_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void shouldReturnMyFeedListSuccessfully() {
+        // given
+        Long memberId = 1L;
+        int page = 0;
+        int size = 10;
+
+        List<FeedSummaryResponse> mockList = List.of(
+                FeedSummaryResponse.builder()
+                        .feedId(1L)
+                        .thumbnailUrl("https://example.com/image1.jpg")
+                        .build(),
+                FeedSummaryResponse.builder()
+                        .feedId(2L)
+                        .thumbnailUrl("https://example.com/image2.jpg")
+                        .build()
+        );
+
+        when(feedQueryMapper.findMyFeeds(memberId)).thenReturn(mockList);
+
+        // when
+        PageResponse<FeedSummaryResponse> result = feedQueryService.getMyFeeds(memberId, page, size);
+
+        // then
+        assertThat(result.getContent()).hasSize(2);
+        assertThat(result.getContent().get(0).getFeedId()).isEqualTo(1L);
+    }
+
+    @Test
+    void shouldReturnFeedListSuccessfully() {
+        // given
+        Long userId = 1L;
+        FeedBaseInfo baseInfo = new FeedBaseInfo(
+                10L, // feedId
+                1L, // authorId
+                "nickname",
+                "profile.jpg",
+                "hello world",
+                "music.mp3",
+                5,
+                2,
+                LocalDateTime.now()
+        );
+
+        List<String> imageUrls = List.of("img1.jpg", "img2.jpg");
+        CommentPreview preview = new CommentPreview("댓글쓴이", "댓글 내용");
+
+        when(feedQueryMapper.findFeedList()).thenReturn(List.of(baseInfo));
+        when(feedQueryMapper.findFeedImageUrls(10L)).thenReturn(imageUrls);
+        when(feedQueryMapper.findLatestCommentPreview(10L)).thenReturn(Optional.of(preview));
+        when(feedQueryMapper.isFeedLikedByUser(10L, userId)).thenReturn(true);
+
+        // when
+        PageResponse<FeedDetailResponse> result = feedQueryService.getFeedList(userId, 0, 10);
+
+        // then
+        assertThat(result.getContent()).hasSize(1);
+        FeedDetailResponse response = result.getContent().get(0);
+        assertThat(response.getId()).isEqualTo(10L);
+        assertThat(response.getAuthor()).isEqualTo(new AuthorInfo(1L, "nickname", "profile.jpg"));
+        assertThat(response.getImageUrls()).isEqualTo(imageUrls);
+        assertThat(response.getCommentPreview()).isEqualTo(preview);
+        assertThat(response.isLiked()).isTrue();
+        assertThat(response.isMine()).isTrue();
     }
 }
