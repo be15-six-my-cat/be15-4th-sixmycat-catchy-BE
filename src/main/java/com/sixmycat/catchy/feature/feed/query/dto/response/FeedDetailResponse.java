@@ -1,5 +1,7 @@
 package com.sixmycat.catchy.feature.feed.query.dto.response;
 
+import com.sixmycat.catchy.common.dto.AuthorInfo;
+import com.sixmycat.catchy.common.dto.CommentPreview;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

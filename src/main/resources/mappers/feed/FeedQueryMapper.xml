@@ -32,7 +32,7 @@
     </select>
 
     <!-- 3. 최근 댓글 1개 -->
-    <select id="findLatestCommentPreview" resultType="com.sixmycat.catchy.feature.feed.query.dto.response.CommentPreview">
+    <select id="findLatestCommentPreview" resultType="com.sixmycat.catchy.common.dto.CommentPreview">
         SELECT
         m.nickname AS userNickname,
         c.content
