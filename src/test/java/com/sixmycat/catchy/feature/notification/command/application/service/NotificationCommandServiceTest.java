@@ -40,7 +40,7 @@ class NotificationCommandServiceTest {
         when(sseEmitterRepository.findAllEmittersStartWithId(memberId)).thenReturn(emitters);
 
         // when
-        notificationCommandService.createAndSendNotification(memberId, content, type, relatedId);
+        notificationCommandService.createAndSendNotification(memberId, 1L, content, type, relatedId);
 
         // then
         verify(notificationRepository, times(1)).save(any(Notification.class));

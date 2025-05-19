@@ -27,6 +27,7 @@ public enum ErrorCode {
     // 멤버
     MEMBER_NOT_FOUND("01000", "회원을 찾을 수 업습니다", HttpStatus.NOT_FOUND),
     MEMBER_ALREADY_DELETED("01001", "탈퇴한 회원입니다", HttpStatus.CONFLICT),
+    MEMBER_PROFILE_IMAGE_NOT_FOUND("01002", "프로필 이미지를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     // 피드
     FEED_NOT_FOUND("04000", "피드를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
