@@ -91,6 +91,19 @@ public class AuthController {
         return buildTokenResponse(token);
     }
 
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> withdraw(
+            @CookieValue(name = "refreshToken", required = false) String refreshToken
+    ) {
+        if (refreshToken != null) {
+            authCommandService.delete(refreshToken);
+        }
+
+        ResponseCookie deleteCookie = CookieUtils.createDeleteRefreshTokenCookie();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, deleteCookie.toString())
+                .body(ApiResponse.success(null));
+    }
 
     /* accessToken 과 refreshToken을 body와 쿠키에 담아 반환 */
     private ResponseEntity<ApiResponse<TokenResponse>> buildTokenResponse(TokenResponse tokenResponse) {

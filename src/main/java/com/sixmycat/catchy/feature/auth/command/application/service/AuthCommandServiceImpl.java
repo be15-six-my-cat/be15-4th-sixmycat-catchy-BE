@@ -142,4 +142,32 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         }
     }
 
+    @Override
+    @Transactional
+    public void delete(String refreshToken) {
+        // Redis에서 memberId 찾기
+        Set<String> keys = refreshTokenRedisTemplate.keys("REFRESH_TOKEN:*");
+        if (keys == null) return;
+
+        for (String key : keys) {
+            RefreshToken storedToken = refreshTokenRedisTemplate.opsForValue().get(key);
+            if (storedToken != null && refreshToken.equals(storedToken.getToken())) {
+                // key: REFRESH_TOKEN:{memberId}
+                Long memberId = Long.parseLong(key.split(":")[1]);
+
+                // DB에서 회원 조회 및 탈퇴 처리
+                Member member = memberRepository.findById(memberId)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+                member.updateDeletedAt();
+
+                // 저장
+                memberRepository.save(member);
+
+                // Redis에서 refreshToken 제거
+                refreshTokenRedisTemplate.delete(key);
+                break;
+            }
+        }
+    }
 }
