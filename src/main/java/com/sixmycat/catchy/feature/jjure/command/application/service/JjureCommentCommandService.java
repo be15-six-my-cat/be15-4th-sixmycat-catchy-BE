@@ -4,4 +4,5 @@ import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureCo
 
 public interface JjureCommentCommandService {
     Long createComment(JjureCommentCreateRequest request, Long memberId);
+    void deleteComment(Long commentId, Long memberId);
 }
