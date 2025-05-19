@@ -4,6 +4,7 @@ import com.sixmycat.catchy.feature.notification.command.domain.aggregate.Notific
 import com.sixmycat.catchy.feature.notification.command.domain.aggregate.NotificationType;
 import com.sixmycat.catchy.feature.notification.command.domain.repository.NotificationRepository;
 import com.sixmycat.catchy.feature.notification.command.infrastructure.repository.SseEmitterRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -24,6 +25,7 @@ public class NotificationCommandService {
 
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60; // 1시간
 
+    @Transactional
     public void createAndSendNotification(Long memberId, String content, NotificationType type, Long relatedId) {
         Notification notification = Notification.builder()
                 .memberId(memberId)
