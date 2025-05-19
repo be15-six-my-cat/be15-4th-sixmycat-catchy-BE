@@ -111,6 +111,21 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         return temp;
     }
 
+    /* 테스트 로그인  */
+    @Transactional
+    public TokenResponse testLogin() {
+
+        // 토큰 발급
+        String accessToken = jwtTokenProvider.createToken(1L);
+        String refreshToken = jwtTokenProvider.createRefreshToken(1L);
+
+        return TokenResponse
+                .builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
     @Override
     public void logout(String refreshToken) {
         Set<String> keys = refreshTokenRedisTemplate.keys("REFRESH_TOKEN:*");

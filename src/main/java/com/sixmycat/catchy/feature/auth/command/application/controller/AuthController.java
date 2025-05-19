@@ -34,6 +34,23 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(temp));
     }
 
+    /* 테스트 로그인 */
+    @Operation(summary = "테스트용 로그인", description = "테스트용 로그인 후 JWT를 발급합니다.")
+    @PostMapping("/login/test")
+    public ResponseEntity<ApiResponse<TokenResponse>> login(){
+        TokenResponse token = authCommandService.testLogin();
+        return buildTokenResponse(token);
+    }
+
+
+    /* accessToken 과 refreshToken을 body와 쿠키에 담아 반환 */
+    private ResponseEntity<ApiResponse<TokenResponse>> buildTokenResponse(TokenResponse tokenResponse) {
+        ResponseCookie cookie = createRefreshTokenCookie(tokenResponse.getRefreshToken());  // refreshToken 쿠키 생성
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(ApiResponse.success(tokenResponse));
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
             @CookieValue(name = "refreshToken", required = false) String refreshToken
