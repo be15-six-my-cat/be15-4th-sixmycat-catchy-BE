@@ -71,7 +71,13 @@
         AND c.target_type = 'FEED'
         AND c.deleted_at IS NULL
         ORDER BY c.created_at ASC
-      </select>
+    </select>
+
+    <select id="existsByFeedId" resultType="boolean">
+        SELECT EXISTS (
+        SELECT 1 FROM feed WHERE id = #{feedId}
+        )
+    </select>
   
     <select id="findMyFeeds" resultType="com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse">
         SELECT

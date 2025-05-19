@@ -18,6 +18,8 @@ public interface FeedQueryMapper {
 
     List<FeedCommentResponse> findCommentsByFeedId(@Param("feedId") Long feedId);
 
+    boolean existsByFeedId(@Param("feedId") Long feedId);
+    
     Optional<CommentPreview> findLatestCommentPreview(@Param("feedId") Long feedId);
 
     boolean isFeedLikedByUser(@Param("feedId") Long feedId, @Param("userId") Long userId);
