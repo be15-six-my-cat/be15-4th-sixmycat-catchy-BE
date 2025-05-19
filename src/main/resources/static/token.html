@@ -9,17 +9,27 @@
 <p><strong>Access Token:</strong></p>
 <pre id="accessToken"></pre>
 
-<p><strong>Refresh Token:</strong></p>
-<pre id="refreshToken"></pre>
-
-<p><strong>User ID:</strong></p>
-<pre id="userId"></pre>
+<p><strong>ID:</strong></p>
+<pre id="id"></pre>
 
 <script>
-    const params = new URLSearchParams(window.location.search);
-    document.getElementById('accessToken').textContent = params.get('accessToken');
-    document.getElementById('refreshToken').textContent = params.get('refreshToken');
-    document.getElementById('userId').textContent = params.get('userId');
+    fetch("/api/v1/members/token", {
+        method: "GET",
+        credentials: "include"
+    })
+        .then(res => res.json())
+        .then(data => {
+            const token = data.data.accessToken;
+            const id = data.data.id;
+
+            document.getElementById('accessToken').textContent = token || "없음";
+            document.getElementById('id').textContent = id || "없음";
+        })
+        .catch(err => {
+            document.getElementById('accessToken').textContent = "오류 발생";
+            document.getElementById('id').textContent = "오류 발생";
+            console.error("요청 오류", err);
+        });
 </script>
 </body>
 </html>
