@@ -38,5 +38,16 @@ public class FeedCommentCommandServiceImpl implements FeedCommentCommandService 
         return commentRepository.save(comment).getCommentId();
     }
 
+    @Override
+    @Transactional
+    public void deleteComment(Long commentId, Long memberId) {
+        FeedComment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.COMMENT_NOT_FOUND));
 
+        if (!comment.getMemberId().equals(memberId)) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
+        }
+
+        commentRepository.delete(comment); // 논리 삭제 (deleted_at 업데이트)
+    }
 }
