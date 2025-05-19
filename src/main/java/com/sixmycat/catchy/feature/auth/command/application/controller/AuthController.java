@@ -1,12 +1,15 @@
 package com.sixmycat.catchy.feature.auth.command.application.controller;
 
-import com.sixmycat.catchy.feature.auth.command.application.service.AuthCommandService;
-import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
+import com.sixmycat.catchy.common.dto.ApiResponse;
+import com.sixmycat.catchy.common.utils.CookieUtils;
 import com.sixmycat.catchy.feature.auth.command.application.dto.request.ExtraSignupRequest;
 import com.sixmycat.catchy.feature.auth.command.application.dto.response.SocialLoginResponse;
-import com.sixmycat.catchy.common.dto.ApiResponse;
+import com.sixmycat.catchy.feature.auth.command.application.service.AuthCommandService;
+import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
+import com.sixmycat.catchy.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +19,26 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/members")
 public class AuthController {
 
+    private final JwtTokenProvider jwtTokenProvider;
     private final AuthCommandService authCommandService;
 
     @PostMapping("/signup/extra")
     public ResponseEntity<ApiResponse<SocialLoginResponse>> completeSignup(@RequestBody ExtraSignupRequest request) {
         SocialLoginResponse result = authCommandService.registerNewMember(request);
-        return ResponseEntity.ok(ApiResponse.success(result));
+
+        // refreshToken만 쿠키로 내려주고
+        ResponseCookie refreshTokenCookie = CookieUtils.createRefreshTokenCookie(result.getRefreshToken());
+
+        // accessToken은 바디로 전달
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                .body(ApiResponse.success(
+                        SocialLoginResponse.builder()
+                                .id(result.getId())
+                                .accessToken(result.getAccessToken())
+                                .refreshToken(null) // 바디에는 포함시키지 않음
+                                .build()
+                ));
     }
 
     @GetMapping("/temp-info")
@@ -38,20 +55,28 @@ public class AuthController {
             authCommandService.logout(refreshToken);
         }
 
-        ResponseCookie deleteCookie = createDeleteRefreshTokenCookie();
+        ResponseCookie deleteCookie = CookieUtils.createDeleteRefreshTokenCookie();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, deleteCookie.toString())
                 .body(ApiResponse.success(null));
     }
 
+    @GetMapping("/token")
+    public ResponseEntity<ApiResponse<SocialLoginResponse>> reissueAccessToken(
+            @CookieValue(name = "refreshToken", required = false) String refreshToken
+    ) {
+        if (refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-    private ResponseCookie createDeleteRefreshTokenCookie() {
-        return ResponseCookie.from("refreshToken", "")
-                .path("/")
-                .maxAge(0)
-                .httpOnly(true)
-                .secure(true) // 배포 환경에서는 true
-                .sameSite("Lax") // 필요 시 Strict, None 등으로 변경
-                .build();
+        // userId 추출
+        Long userId = Long.parseLong(jwtTokenProvider.getUserIdFromJwt(refreshToken));
+
+        // accessToken 재발급
+        String newAccessToken = jwtTokenProvider.createToken(userId);
+
+        SocialLoginResponse response = SocialLoginResponse.loggedInWithoutRefresh(userId, newAccessToken);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
+
 }
