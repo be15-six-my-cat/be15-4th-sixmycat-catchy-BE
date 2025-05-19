@@ -1,5 +1,8 @@
 package com.sixmycat.catchy.feature.jjure.query.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.sixmycat.catchy.common.dto.PageResponse;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.common.dto.AuthorInfo;
@@ -9,6 +12,8 @@ import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureDetailResponse;
 import com.sixmycat.catchy.feature.jjure.query.mapper.JjureQueryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,5 +55,34 @@ public class JjureQueryServiceImpl implements JjureQueryService {
                 .isMine(isMine)
                 .createdAt(baseInfo.getCreatedAt())
                 .build();
+    }
+
+    @Override
+    public PageResponse<JjureDetailResponse> getJjureList(Long userId, int page, int size) {
+        PageHelper.startPage(page + 1, size); // PageHelper는 1부터 시작
+        List<JjureBaseInfo> baseInfos = jjureQueryMapper.findJjureList();
+
+        List<JjureDetailResponse> result = baseInfos.stream().map(base -> {
+            CommentPreview commentPreview = jjureQueryMapper.findLatestCommentPreview(base.getId())
+                    .orElse(null);
+            boolean isLiked = userId != null && jjureQueryMapper.isJjureLikedByUser(base.getId(), userId);
+            boolean isMine = userId != null && userId.equals(base.getAuthorId());
+
+            return JjureDetailResponse.builder()
+                    .id(base.getId())
+                    .author(new AuthorInfo(base.getAuthorId(), base.getNickname(), base.getProfileImageUrl()))
+                    .fileKey(base.getFileKey())
+                    .caption(base.getCaption())
+                    .musicUrl(base.getMusicUrl())
+                    .likeCount(base.getLikeCount())
+                    .commentCount(base.getCommentCount())
+                    .commentPreview(commentPreview)
+                    .isLiked(isLiked)
+                    .isMine(isMine)
+                    .createdAt(base.getCreatedAt())
+                    .build();
+        }).toList();
+
+        return PageResponse.from(new PageInfo<>(result));
     }
 }

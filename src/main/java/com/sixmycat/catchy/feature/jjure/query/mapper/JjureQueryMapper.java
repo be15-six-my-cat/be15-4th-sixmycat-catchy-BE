@@ -1,6 +1,7 @@
 package com.sixmycat.catchy.feature.jjure.query.mapper;
 
 import com.sixmycat.catchy.common.dto.CommentPreview;
+import com.sixmycat.catchy.feature.feed.query.dto.response.FeedBaseInfo;
 import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureBaseInfo;
 import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureCommentResponse;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,4 +23,5 @@ public interface JjureQueryMapper {
 
     boolean isJjureLikedByUser(@Param("jjureId") Long jjureId, @Param("userId") Long userId);
 
+    List<JjureBaseInfo> findJjureList();
 }
