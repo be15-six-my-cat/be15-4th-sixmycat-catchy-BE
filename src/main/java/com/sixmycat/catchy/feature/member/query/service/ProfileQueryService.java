@@ -1,9 +1,8 @@
 package com.sixmycat.catchy.feature.member.query.service;
 
-import com.sixmycat.catchy.feature.member.command.domain.aggregate.User;
-import com.sixmycat.catchy.feature.member.command.domain.repository.CatRepository;
+import com.sixmycat.catchy.feature.member.command.domain.aggregate.Member;
 import com.sixmycat.catchy.feature.member.command.domain.repository.FollowRepository;
-import com.sixmycat.catchy.feature.member.command.domain.repository.UserRepository;
+import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
 import com.sixmycat.catchy.feature.member.query.dto.response.*;
 import com.sixmycat.catchy.feature.member.query.mapper.ProfileMapper;
 
@@ -18,20 +17,20 @@ import java.util.List;
 public class ProfileQueryService {
 
     private final FollowRepository followRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final ProfileMapper profileMapper;
 
     // 다른 도메인에서 주입될 Repository (post, video 등)
     // private final PostRepository postRepository;
     // private final VideoRepository videoRepository;
 
-    public MyProfileResponse getMyProfile(Long userId) {
+    public MyProfileResponse getMyProfile(Long memberId) {
         // 1. 유저 + 고양이 정보 조회
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         // 2. 고양이 정보로 생일 뱃지 판단
-        boolean isBirthday = user.getCats().stream()
+        boolean isBirthday = member.getCats().stream()
                 .anyMatch(cat -> {
                     LocalDate birthDay = cat.getBirthDay();
                     return birthDay != null
@@ -40,11 +39,11 @@ public class ProfileQueryService {
                 });
 
         // 3. 인플루언서 여부 (팔로워 5만 이상)
-        int followerCount = followRepository.countByFollower_Id(userId);
+        int followerCount = followRepository.countByFollower_Id(memberId);
         boolean isInfluencer = followerCount >= 50000;
 
         // 4. 팔로잉 수
-        int followingCount = followRepository.countByFollowing_Id(userId);
+        int followingCount = followRepository.countByFollowing_Id(memberId);
 
         // 5. 게시글 수
         int postCount = 0; // postRepository.countByUserId(userId);
@@ -62,7 +61,7 @@ public class ProfileQueryService {
 
         // 8. Mapper로 변환해서 반환
         return profileMapper.toMyProfileResponse(
-                user,
+                member,
                 followerCount,
                 followingCount,
                 postCount,

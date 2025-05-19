@@ -27,16 +27,16 @@ public class Cat {
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private User user;
+    private Member member;
 
     // 생성자 (등록 시 필요한 필드들만 받는 생성자)
-    public Cat(String name, String gender, String breed, LocalDate birthDay, Integer age, User user) {
+    public Cat(String name, String gender, String breed, LocalDate birthDay, Integer age, Member member) {
         this.name = name;
         this.gender = gender;
         this.breed = breed;
         this.birthDay = birthDay;
         this.age = age;
-        this.user = user;
+        this.member = member;
     }
 
     // 고양이 정보 수정 메서드

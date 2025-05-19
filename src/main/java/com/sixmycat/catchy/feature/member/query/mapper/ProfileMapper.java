@@ -1,7 +1,7 @@
 package com.sixmycat.catchy.feature.member.query.mapper;
 
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Cat;
-import com.sixmycat.catchy.feature.member.command.domain.aggregate.User;
+import com.sixmycat.catchy.feature.member.command.domain.aggregate.Member;
 import com.sixmycat.catchy.feature.member.query.dto.response.*;
 
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class ProfileMapper {
 
-    public MyProfileResponse toMyProfileResponse(User user,
+    public MyProfileResponse toMyProfileResponse(Member member,
                                                  int followerCount,
                                                  int followingCount,
                                                  int postCount,
@@ -22,14 +22,14 @@ public class ProfileMapper {
                                                  List<FeedSummary> likedFeeds,
                                                  List<VideoSummary> likedVideos) {
 
-        List<CatResponse> cats = user.getCats().stream()
+        List<CatResponse> cats = member.getCats().stream()
                 .map(this::toCatResponse)
                 .collect(Collectors.toList());
 
         return new MyProfileResponse(
-                user.getNickname(),
-                user.getStatusMessage(),
-                user.getProfileImg(),
+                member.getNickname(),
+                member.getStatusMessage(),
+                member.getProfileImage(),
                 badges,
                 followerCount,
                 followingCount,

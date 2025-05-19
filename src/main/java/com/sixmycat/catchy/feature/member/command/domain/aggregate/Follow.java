@@ -16,14 +16,14 @@ public class Follow {
     // 팔로우를 하는 사람 (팔로워)
     @ManyToOne
     @JoinColumn(name = "follower_id")
-    private User follower;
+    private Member follower;
 
     // 팔로우 당하는 사람 (팔로잉 대상)
     @ManyToOne
     @JoinColumn(name = "following_id")
-    private User following;
+    private Member following;
 
-    public Follow(User follower, User following) {
+    public Follow(Member follower, Member following) {
         this.follower = follower;
         this.following = following;
     }

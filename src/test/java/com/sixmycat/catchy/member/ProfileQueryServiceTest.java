@@ -1,9 +1,9 @@
 package com.sixmycat.catchy.member;
 
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Cat;
-import com.sixmycat.catchy.feature.member.command.domain.aggregate.User;
+import com.sixmycat.catchy.feature.member.command.domain.aggregate.Member;
 import com.sixmycat.catchy.feature.member.command.domain.repository.FollowRepository;
-import com.sixmycat.catchy.feature.member.command.domain.repository.UserRepository;
+import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
 import com.sixmycat.catchy.feature.member.query.dto.response.Badges;
 import com.sixmycat.catchy.feature.member.query.dto.response.MyProfileResponse;
 import com.sixmycat.catchy.feature.member.query.mapper.ProfileMapper;
@@ -32,7 +32,7 @@ class ProfileQueryServiceTest {
     private ProfileQueryService profileQueryService;
 
     @Mock
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Mock
     private FollowRepository followRepository;
@@ -47,13 +47,13 @@ class ProfileQueryServiceTest {
         Long userId = 1L;
 
         // 생성자 사용
-        User user = new User("길동이", "안녕하세요!", "default1.png");
+        Member member = new Member("길동이", "안녕하세요!", "default1.png");
 
         // 고양이 정보 생성 및 연관관계 설정
-        Cat cat = new Cat("나비", "F", "코리안숏헤어", LocalDate.now(), 4, user);
-        user.addCat(cat); // 양방향 연관관계 설정 메서드 사용
+        Cat cat = new Cat("나비", "F", "코리안숏헤어", LocalDate.now(), 4, member);
+        member.addCat(cat); // 양방향 연관관계 설정 메서드 사용
 
-        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+        given(memberRepository.findById(userId)).willReturn(Optional.of(member));
         given(followRepository.countByFollower_Id(userId)).willReturn(60000);
         given(followRepository.countByFollowing_Id(userId)).willReturn(123);
 
@@ -75,7 +75,7 @@ class ProfileQueryServiceTest {
         );
 
         given(profileMapper.toMyProfileResponse(
-                eq(user),
+                eq(member),
                 eq(60000),
                 eq(123),
                 eq(0),
