@@ -1,5 +1,8 @@
 package com.sixmycat.catchy.feature.block.query.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.sixmycat.catchy.common.dto.PageResponse;
 import com.sixmycat.catchy.feature.block.query.dto.response.BlockResponse;
 import com.sixmycat.catchy.feature.block.query.mapper.BlockQueryRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +29,11 @@ class BlockQueryServiceImplTest {
     }
 
     @Test
-    void getBlockedUsers_shouldReturnListOfBlockedUsers() {
+    void getBlockedUsers_shouldReturnPagedBlockedUsers() {
         // given
         Long blockerId = 1L;
+        int page = 1;
+        int size = 10;
 
         List<BlockResponse> mockBlockedList = List.of(
                 BlockResponse.builder()
@@ -46,12 +51,13 @@ class BlockQueryServiceImplTest {
         when(blockQueryRepository.findBlockedUsers(blockerId)).thenReturn(mockBlockedList);
 
         // when
-        List<BlockResponse> result = blockQueryService.getBlockedUsers(blockerId);
+        PageHelper.startPage(page, size); // PageHelper context 설정
+        PageResponse<BlockResponse> result = blockQueryService.getBlockedUsers(blockerId, page, size);
 
         // then
-        assertThat(result).hasSize(2);
-        assertThat(result.get(0).getBlockedId()).isEqualTo(2L);
-        assertThat(result.get(1).getBlockedNickname()).isEqualTo("UserThree");
+        assertThat(result.getContent()).hasSize(2);
+        assertThat(result.getContent().get(0).getBlockedId()).isEqualTo(2L);
+        assertThat(result.getContent().get(1).getBlockedNickname()).isEqualTo("UserThree");
 
         verify(blockQueryRepository, times(1)).findBlockedUsers(blockerId);
     }
