@@ -23,6 +23,7 @@ public class FeedComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long commentId;
 
     @Column(name = "member_id", nullable = false)
