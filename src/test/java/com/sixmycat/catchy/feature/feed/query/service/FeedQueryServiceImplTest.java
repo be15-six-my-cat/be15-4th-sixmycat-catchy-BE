@@ -1,5 +1,7 @@
 package com.sixmycat.catchy.feature.feed.query.service;
 
+import com.sixmycat.catchy.common.dto.AuthorInfo;
+import com.sixmycat.catchy.common.dto.CommentPreview;
 import com.sixmycat.catchy.common.dto.PageResponse;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;

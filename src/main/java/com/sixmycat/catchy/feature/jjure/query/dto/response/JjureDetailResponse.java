@@ -1,4 +1,4 @@
-package com.sixmycat.catchy.feature.feed.query.dto.response;
+package com.sixmycat.catchy.feature.jjure.query.dto.response;
 
 import com.sixmycat.catchy.common.dto.AuthorInfo;
 import com.sixmycat.catchy.common.dto.CommentPreview;
@@ -7,20 +7,18 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Builder
 @AllArgsConstructor
-public class FeedDetailResponse {
-
+public class JjureDetailResponse {
     private Long id;
 
     private AuthorInfo author;
 
-    private List<String> imageUrls;
+    private String fileKey;
 
-    private String content;
+    private String caption;
 
     private String musicUrl;
 
@@ -35,5 +33,4 @@ public class FeedDetailResponse {
     private boolean isMine;
 
     private LocalDateTime createdAt;
-
 }

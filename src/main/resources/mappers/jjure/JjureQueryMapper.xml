@@ -27,4 +27,43 @@
         )
     </select>
 
+    <select id="findJjureBaseInfo" resultType="com.sixmycat.catchy.feature.jjure.query.dto.response.JjureBaseInfo">
+        SELECT
+        j.id,
+        m.id AS authorId,
+        m.nickname,
+        m.profile_image AS profileImageUrl,
+        j.file_key,
+        j.caption,
+        j.music_url AS musicUrl,
+        (SELECT COUNT(*) FROM `like` l WHERE l.target_id = j.id AND l.target_type = 'JJURE') AS likeCount,
+        (SELECT COUNT(*) FROM comment c WHERE c.target_id = j.id AND c.target_type = 'JJURE') AS commentCount,
+        j.created_at
+        FROM jjure j
+        JOIN member m ON j.member_id = m.id
+        WHERE j.id = #{jjureId}
+    </select>
+
+    <select id="findLatestCommentPreview" resultType="com.sixmycat.catchy.common.dto.CommentPreview">
+        SELECT
+        m.nickname AS userNickname,
+        c.content
+        FROM comment c
+        JOIN member m ON c.member_id = m.id
+        WHERE c.target_id = #{jjureId}
+        AND c.target_type = 'JJURE'
+        AND c.deleted_at IS NULL
+        ORDER BY c.created_at DESC
+        LIMIT 1
+    </select>
+
+    <select id="isJjureLikedByUser" resultType="boolean">
+        SELECT EXISTS (
+        SELECT 1
+        FROM `like`
+        WHERE member_id = #{userId}
+        AND target_id = #{jjureId}
+        AND target_type = 'JJURE'
+        )
+    </select>
 </mapper>
