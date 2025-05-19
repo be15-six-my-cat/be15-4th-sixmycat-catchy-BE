@@ -41,4 +41,8 @@ public class Member {
     private Date updatedAt;
 
     private Date deletedAt;
+
+    public void updateDeletedAt() {
+        this.deletedAt = new Date();
+    }
 }
