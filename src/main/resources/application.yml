@@ -95,7 +95,7 @@ mybatis:
     com.sixmycat.catchy.feature.jjure.query.dto,
     com.sixmycat.catchy.feature.like.query.dto,
     com.sixmycat.catchy.feature.member.query.dto,
-    com.sixmycat.catchy.feature.notify.query.dto
+    com.sixmycat.catchy.feature.notification.query.dto
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_ACCESS_EXPIRATION}
