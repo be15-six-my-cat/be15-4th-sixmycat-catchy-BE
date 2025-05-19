@@ -12,7 +12,6 @@ import java.io.Serializable;
 public class TempMember implements Serializable {
     private String email;
     private String social;
-    private String profileImage;
     private String name;
     private String contactNumber;
 }
