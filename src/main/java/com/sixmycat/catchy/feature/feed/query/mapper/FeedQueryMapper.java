@@ -1,7 +1,9 @@
 package com.sixmycat.catchy.feature.feed.query.mapper;
 
-import com.sixmycat.catchy.feature.feed.query.dto.response.FeedBaseInfo;
 import com.sixmycat.catchy.feature.feed.query.dto.response.CommentPreview;
+import com.sixmycat.catchy.feature.feed.query.dto.response.FeedBaseInfo;
+import com.sixmycat.catchy.feature.feed.query.dto.response.FeedCommentResponse;
+import com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,7 +17,15 @@ public interface FeedQueryMapper {
 
     List<String> findFeedImageUrls(@Param("feedId") Long feedId);
 
+    List<FeedCommentResponse> findCommentsByFeedId(@Param("feedId") Long feedId);
+
+    boolean existsByFeedId(@Param("feedId") Long feedId);
+    
     Optional<CommentPreview> findLatestCommentPreview(@Param("feedId") Long feedId);
 
     boolean isFeedLikedByUser(@Param("feedId") Long feedId, @Param("userId") Long userId);
+
+    List<FeedSummaryResponse> findMyFeeds(Long memberId);
+
+    List<FeedBaseInfo> findFeedList();
 }

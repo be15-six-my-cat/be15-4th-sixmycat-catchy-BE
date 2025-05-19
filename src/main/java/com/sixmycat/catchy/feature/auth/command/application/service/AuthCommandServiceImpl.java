@@ -1,5 +1,9 @@
 package com.sixmycat.catchy.feature.auth.command.application.service;
 
+import com.sixmycat.catchy.common.dto.TokenResponse;
+import com.sixmycat.catchy.common.utils.NicknameValidator;
+import com.sixmycat.catchy.exception.BusinessException;
+import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.RefreshToken;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import com.sixmycat.catchy.feature.auth.command.application.dto.request.ExtraSignupRequest;
@@ -12,8 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -35,12 +41,34 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         String key = switch (request.getSocial().toUpperCase()) {
             case "NAVER" -> "TEMP_N_MEMBER:" + request.getEmail();
             case "KAKAO" -> "TEMP_K_MEMBER:" + request.getEmail();
-            default -> throw new IllegalArgumentException("지원하지 않는 소셜 플랫폼: " + request.getSocial());
+            default -> throw new BusinessException(ErrorCode.SOCIAL_PLATFORM_NOT_SUPPORTED);
         };
 
         TempMember temp = redisTemplate.opsForValue().get(key);
         if (temp == null) {
-            throw new IllegalStateException("임시 회원 정보가 존재하지 않습니다.");
+            throw new BusinessException(ErrorCode.TEMP_MEMBER_NOT_FOUND);
+        }
+
+        String nickname = request.getNickname();
+
+        // 닉네임 공백 검사
+        if (NicknameValidator.isEmptyOrBlank(nickname)) {
+            throw new BusinessException(ErrorCode.EMPTY_OR_BLANK_NICKNAME);
+        }
+
+        // 닉네임 길이 검사
+        if (!NicknameValidator.isLengthValid(nickname)) {
+            throw new BusinessException(ErrorCode.WRONG_NICKNAME_LENGTH);
+        }
+
+        // 닉네임 유효성 검사
+        if (!NicknameValidator.isPatternValid(nickname)) {
+            throw new BusinessException(ErrorCode.INVALID_NICKNAME_FORMAT);
+        }
+
+        // 닉네임 중복 검사
+        if (memberRepository.existsByNicknameAndDeletedAtIsNull(nickname)) {
+            throw new BusinessException(ErrorCode.USING_NICKNAME);
         }
 
         Member member = Member.builder()
@@ -49,7 +77,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
                 .profileImage(temp.getProfileImage())
                 .name(request.getName())
                 .contactNumber(request.getContactNumber())
-                .nickname(request.getNickname())
+                .nickname(nickname)
                 .build();
 
         memberRepository.save(member);
@@ -73,13 +101,43 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         String key = switch (social.toUpperCase()) {
             case "NAVER" -> "TEMP_N_MEMBER:" + email;
             case "KAKAO" -> "TEMP_K_MEMBER:" + email;
-            default -> throw new IllegalArgumentException("지원하지 않는 소셜");
+            default -> throw new BusinessException(ErrorCode.SOCIAL_PLATFORM_NOT_SUPPORTED);
         };
 
         TempMember temp = redisTemplate.opsForValue().get(key);
         if (temp == null) {
-            throw new IllegalStateException("임시 회원 정보가 존재하지 않습니다.");
+            throw new BusinessException(ErrorCode.TEMP_MEMBER_NOT_FOUND);
         }
         return temp;
     }
+
+    /* 테스트 로그인  */
+    @Transactional
+    public TokenResponse testLogin() {
+
+        // 토큰 발급
+        String accessToken = jwtTokenProvider.createToken(1L);
+        String refreshToken = jwtTokenProvider.createRefreshToken(1L);
+
+        return TokenResponse
+                .builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    @Override
+    public void logout(String refreshToken) {
+        Set<String> keys = refreshTokenRedisTemplate.keys("REFRESH_TOKEN:*");
+        if (keys != null) {
+            for (String key : keys) {
+                RefreshToken storedToken = refreshTokenRedisTemplate.opsForValue().get(key);
+                if (storedToken != null && refreshToken.equals(storedToken.getToken())) {
+                    refreshTokenRedisTemplate.delete(key);
+                    break;
+                }
+            }
+        }
+    }
+
 }
