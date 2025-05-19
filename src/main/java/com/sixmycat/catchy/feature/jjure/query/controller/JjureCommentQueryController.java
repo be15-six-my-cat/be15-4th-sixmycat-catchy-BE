@@ -5,6 +5,7 @@ import com.sixmycat.catchy.common.dto.PageResponse;
 import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureCommentResponse;
 import com.sixmycat.catchy.feature.jjure.query.service.JjureCommentQueryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,11 +16,12 @@ public class JjureCommentQueryController {
     private final JjureCommentQueryService commentQueryService;
 
     @GetMapping("/{jjureId}/comments")
-    public ApiResponse<PageResponse<JjureCommentResponse>> getComments(
+    public ResponseEntity<ApiResponse<PageResponse<JjureCommentResponse>>> getComments(
             @PathVariable Long jjureId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ApiResponse.success(commentQueryService.getComments(jjureId, page, size));
+        PageResponse<JjureCommentResponse> comments = commentQueryService.getComments(jjureId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(comments));
     }
 }
