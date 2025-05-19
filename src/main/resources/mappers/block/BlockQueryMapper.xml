@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sixmycat.catchy.feature.block.repository.BlockQueryRepository">
+<mapper namespace="com.sixmycat.catchy.feature.block.query.mapper.BlockQueryRepository">
 
     <select id="findBlockedUsers" resultType="com.sixmycat.catchy.feature.block.query.dto.response.BlockResponse">
         SELECT
