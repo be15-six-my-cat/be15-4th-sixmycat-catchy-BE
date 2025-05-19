@@ -50,7 +50,7 @@ class GameScoreCommandServiceImplTest {
         Integer newScore = 40;
         GameScore oldScore = GameScore.of(memberId, 50);
 
-        when(gameScoreRepository.findTopByMemberIdOrderByScoreAsc(memberId)).thenReturn(Optional.of(oldScore));
+        when(gameScoreRepository.findByMemberId(memberId)).thenReturn(Optional.of(oldScore));
         when(gameScoreDomainService.shouldSaveNewScore(oldScore, newScore)).thenReturn(true);
 
         // when
@@ -67,7 +67,7 @@ class GameScoreCommandServiceImplTest {
         Integer newScore = 60;
         GameScore oldScore = GameScore.of(memberId, 50);
 
-        when(gameScoreRepository.findTopByMemberIdOrderByScoreAsc(memberId)).thenReturn(Optional.of(oldScore));
+        when(gameScoreRepository.findByMemberId(memberId)).thenReturn(Optional.of(oldScore));
         when(gameScoreDomainService.shouldSaveNewScore(oldScore, newScore)).thenReturn(false);
 
         gameScoreService.saveIfBestScore(memberId, newScore);
@@ -81,7 +81,7 @@ class GameScoreCommandServiceImplTest {
         Long memberId = 1L;
         Integer newScore = 30;
 
-        when(gameScoreRepository.findTopByMemberIdOrderByScoreAsc(memberId)).thenReturn(Optional.empty());
+        when(gameScoreRepository.findByMemberId(memberId)).thenReturn(Optional.empty());
         when(gameScoreDomainService.shouldSaveNewScore(null, newScore)).thenReturn(true);
         doThrow(new RuntimeException("DB ERROR")).when(gameScoreRepository).save(any());
 
@@ -100,7 +100,7 @@ class GameScoreCommandServiceImplTest {
         Integer score = 42;
         ArgumentCaptor<GameScore> captor = ArgumentCaptor.forClass(GameScore.class);
 
-        when(gameScoreRepository.findTopByMemberIdOrderByScoreAsc(memberId)).thenReturn(Optional.empty());
+        when(gameScoreRepository.findByMemberId(memberId)).thenReturn(Optional.empty());
         when(gameScoreDomainService.shouldSaveNewScore(null, score)).thenReturn(true);
 
         gameScoreService.saveIfBestScore(memberId, score);

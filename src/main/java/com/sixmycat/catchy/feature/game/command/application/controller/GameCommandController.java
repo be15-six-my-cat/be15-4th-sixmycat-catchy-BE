@@ -9,7 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/games/scores")
+@RequestMapping("/api/v1/games")
 @RequiredArgsConstructor
 public class GameCommandController {
 
