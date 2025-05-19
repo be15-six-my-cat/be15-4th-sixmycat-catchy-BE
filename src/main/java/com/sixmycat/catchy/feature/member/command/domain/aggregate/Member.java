@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -44,5 +46,36 @@ public class Member {
 
     public void updateDeletedAt() {
         this.deletedAt = new Date();
+    }
+
+    // 고양이 리스트
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cat> cats = new ArrayList<>();
+
+    // 나를 팔로우하는 사람들 (followers)
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> followers = new ArrayList<>();
+
+    // 내가 팔로우한 사람들 (followings)
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> followings = new ArrayList<>();
+
+
+    public Member(String nickname, String statusMessage, String profileImage) {
+        this.nickname = nickname;
+        this.statusMessage = statusMessage;
+        this.profileImage = profileImage;
+    }
+
+    public void updateProfile(String nickname, String statusMessage, String profileImage) {
+        this.nickname = nickname;
+        this.statusMessage = statusMessage;
+        this.profileImage = profileImage;
+    }
+
+    // 고양이 추가
+    public void addCat(Cat cat) {
+        cats.add(cat);
+        cat.setMember(this);
     }
 }
