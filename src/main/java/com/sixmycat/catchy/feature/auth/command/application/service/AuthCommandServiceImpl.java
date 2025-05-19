@@ -111,20 +111,6 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         return temp;
     }
 
-    @Override
-    public void logout(String refreshToken) {
-        Set<String> keys = refreshTokenRedisTemplate.keys("REFRESH_TOKEN:*");
-        if (keys != null) {
-            for (String key : keys) {
-                RefreshToken storedToken = refreshTokenRedisTemplate.opsForValue().get(key);
-                if (storedToken != null && refreshToken.equals(storedToken.getToken())) {
-                    refreshTokenRedisTemplate.delete(key);
-                    break;
-                }
-            }
-        }
-    }
-
     /* 테스트 로그인  */
     @Transactional
     public TokenResponse testLogin() {
@@ -139,4 +125,19 @@ public class AuthCommandServiceImpl implements AuthCommandService {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+    @Override
+    public void logout(String refreshToken) {
+        Set<String> keys = refreshTokenRedisTemplate.keys("REFRESH_TOKEN:*");
+        if (keys != null) {
+            for (String key : keys) {
+                RefreshToken storedToken = refreshTokenRedisTemplate.opsForValue().get(key);
+                if (storedToken != null && refreshToken.equals(storedToken.getToken())) {
+                    refreshTokenRedisTemplate.delete(key);
+                    break;
+                }
+            }
+        }
+    }
+
 }

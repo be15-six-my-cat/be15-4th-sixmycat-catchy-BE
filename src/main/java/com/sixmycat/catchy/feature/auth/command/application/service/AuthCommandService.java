@@ -8,6 +8,6 @@ import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 public interface AuthCommandService {
     SocialLoginResponse registerNewMember(ExtraSignupRequest request);
     TempMember getTempMember(String email, String social);
-    void logout(String refreshToken);
     TokenResponse testLogin();
+    void logout(String refreshToken);
 }
