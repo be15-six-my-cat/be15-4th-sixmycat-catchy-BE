@@ -30,6 +30,9 @@ public enum ErrorCode {
     FEED_IMAGE_REQUIRED("04002", "피드에는 최소 1개의 이미지가 필요합니다.", HttpStatus.BAD_REQUEST),
     FEED_IMAGE_TOO_MANY("04003", "피드에는 최대 5개의 이미지만 등록할 수 있습니다.", HttpStatus.BAD_REQUEST),
 
+    //쭈르
+    JJURE_NOT_FOUND("05000","쭈르를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
+
     //댓글
     COMMENT_NOT_FOUND("11000", "해당 상위댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
     INVALID_PARENT_COMMENT("11001", "부모 댓글의 targetType이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
