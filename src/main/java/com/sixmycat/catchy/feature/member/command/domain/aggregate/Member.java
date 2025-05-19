@@ -56,8 +56,14 @@ public class Member {
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Follow> followings = new ArrayList<>();
 
-    // 생성자
+
     public Member(String nickname, String statusMessage, String profileImage) {
+        this.nickname = nickname;
+        this.statusMessage = statusMessage;
+        this.profileImage = profileImage;
+    }
+
+    public void updateProfile(String nickname, String statusMessage, String profileImage) {
         this.nickname = nickname;
         this.statusMessage = statusMessage;
         this.profileImage = profileImage;
