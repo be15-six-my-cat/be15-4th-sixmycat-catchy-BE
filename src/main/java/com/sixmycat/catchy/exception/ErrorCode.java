@@ -34,7 +34,6 @@ public enum ErrorCode {
     FEED_IMAGE_REQUIRED("04002", "피드에는 최소 1개의 이미지가 필요합니다.", HttpStatus.BAD_REQUEST),
     FEED_IMAGE_TOO_MANY("04003", "피드에는 최대 5개의 이미지만 등록할 수 있습니다.", HttpStatus.BAD_REQUEST),
 
-
     //차단
     CANNOT_BLOCK_SELF("03001", "자기 자신은 차단할 수 없습니다.",HttpStatus.BAD_REQUEST),
     ALREADY_BLOCKED("03002", "이미 차단한 사용자입니다.",HttpStatus.BAD_REQUEST),
@@ -49,7 +48,6 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND("11000", "해당 상위댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
     INVALID_PARENT_COMMENT("11001", "부모 댓글의 targetType이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     ;
-
 
     private final String code;
     private final String message;
