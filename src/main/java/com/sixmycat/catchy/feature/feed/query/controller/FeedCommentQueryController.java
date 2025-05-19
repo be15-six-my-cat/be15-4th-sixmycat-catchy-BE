@@ -5,9 +5,8 @@ import com.sixmycat.catchy.common.dto.PageResponse;
 import com.sixmycat.catchy.feature.feed.query.dto.response.FeedCommentResponse;
 import com.sixmycat.catchy.feature.feed.query.service.FeedCommentQueryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,12 +16,12 @@ public class FeedCommentQueryController {
     private final FeedCommentQueryService commentQueryService;
 
     @GetMapping("/{feedId}/comments")
-    public ApiResponse<PageResponse<FeedCommentResponse>> getComments(
+    public ResponseEntity<ApiResponse<PageResponse<FeedCommentResponse>>> getComments(
             @PathVariable Long feedId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ApiResponse.success(commentQueryService.getComments(feedId, page, size));
+        PageResponse<FeedCommentResponse> comments = commentQueryService.getComments(feedId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(comments));
     }
 }
-
