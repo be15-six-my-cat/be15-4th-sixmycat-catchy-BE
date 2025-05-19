@@ -56,6 +56,29 @@
         )
     </select>
 
+    <!-- 5. 댓글 목록 조회 -->
+    <select id="findCommentsByFeedId" resultType="com.sixmycat.catchy.feature.feed.query.dto.response.FeedCommentResponse">
+        SELECT
+        c.id AS commentId,
+        c.member_id AS memberId,
+        m.nickname,
+        c.content,
+        c.created_at,
+        c.parent_comment_id AS parentCommentId
+        FROM comment c
+        JOIN member m ON c.member_id = m.id
+        WHERE c.target_id = #{feedId}
+        AND c.target_type = 'FEED'
+        AND c.deleted_at IS NULL
+        ORDER BY c.created_at ASC
+    </select>
+
+    <select id="existsByFeedId" resultType="boolean">
+        SELECT EXISTS (
+        SELECT 1 FROM feed WHERE id = #{feedId}
+        )
+    </select>
+  
     <select id="findMyFeeds" resultType="com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse">
         SELECT
         f.id AS feedId,
