@@ -19,4 +19,10 @@ public class BlockController {
         return ApiResponse.success(null);
     }
 
+    @DeleteMapping("/{blockedId}")
+    public ApiResponse<Void> unblock(@RequestHeader("X-USER-ID") Long blockerId,
+                                     @PathVariable Long blockedId) {
+        blockService.unblockUser(blockerId, blockedId);
+        return ApiResponse.success(null);
+    }
 }
