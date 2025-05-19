@@ -5,9 +5,8 @@ import com.sixmycat.catchy.common.dto.PageResponse;
 import com.sixmycat.catchy.feature.block.query.dto.response.BlockResponse;
 import com.sixmycat.catchy.feature.block.query.service.BlockQueryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,11 +16,12 @@ public class BlockQueryController {
     private final BlockQueryService blockQueryService;
 
     @GetMapping
-    public ApiResponse<PageResponse<BlockResponse>> getBlockedUsers(
+    public ResponseEntity<ApiResponse<PageResponse<BlockResponse>>> getBlockedUsers(
             @RequestHeader("X-USER-ID") Long blockerId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ApiResponse.success(blockQueryService.getBlockedUsers(blockerId, page, size));
+        PageResponse<BlockResponse> response = blockQueryService.getBlockedUsers(blockerId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
