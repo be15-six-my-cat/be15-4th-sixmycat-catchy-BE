@@ -1,0 +1,15 @@
+package com.sixmycat.catchy.feature.member.command.application.dto.request;
+
+import lombok.Getter;
+
+import java.time.LocalDate;
+
+@Getter
+public class UpdateCatRequest {
+    private Long id;
+    private String name;
+    private String gender;
+    private String breed;
+    private LocalDate birthDay;
+    private Integer age;
+}
