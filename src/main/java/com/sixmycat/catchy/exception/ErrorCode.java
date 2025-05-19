@@ -22,10 +22,6 @@ public enum ErrorCode {
     USING_NICKNAME("01010", "이미 사용중인 닉네임입니다.", HttpStatus.BAD_REQUEST),
     INVALID_NICKNAME_FORMAT("01011", "닉네임 형식이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
     EMPTY_OR_BLANK_NICKNAME("01012", "닉네임은 공백이거나 비워둘 수 없습니다.", HttpStatus.BAD_REQUEST),
-    USING_NICKNAME("01010", "이미 사용중인 닉네임입니다.", HttpStatus.BAD_REQUEST),
-    INVALID_NICKNAME_FORMAT("01011", "닉네임 형식이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
-    EMPTY_OR_BLANK_NICKNAME("01012", "닉네임은 공백이거나 비워둘 수 없습니다.", HttpStatus.BAD_REQUEST),
-    WRONG_NICKNAME_LENGTH("01013", "닉네임 길이는 3~30자입니다.", HttpStatus.BAD_REQUEST),
     WRONG_NICKNAME_LENGTH("01013", "닉네임 길이는 3~30자입니다.", HttpStatus.BAD_REQUEST),
 
     // 멤버
@@ -38,16 +34,20 @@ public enum ErrorCode {
     FEED_IMAGE_REQUIRED("04002", "피드에는 최소 1개의 이미지가 필요합니다.", HttpStatus.BAD_REQUEST),
     FEED_IMAGE_TOO_MANY("04003", "피드에는 최대 5개의 이미지만 등록할 수 있습니다.", HttpStatus.BAD_REQUEST),
 
-
-    //댓글
-    COMMENT_NOT_FOUND("11000", "해당 상위댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
-    INVALID_PARENT_COMMENT("11001", "부모 댓글의 targetType이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    //차단
+    CANNOT_BLOCK_SELF("03001", "자기 자신은 차단할 수 없습니다.",HttpStatus.BAD_REQUEST),
+    ALREADY_BLOCKED("03002", "이미 차단한 사용자입니다.",HttpStatus.BAD_REQUEST),
+    BLOCK_NOT_FOUND("03003", "차단 내역이 없습니다.",HttpStatus.BAD_REQUEST),
 
     // 쮸르
     JJURE_NOT_FOUND("05000","쭈르를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
     JJURE_UPLOAD_FAILED("05001","쭈르를 등록에 실패했습니다", HttpStatus.BAD_REQUEST),
-    NO_PERMISSION_TO_UPDATE_JJURE("05002", "수정 권한이 없습니다",HttpStatus.FORBIDDEN);
+    NO_PERMISSION_TO_UPDATE_JJURE("05002", "수정 권한이 없습니다",HttpStatus.FORBIDDEN),
 
+    //댓글
+    COMMENT_NOT_FOUND("11000", "해당 상위댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
+    INVALID_PARENT_COMMENT("11001", "부모 댓글의 targetType이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    ;
 
     private final String code;
     private final String message;
