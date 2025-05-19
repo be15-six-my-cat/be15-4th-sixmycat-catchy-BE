@@ -9,6 +9,7 @@
     <!-- 1. 피드 기본 정보 -->
     <select id="findFeedBaseInfo" resultType="com.sixmycat.catchy.feature.feed.query.dto.response.FeedBaseInfo">
         SELECT
+        f.id,
         m.id AS authorId,
         m.nickname,
         m.profile_image AS profileImageUrl,
@@ -68,6 +69,23 @@
         f.created_at
         FROM feed f
         WHERE f.member_id = #{memberId}
+        ORDER BY f.created_at DESC
+    </select>
+
+
+    <select id="findFeedList" resultType="com.sixmycat.catchy.feature.feed.query.dto.response.FeedBaseInfo">
+        SELECT
+        f.id AS id,
+        m.id AS authorId,
+        m.nickname,
+        m.profile_image AS profileImageUrl,
+        f.content,
+        f.music_url AS musicUrl,
+        (SELECT COUNT(*) FROM `like` l WHERE l.target_id = f.id AND l.target_type = 'FEED') AS likeCount,
+        (SELECT COUNT(*) FROM comment c WHERE c.target_id = f.id AND c.target_type = 'FEED') AS commentCount,
+        f.created_at
+        FROM feed f
+        JOIN member m ON f.member_id = m.id
         ORDER BY f.created_at DESC
     </select>
 

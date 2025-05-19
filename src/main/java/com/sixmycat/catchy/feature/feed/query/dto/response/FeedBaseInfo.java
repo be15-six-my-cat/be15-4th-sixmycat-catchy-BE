@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class FeedBaseInfo {
+    private Long id;
     private Long authorId;
     private String nickname;
     private String profileImageUrl;
