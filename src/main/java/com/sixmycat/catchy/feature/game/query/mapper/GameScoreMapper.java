@@ -11,4 +11,6 @@ public interface GameScoreMapper {
     Optional<Integer> findScoreByMemberId(Long memberId);
     int findRankByScore(int score);
     List<RankerDto> findTopRankers(int limit);
+
+    int countAllUsers();
 }

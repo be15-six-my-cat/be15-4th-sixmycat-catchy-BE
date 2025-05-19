@@ -10,10 +10,17 @@
     </select>
 
     <!-- 내 랭크 조회 -->
-    <select id="findRankByScore" parameterType="int" resultType="int">
+    <select id="findRankByScore" parameterType="map" resultType="int">
         SELECT COUNT(*) + 1
         FROM game_score
-        WHERE score > #{score}
+        WHERE (score &lt; #{score})
+        OR (score = #{score} AND created_at &lt; #{createdAt});
+    </select>
+
+
+    <!-- 내 랭크 조회 -->
+    <select id="countAllUsers"  resultType="int">
+        SELECT COUNT(*) FROM game_score;
     </select>
 
     <!-- 상위 랭커 조회  -->
@@ -22,15 +29,15 @@
             ranked.rank,
             m.nickname,
             ranked.score
-        FROM (
+         FROM (
             SELECT
                 gs.member_id,
                 gs.score,
-                ROW_NUMBER() OVER (ORDER BY gs.score DESC, gs.created_at ASC) AS rank
+                ROW_NUMBER() OVER (ORDER BY gs.score ASC, gs.created_at ASC) AS rank
             FROM game_score gs
             WHERE gs.score IS NOT NULL
-            LIMIT #{limit}
-        ) ranked
+         ) ranked
         JOIN member m ON ranked.member_id = m.id
+        WHERE ranked.rank &lt;= #{limit}
     </select>
 </mapper>

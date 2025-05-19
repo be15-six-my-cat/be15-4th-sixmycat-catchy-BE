@@ -49,7 +49,9 @@ public enum ErrorCode {
     //댓글
     COMMENT_NOT_FOUND("11000", "해당 상위댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
     INVALID_PARENT_COMMENT("11001", "부모 댓글의 targetType이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
-    ;
+
+    //게임
+    GAME_SCORE_NOT_FOUND("06000","회원에 대한 게임 점수를 조회할 수 없습니다",HttpStatus.NOT_FOUND);
 
 
     private final String code;

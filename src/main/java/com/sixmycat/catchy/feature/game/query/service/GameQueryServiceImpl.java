@@ -40,10 +40,14 @@ public class GameQueryServiceImpl implements GameQueryService {
 
         int myRank = gameScoreMapper.findRankByScore(myScore);
 
+        int totalUserCount = gameScoreMapper.countAllUsers();
+
+        double topPercentage = ((double)(myRank) / totalUserCount) * 100;
+
         List<RankerDto> topRankers = gameScoreMapper.findTopRankers(limit).stream()
                 .map(r -> new RankerDto(r.getRank(), r.getNickname(), r.getScore()))
                 .toList();
 
-        return new GameRankingResponse(myRank, myScore, topRankers);
+        return new GameRankingResponse(myRank, myScore, topPercentage, topRankers);
     }
 }
