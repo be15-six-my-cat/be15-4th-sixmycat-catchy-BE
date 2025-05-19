@@ -71,7 +71,6 @@ spring:
             authorization-grant-type: authorization_code
             scope:
               - account_email
-              - profile_image
         provider:
           naver:
             authorization-uri: https://nid.naver.com/oauth2.0/authorize

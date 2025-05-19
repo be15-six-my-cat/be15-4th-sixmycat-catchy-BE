@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.sixmycat.catchy.common.utils.CookieUtils.createRefreshTokenCookie;
 
@@ -26,21 +27,22 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthCommandService authCommandService;
 
-    @PostMapping("/signup/extra")
-    public ResponseEntity<ApiResponse<SocialLoginResponse>> completeSignup(@RequestBody ExtraSignupRequest request) {
-        SocialLoginResponse result = authCommandService.registerNewMember(request);
+    @PostMapping(value = "/signup/extra", consumes = "multipart/form-data")
+    public ResponseEntity<ApiResponse<SocialLoginResponse>> completeSignup(
+            @ModelAttribute ExtraSignupRequest request,
+            @RequestPart(required = false) MultipartFile profileImage
+    ) {
+        SocialLoginResponse result = authCommandService.registerNewMember(request, profileImage);
 
-        // refreshToken만 쿠키로 내려주고
         ResponseCookie refreshTokenCookie = CookieUtils.createRefreshTokenCookie(result.getRefreshToken());
 
-        // accessToken은 바디로 전달
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .body(ApiResponse.success(
                         SocialLoginResponse.builder()
                                 .id(result.getId())
                                 .accessToken(result.getAccessToken())
-                                .refreshToken(null) // 바디에는 포함시키지 않음
+                                .refreshToken(null)
                                 .build()
                 ));
     }
