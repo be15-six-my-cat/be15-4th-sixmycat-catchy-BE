@@ -45,12 +45,12 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/oauth2/authorization/naver",
                                 "/api/v1/members/signup/naver/callback",
+                                "/api/v1/members/signup/extra",
+                                "/api/v1/members/temp-info",
                                 "/signup.html",
                                 "/signup-extra.html",
                                 "/token.html",
-                                "/login.html",
-                                "/api/v1/members/signup/extra",
-                                "/api/v1/members/temp-info"
+                                "/login.html"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
