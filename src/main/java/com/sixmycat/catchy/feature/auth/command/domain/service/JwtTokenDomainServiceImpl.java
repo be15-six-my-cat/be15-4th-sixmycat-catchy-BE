@@ -39,4 +39,23 @@ public class JwtTokenDomainServiceImpl implements JwtTokenDomainService {
                 .queryParam("userId", memberId)
                 .build().toUriString();
     }
+
+    @Override
+    public String createAccessToken(Long memberId) {
+        return jwtTokenProvider.createToken(memberId);
+    }
+
+    @Override
+    public String createRefreshToken(Long memberId) {
+        return jwtTokenProvider.createRefreshToken(memberId);
+    }
+
+    @Override
+    public void storeRefreshToken(Long memberId, String refreshToken) {
+        refreshTokenRedisTemplate.opsForValue().set(
+                "REFRESH_TOKEN:" + memberId,
+                new RefreshToken(refreshToken),
+                Duration.ofMillis(refreshTokenExpiration)
+        );
+    }
 }

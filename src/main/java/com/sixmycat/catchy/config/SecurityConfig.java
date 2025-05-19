@@ -47,6 +47,7 @@ public class SecurityConfig {
                                 "/api/v1/members/signup/naver/callback",
                                 "/api/v1/members/signup/extra",
                                 "/api/v1/members/temp-info",
+                                "/api/v1/members/token",
                                 "/signup.html",
                                 "/signup-extra.html",
                                 "/token.html",

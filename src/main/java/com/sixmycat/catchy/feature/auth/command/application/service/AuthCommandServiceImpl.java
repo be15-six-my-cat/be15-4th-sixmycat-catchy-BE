@@ -26,6 +26,8 @@ import java.util.Set;
 public class AuthCommandServiceImpl implements AuthCommandService {
 
     private final MemberRepository memberRepository;
+
+    @Qualifier("tempMemberRedisTemplate")
     private final RedisTemplate<String, TempMember> redisTemplate;
 
     @Qualifier("refreshTokenRedisTemplate")
