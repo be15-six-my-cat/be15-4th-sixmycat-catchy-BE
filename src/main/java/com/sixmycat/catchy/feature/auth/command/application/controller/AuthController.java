@@ -1,15 +1,19 @@
 package com.sixmycat.catchy.feature.auth.command.application.controller;
 
+import com.sixmycat.catchy.common.dto.TokenResponse;
 import com.sixmycat.catchy.feature.auth.command.application.service.AuthCommandService;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import com.sixmycat.catchy.feature.auth.command.application.dto.request.ExtraSignupRequest;
 import com.sixmycat.catchy.feature.auth.command.application.dto.response.SocialLoginResponse;
 import com.sixmycat.catchy.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.sixmycat.catchy.common.utils.CookieUtils.createRefreshTokenCookie;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,6 +32,23 @@ public class AuthController {
     public ResponseEntity<ApiResponse<TempMember>> getTempInfo(@RequestParam String email, @RequestParam String social) {
         TempMember temp = authCommandService.getTempMember(email, social.toUpperCase());
         return ResponseEntity.ok(ApiResponse.success(temp));
+    }
+
+    /* 테스트 로그인 */
+    @Operation(summary = "테스트용 로그인", description = "테스트용 로그인 후 JWT를 발급합니다.")
+    @PostMapping("/login/test")
+    public ResponseEntity<ApiResponse<TokenResponse>> login(){
+        TokenResponse token = authCommandService.testLogin();
+        return buildTokenResponse(token);
+    }
+
+
+    /* accessToken 과 refreshToken을 body와 쿠키에 담아 반환 */
+    private ResponseEntity<ApiResponse<TokenResponse>> buildTokenResponse(TokenResponse tokenResponse) {
+        ResponseCookie cookie = createRefreshTokenCookie(tokenResponse.getRefreshToken());  // refreshToken 쿠키 생성
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(ApiResponse.success(tokenResponse));
     }
 
     @PostMapping("/logout")
@@ -53,5 +74,22 @@ public class AuthController {
                 .secure(true) // 배포 환경에서는 true
                 .sameSite("Lax") // 필요 시 Strict, None 등으로 변경
                 .build();
+    }
+
+    /* 테스트 로그인 */
+    @Operation(summary = "테스트용 로그인", description = "테스트용 로그인 후 JWT를 발급합니다.")
+    @PostMapping("/login/test")
+    public ResponseEntity<ApiResponse<TokenResponse>> login(){
+        TokenResponse token = authCommandService.testLogin();
+        return buildTokenResponse(token);
+    }
+
+
+    /* accessToken 과 refreshToken을 body와 쿠키에 담아 반환 */
+    private ResponseEntity<ApiResponse<TokenResponse>> buildTokenResponse(TokenResponse tokenResponse) {
+        ResponseCookie cookie = createRefreshTokenCookie(tokenResponse.getRefreshToken());  // refreshToken 쿠키 생성
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(ApiResponse.success(tokenResponse));
     }
 }
