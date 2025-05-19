@@ -1,6 +1,7 @@
 package com.sixmycat.catchy.config;
 
-import com.sixmycat.catchy.common.auth.domain.RefreshToken;
+import com.sixmycat.catchy.feature.auth.command.domain.aggregate.RefreshToken;
+import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +45,15 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer()); // key를 String으로 직렬화
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer()); // value를 JSON으로 직렬화
+        return redisTemplate;
+    }
+
+    @Bean(name = "tempMemberRedisTemplate")
+    public RedisTemplate<String, TempMember> tempMemberRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, TempMember> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return redisTemplate;
     }
 }

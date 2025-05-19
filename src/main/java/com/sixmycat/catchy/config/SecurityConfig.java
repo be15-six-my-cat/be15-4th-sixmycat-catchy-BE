@@ -21,40 +21,55 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableMethodSecurity //컨트롤 메서드 제어 가능하도록 활성화
+@EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfig {
+
     private final JwtTokenProvider jwtTokenProvider;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {return new BCryptPasswordEncoder();}
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors
-                        .configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exception ->
-                        exception
-                                .authenticationEntryPoint(restAuthenticationEntryPoint)     // 인증 실패
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(restAuthenticationEntryPoint))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/oauth2/authorization/naver",
+                                "/api/v1/members/signup/naver/callback",
+                                "/api/v1/members/signup/extra",
+                                "/api/v1/members/temp-info",
+                                "/signup.html",
+                                "/signup-extra.html",
+                                "/token.html",
+                                "/login.html",
+                                "/api/v1/members/signup/extra",
+                                "/api/v1/members/temp-info",
+                                "/login.html",
+                                "/api/v1/members/temp-info",
+                                "/api/v1/members/login/test"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
-                // 요청 http method, url 기준으로 인증, 인가 필요 여부 설정
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/v1/**").permitAll()
-                                .anyRequest().authenticated()
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login.html") // 커스텀 로그인 페이지 사용
+                        .successHandler(oAuth2SuccessHandler)
                 )
-                // 커스텀 인증 필터(jwt 토큰 필터)
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-        ;
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtTokenProvider);
     }
 
@@ -68,6 +83,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("http://localhost:8000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
@@ -75,5 +91,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-
 }
