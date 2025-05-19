@@ -28,7 +28,7 @@ public class OAuth2AuthenticationServiceImpl implements OAuth2AuthenticationServ
     public SocialLoginResponse handleOAuth2Login(DefaultOAuth2User oAuth2User, String registrationId) {
         String email = userInfoExtractor.extractEmail(oAuth2User, registrationId);
 
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        Optional<Member> optionalMember = memberRepository.findByEmailAndDeletedAtIsNull(email);
         if (optionalMember.isPresent()) {
             Member member = optionalMember.get();
             Long memberId = member.getId();
