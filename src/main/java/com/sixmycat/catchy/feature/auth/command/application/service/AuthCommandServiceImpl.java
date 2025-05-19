@@ -1,5 +1,6 @@
 package com.sixmycat.catchy.feature.auth.command.application.service;
 
+import com.sixmycat.catchy.common.dto.TokenResponse;
 import com.sixmycat.catchy.common.utils.NicknameValidator;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.Set;
@@ -111,6 +113,21 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         return temp;
     }
 
+    /* 테스트 로그인  */
+    @Transactional
+    public TokenResponse testLogin() {
+
+        // 토큰 발급
+        String accessToken = jwtTokenProvider.createToken(1L);
+        String refreshToken = jwtTokenProvider.createRefreshToken(1L);
+
+        return TokenResponse
+                .builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
     @Override
     public void logout(String refreshToken) {
         Set<String> keys = refreshTokenRedisTemplate.keys("REFRESH_TOKEN:*");
@@ -124,4 +141,5 @@ public class AuthCommandServiceImpl implements AuthCommandService {
             }
         }
     }
+
 }
