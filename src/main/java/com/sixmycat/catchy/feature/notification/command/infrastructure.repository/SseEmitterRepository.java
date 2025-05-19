@@ -15,40 +15,42 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Repository
 public class SseEmitterRepository {
-    // key: emitterId (userId_UUID), value: SseEmitter
+
     private final Map<String, SseEmitter> emitterMap = new ConcurrentHashMap<>();
+    private final Map<String, Object> eventCache = new ConcurrentHashMap<>();
 
-    // key: userId, value: List<emitterId>
-    private final Map<Long, List<String>> userEmitterMap = new ConcurrentHashMap<>();
-
-    public void save(String emitterId, Long userId, SseEmitter emitter) {
+    public SseEmitter save(String emitterId, SseEmitter emitter) {
         emitterMap.put(emitterId, emitter);
-        userEmitterMap.computeIfAbsent(userId, id -> new ArrayList<>()).add(emitterId);
+        return emitter;
     }
 
     public void deleteById(String emitterId) {
         emitterMap.remove(emitterId);
-
-        // userEmitterMap에서도 emitterId 제거
-        userEmitterMap.forEach((userId, emitterIds) -> emitterIds.remove(emitterId));
+        eventCache.remove(emitterId);
     }
 
-    public void send(Long userId, NotificationSendResponse response) {
-        List<String> emitterIds = userEmitterMap.getOrDefault(userId, new ArrayList<>());
-
-        for (String emitterId : emitterIds) {
-            SseEmitter emitter = emitterMap.get(emitterId);
-            if (emitter == null) continue;
-
-            try {
-                emitter.send(SseEmitter.event()
-                        .name("notification")
-                        .data(response));
-            } catch (IOException e) {
-                log.warn("SSE 연결 실패 -> emitterId: {}, 이유: {}", emitterId, e.getMessage());
-                emitter.completeWithError(e);
-                deleteById(emitterId);
+    public Map<String, SseEmitter> findAllEmittersStartWithId(Long memberId) {
+        Map<String, SseEmitter> result = new HashMap<>();
+        emitterMap.forEach((key, emitter) -> {
+            if (key.startsWith(memberId.toString())) {
+                result.put(key, emitter);
             }
-        }
+        });
+        return result;
+    }
+
+    public void saveEventCache(String emitterId, Object event) {
+        eventCache.put(emitterId, event);
+    }
+
+    public Map<String, Object> findAllEventCacheStartWithId(Long memberId) {
+        Map<String, Object> result = new HashMap<>();
+        eventCache.forEach((key, event) -> {
+            if (key.startsWith(memberId.toString())) {
+                result.put(key, event);
+            }
+        });
+        return result;
     }
 }
+

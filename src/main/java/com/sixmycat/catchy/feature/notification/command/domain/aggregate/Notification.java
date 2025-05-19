@@ -34,4 +34,12 @@ public class Notification {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Builder
+    public Notification(Long memberId, Long relatedId, NotificationType type, String content) {
+        this.memberId = memberId;
+        this.relatedId = relatedId;
+        this.type = type;
+        this.content = content;
+        this.createdAt = LocalDateTime.now();
+    }
 }

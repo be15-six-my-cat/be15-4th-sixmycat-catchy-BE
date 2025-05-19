@@ -44,6 +44,8 @@ spring:
       cloudfront:
         domain: ${CLOUDFRONT_URL}
 
+  mvc:
+    static-path-pattern: /static/**
   security:
     oauth2:
       client:
