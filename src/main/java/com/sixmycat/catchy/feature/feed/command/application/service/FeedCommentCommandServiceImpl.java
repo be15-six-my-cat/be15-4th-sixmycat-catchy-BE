@@ -19,9 +19,11 @@ public class FeedCommentCommandServiceImpl implements FeedCommentCommandService 
     @Transactional
     public Long createComment(FeedCommentCreateRequest request, Long memberId) {
         if (request.getParentCommentId() != null) {
-            boolean exists = commentRepository.existsById(request.getParentCommentId());
-            if (!exists) {
-                throw new BusinessException(ErrorCode.COMMENT_NOT_FOUND);
+            FeedComment parent = commentRepository.findById(request.getParentCommentId())
+                    .orElseThrow(() -> new BusinessException(ErrorCode.COMMENT_NOT_FOUND));
+
+            if (!parent.getTargetType().equals(request.getTargetType())) {
+                throw new BusinessException(ErrorCode.INVALID_PARENT_COMMENT);
             }
         }
 
