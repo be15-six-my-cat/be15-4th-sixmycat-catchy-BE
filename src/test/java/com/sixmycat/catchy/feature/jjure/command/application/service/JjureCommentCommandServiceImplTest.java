@@ -62,4 +62,43 @@ class JjureCommentCommandServiceImplTest {
                 .hasMessageContaining(ErrorCode.COMMENT_NOT_FOUND.getMessage());
     }
 
+    @Test
+    void shouldDeleteCommentSuccessfully() {
+        // given
+        Long commentId = 1L;
+        Long memberId = 1L;
+        JjureComment comment = JjureComment.create(memberId, 2L, TargetType.FEED, "hi", null);
+
+        when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
+
+        // when
+        commentService.deleteComment(commentId, memberId);
+
+        // then
+        verify(commentRepository).delete(comment); // SQLDelete → 논리 삭제됨
+    }
+
+    @Test
+    void shouldThrowWhenCommentNotFoundOnDelete() {
+        // given
+        when(commentRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> commentService.deleteComment(1L, 1L))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining(ErrorCode.COMMENT_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void shouldThrowWhenUnauthorizedUserDeletesComment() {
+        // given
+        JjureComment comment = JjureComment.create(1L, 2L, TargetType.FEED, "hi", null);
+        when(commentRepository.findById(1L)).thenReturn(Optional.of(comment));
+
+        // when & then
+        assertThatThrownBy(() -> commentService.deleteComment(1L, 999L))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining(ErrorCode.UNAUTHORIZED_USER.getMessage());
+    }
+
 }
