@@ -2,8 +2,8 @@ package com.sixmycat.catchy.feature.jjure.query.controller;
 
 import com.sixmycat.catchy.common.dto.ApiResponse;
 import com.sixmycat.catchy.common.dto.PageResponse;
-import com.sixmycat.catchy.feature.feed.query.dto.response.FeedDetailResponse;
 import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureDetailResponse;
+import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureSummaryResponse;
 import com.sixmycat.catchy.feature.jjure.query.service.JjureQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +32,16 @@ public class JjureQueryController {
             @RequestParam(defaultValue = "10") int size
     ) {
         PageResponse<JjureDetailResponse> response = jjureQueryService.getJjureList(userId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping("/likes")
+    public ResponseEntity<ApiResponse<PageResponse<JjureSummaryResponse>>> getLikedJjures(
+            @RequestHeader(value = "X-USER-ID", required = false) Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        PageResponse<JjureSummaryResponse> response = jjureQueryService.getLikedJjureList(userId, page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
