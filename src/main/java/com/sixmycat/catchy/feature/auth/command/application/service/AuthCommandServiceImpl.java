@@ -13,7 +13,6 @@ import com.sixmycat.catchy.feature.member.command.domain.aggregate.Member;
 import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
 import com.sixmycat.catchy.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -37,9 +36,6 @@ public class AuthCommandServiceImpl implements AuthCommandService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final S3Uploader s3Uploader;
-
-    @Value("${jwt.refresh-expiration}")
-    private Long refreshTokenExpiration;
 
     @Override
     public SocialLoginResponse registerNewMember(ExtraSignupRequest request, MultipartFile profileImage) {
@@ -104,7 +100,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         refreshTokenRedisTemplate.opsForValue().set(
                 "REFRESH_TOKEN:" + memberId,
                 new RefreshToken(refreshToken),
-                Duration.ofMillis(refreshTokenExpiration)
+                Duration.ofMillis(jwtTokenProvider.getRefreshTokenExpiration())
         );
 
         return SocialLoginResponse.loggedIn(memberId, accessToken, refreshToken);
