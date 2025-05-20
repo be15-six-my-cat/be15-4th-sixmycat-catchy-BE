@@ -53,9 +53,8 @@ public class RekognitionService {
                 .anyMatch(FORBIDDEN_LABELS::contains);
     }
     public boolean containsCatLabel(List<Label> labels) {
-        return !labels.isEmpty() &&
-                labels.stream()
-                        .map(label -> label.name().toLowerCase())
-                        .allMatch(CAT_LABELS::contains);
+        return labels.stream()
+                .map(label -> label.name().toLowerCase())
+                .anyMatch(CAT_LABELS::contains);
     }
 }
