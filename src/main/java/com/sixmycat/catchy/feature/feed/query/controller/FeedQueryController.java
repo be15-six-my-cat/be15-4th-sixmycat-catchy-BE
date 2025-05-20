@@ -45,7 +45,7 @@ public class FeedQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    @GetMapping("/like")
+    @GetMapping("/likes")
     public ResponseEntity<ApiResponse<PageResponse<FeedSummaryResponse>>> getLikedFeeds(
             @RequestHeader(value = "X-USER-ID", required = false) Long userId,
             @RequestParam(defaultValue = "0") int page,
