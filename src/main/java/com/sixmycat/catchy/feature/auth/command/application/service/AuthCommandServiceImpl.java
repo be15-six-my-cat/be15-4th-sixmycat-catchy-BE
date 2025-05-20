@@ -44,6 +44,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         String email = request.getEmail();
         String naverKey = "TEMP_N_MEMBER:" + email;
         String kakaoKey = "TEMP_K_MEMBER:" + email;
+        String googleKey = "TEMP_G_MEMBER:" + email;
 
         TempMember temp = null;
         String redisKey = null;
@@ -54,6 +55,9 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         } else if (redisTemplate.hasKey(kakaoKey)) {
             temp = redisTemplate.opsForValue().get(kakaoKey);
             redisKey = kakaoKey;
+        } else if (redisTemplate.hasKey(googleKey)) {
+            temp = redisTemplate.opsForValue().get(googleKey);
+            redisKey = googleKey;
         }
 
         if (temp == null) {
