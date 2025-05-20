@@ -20,6 +20,7 @@ public class TempMemberRedisServiceImpl implements TempMemberRedisService {
         String key = switch (member.getSocial().toUpperCase()) {
             case "KAKAO" -> "TEMP_K_MEMBER:" + member.getEmail();
             case "NAVER" -> "TEMP_N_MEMBER:" + member.getEmail();
+            case "GOOGLE" -> "TEMP_G_MEMBER:" + member.getEmail();
             default -> throw new BusinessException(ErrorCode.SOCIAL_PLATFORM_NOT_SUPPORTED);
         };
         redisTemplate.opsForValue().set(key, member, Duration.ofMinutes(10));

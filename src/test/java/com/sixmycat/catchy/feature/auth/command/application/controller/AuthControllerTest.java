@@ -1,6 +1,7 @@
 package com.sixmycat.catchy.feature.auth.command.application.controller;
 
 import com.sixmycat.catchy.feature.auth.command.application.service.AuthCommandService;
+import com.sixmycat.catchy.security.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,6 +28,10 @@ class AuthControllerTest {
     @SuppressWarnings("removal")
     @MockBean
     private AuthCommandService authCommandService;
+
+    @SuppressWarnings("removal")
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
 
     @Test
     @WithMockUser(username = "10") // 이 부분을 본인 테이터베이스에 있는 member 의 id 값이어야 함!!
