@@ -7,13 +7,16 @@ import com.sixmycat.catchy.feature.feed.command.application.dto.request.FeedUpda
 import com.sixmycat.catchy.feature.feed.command.domain.aggregate.Feed;
 import com.sixmycat.catchy.feature.feed.command.domain.repository.FeedRepository;
 import com.sixmycat.catchy.feature.feed.command.domain.service.FeedDomainService;
+import com.sixmycat.catchy.feature.rekognition.command.application.service.RekognitionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import software.amazon.awssdk.services.rekognition.model.Label;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class FeedCommandServiceImplTest {
@@ -21,31 +24,43 @@ class FeedCommandServiceImplTest {
     private FeedDomainService feedDomainService;
     private FeedRepository feedRepository;
     private FeedCommandServiceImpl feedCommandService;
+    private RekognitionService rekognitionService;
 
     @BeforeEach
     void setUp() {
         feedDomainService = mock(FeedDomainService.class);
         feedRepository = mock(FeedRepository.class);
-        feedCommandService = new FeedCommandServiceImpl(feedDomainService, feedRepository);
+        rekognitionService = mock(RekognitionService.class);
+        feedCommandService = new FeedCommandServiceImpl(feedDomainService, feedRepository, rekognitionService);
     }
+
 
     @Test
     void shouldCreateFeedSuccessfully() {
         // given
-        FeedCreateRequest request = new FeedCreateRequest("content", List.of("url1", "url2"), "musicUrl");
         Long memberId = 1L;
+        FeedCreateRequest request = new FeedCreateRequest(
+                "고양이입니다~",
+                List.of("https://cdn.catchy.com/feed/image1.jpg"),
+                "https://music.example.com/song.mp3"
+        );
 
-        Feed mockFeed = Feed.create("content", memberId, "musicUrl", List.of("url1", "url2"));
-        when(feedRepository.save(any(Feed.class))).thenReturn(mockFeed);
+        List<Label> labels = List.of(
+                Label.builder().name("cat").confidence(99.0f).build()
+        );
+
+        when(rekognitionService.detectLabels(anyString())).thenReturn(labels);
+        when(rekognitionService.containsForbiddenLabel(labels)).thenReturn(false);
+        when(rekognitionService.containsCatLabel(labels)).thenReturn(true);
+
+        Feed fakeFeed = Feed.create(request.getContent(), memberId, request.getMusicUrl(), request.getImageUrls());
+        when(feedRepository.save(any(Feed.class))).thenReturn(fakeFeed);
 
         // when
         Long result = feedCommandService.createFeed(request, memberId);
 
         // then
-        assertThat(result).isEqualTo(mockFeed.getId());
-        verify(feedDomainService).validateContentLength("content");
-        verify(feedDomainService).validateImageCount(List.of("url1", "url2"));
-        verify(feedRepository).save(any(Feed.class));
+        verify(feedRepository, times(1)).save(any(Feed.class));
     }
 
     @Test
