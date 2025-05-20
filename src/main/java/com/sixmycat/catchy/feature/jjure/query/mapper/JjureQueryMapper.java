@@ -1,8 +1,6 @@
 package com.sixmycat.catchy.feature.jjure.query.mapper;
 
 import com.sixmycat.catchy.common.dto.CommentPreview;
-import com.sixmycat.catchy.feature.feed.query.dto.response.FeedBaseInfo;
-import com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse;
 import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureBaseInfo;
 import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureCommentResponse;
 import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureSummaryResponse;
