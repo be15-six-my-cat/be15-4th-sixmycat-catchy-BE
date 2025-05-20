@@ -115,6 +115,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         String key = switch (social.toUpperCase()) {
             case "NAVER" -> "TEMP_N_MEMBER:" + email;
             case "KAKAO" -> "TEMP_K_MEMBER:" + email;
+            case "GOOGLE" -> "TEMP_G_MEMBER:" + email;
             default -> throw new BusinessException(ErrorCode.SOCIAL_PLATFORM_NOT_SUPPORTED);
         };
 
