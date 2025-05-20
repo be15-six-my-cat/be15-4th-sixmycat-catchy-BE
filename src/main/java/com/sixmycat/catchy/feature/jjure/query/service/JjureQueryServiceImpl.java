@@ -93,4 +93,11 @@ public class JjureQueryServiceImpl implements JjureQueryService {
         List<JjureSummaryResponse> list = jjureQueryMapper.findLikedJjures(memberId);
         return PageResponse.from(new PageInfo<>(list));
     }
+
+    @Override
+    public PageResponse<JjureSummaryResponse> getMyJjureList(Long memberId, int page, int size) {
+        PageHelper.startPage(page + 1, size); // PageHelper는 1부터 시작
+        List<JjureSummaryResponse> list = jjureQueryMapper.findMyJjures(memberId);
+        return PageResponse.from(new PageInfo<>(list));
+    }
 }
