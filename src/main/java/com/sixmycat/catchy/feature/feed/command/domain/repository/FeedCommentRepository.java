@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FeedCommentRepository extends JpaRepository<FeedComment, Long> {
     boolean existsById(Long id);
+    void deleteAllByParentCommentId(Long parentCommentId);
 }

@@ -48,7 +48,11 @@ public class JjureCommentCommandServiceImpl implements JjureCommentCommandServic
             throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
         }
 
-        commentRepository.delete(comment); // 논리 삭제 (deleted_at 업데이트)
+        // 자식 댓글들도 함께 삭제
+        commentRepository.deleteAllByParentCommentId(commentId);
+
+        // 부모 댓글 삭제
+        commentRepository.delete(comment);
     }
 
 }

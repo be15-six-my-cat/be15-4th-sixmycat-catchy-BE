@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JjureCommentRepository extends JpaRepository<JjureComment, Long> {
     boolean existsById(Long id);
+    void deleteAllByParentCommentId(Long parentCommentId);
 }
