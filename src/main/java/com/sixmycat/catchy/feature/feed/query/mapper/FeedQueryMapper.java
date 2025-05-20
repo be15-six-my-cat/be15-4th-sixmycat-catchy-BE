@@ -27,5 +27,7 @@ public interface FeedQueryMapper {
 
     List<FeedSummaryResponse> findMyFeeds(Long memberId);
 
+    List<FeedSummaryResponse> findLikedFeeds(Long memberId);
+
     List<FeedBaseInfo> findFeedList();
 }
