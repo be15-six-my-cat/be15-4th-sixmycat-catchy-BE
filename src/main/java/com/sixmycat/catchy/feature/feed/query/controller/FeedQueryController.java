@@ -39,7 +39,7 @@ public class FeedQueryController {
     public ResponseEntity<ApiResponse<PageResponse<FeedDetailResponse>>> getFeeds(
             @RequestHeader(value = "X-USER-ID", required = false) Long userId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "5") int size
     ) {
         PageResponse<FeedDetailResponse> response = feedQueryService.getFeedList(userId, page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
