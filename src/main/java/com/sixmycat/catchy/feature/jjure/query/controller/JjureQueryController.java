@@ -44,4 +44,14 @@ public class JjureQueryController {
         PageResponse<JjureSummaryResponse> response = jjureQueryService.getLikedJjureList(userId, page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<PageResponse<JjureSummaryResponse>>> getMyJjures(
+            @RequestHeader(value = "X-USER-ID", required = false) Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        PageResponse<JjureSummaryResponse> response = jjureQueryService.getMyJjureList(userId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
 }
