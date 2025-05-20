@@ -34,7 +34,8 @@ public enum ErrorCode {
     FEED_CONTENT_TOO_LONG("04001", "피드 내용은 500자 이하여야 합니다.", HttpStatus.BAD_REQUEST),
     FEED_IMAGE_REQUIRED("04002", "피드에는 최소 1개의 이미지가 필요합니다.", HttpStatus.BAD_REQUEST),
     FEED_IMAGE_TOO_MANY("04003", "피드에는 최대 5개의 이미지만 등록할 수 있습니다.", HttpStatus.BAD_REQUEST),
-
+    FORBIDDEN_LABEL_FOUND("04004", "강아지가 발견되었습니다.", HttpStatus.BAD_REQUEST),
+    NO_CAT_LABEL_FOUND("04005", "피드에 고양이가 아닌 이미지가 포함되었습니다.", HttpStatus.BAD_REQUEST),
 
     //차단
     CANNOT_BLOCK_SELF("03001", "자기 자신은 차단할 수 없습니다.",HttpStatus.BAD_REQUEST),
@@ -52,7 +53,6 @@ public enum ErrorCode {
 
     //게임
     GAME_SCORE_NOT_FOUND("06000","회원에 대한 게임 점수를 조회할 수 없습니다",HttpStatus.NOT_FOUND);
-
 
     private final String code;
     private final String message;
