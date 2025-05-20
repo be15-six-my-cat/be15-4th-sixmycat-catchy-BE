@@ -5,6 +5,7 @@ import com.sixmycat.catchy.common.utils.NicknameValidator;
 import com.sixmycat.catchy.common.s3.S3Uploader;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
+import com.sixmycat.catchy.feature.auth.command.application.dto.response.SocialLoginResultResponse;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.RefreshToken;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import com.sixmycat.catchy.feature.auth.command.application.dto.request.ExtraSignupRequest;
@@ -38,7 +39,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
     private final S3Uploader s3Uploader;
 
     @Override
-    public SocialLoginResponse registerNewMember(ExtraSignupRequest request, MultipartFile profileImage) {
+    public SocialLoginResultResponse registerNewMember(ExtraSignupRequest request, MultipartFile profileImage) {
         // Redis 키를 이메일 기반으로 두 가지 방식 모두 확인
         String email = request.getEmail();
         String naverKey = "TEMP_N_MEMBER:" + email;
@@ -103,7 +104,10 @@ public class AuthCommandServiceImpl implements AuthCommandService {
                 Duration.ofMillis(jwtTokenProvider.getRefreshTokenExpiration())
         );
 
-        return SocialLoginResponse.loggedIn(memberId, accessToken, refreshToken);
+        return new SocialLoginResultResponse(
+                SocialLoginResponse.loggedIn(memberId, accessToken),
+                refreshToken
+        );
     }
 
     @Override

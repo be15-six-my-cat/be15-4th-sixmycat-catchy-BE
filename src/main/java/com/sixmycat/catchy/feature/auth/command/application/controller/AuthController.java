@@ -4,6 +4,7 @@ import com.sixmycat.catchy.common.dto.ApiResponse;
 import com.sixmycat.catchy.common.utils.CookieUtils;
 import com.sixmycat.catchy.feature.auth.command.application.dto.request.ExtraSignupRequest;
 import com.sixmycat.catchy.feature.auth.command.application.dto.response.SocialLoginResponse;
+import com.sixmycat.catchy.feature.auth.command.application.dto.response.SocialLoginResultResponse;
 import com.sixmycat.catchy.feature.auth.command.application.service.AuthCommandService;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import com.sixmycat.catchy.security.jwt.JwtTokenProvider;
@@ -32,19 +33,13 @@ public class AuthController {
             @ModelAttribute ExtraSignupRequest request,
             @RequestPart(required = false) MultipartFile profileImage
     ) {
-        SocialLoginResponse result = authCommandService.registerNewMember(request, profileImage);
+        SocialLoginResultResponse result = authCommandService.registerNewMember(request, profileImage);
 
         ResponseCookie refreshTokenCookie = CookieUtils.createRefreshTokenCookie(result.getRefreshToken());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                .body(ApiResponse.success(
-                        SocialLoginResponse.builder()
-                                .id(result.getId())
-                                .accessToken(result.getAccessToken())
-                                .refreshToken(null)
-                                .build()
-                ));
+                .body(ApiResponse.success(result.getResponse()));
     }
 
     @GetMapping("/temp-info")
@@ -71,10 +66,6 @@ public class AuthController {
     public ResponseEntity<ApiResponse<SocialLoginResponse>> reissueAccessToken(
             @CookieValue(name = "refreshToken", required = false) String refreshToken
     ) {
-        if (refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         // userId 추출
         Long userId = Long.parseLong(jwtTokenProvider.getUserIdFromJwt(refreshToken));
 
