@@ -92,7 +92,7 @@ public class AuthController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse<Void>> withdraw(
+    public ResponseEntity<ApiResponse<Void>> delete(
             @CookieValue(name = "refreshToken", required = false) String refreshToken
     ) {
         if (refreshToken != null) {
