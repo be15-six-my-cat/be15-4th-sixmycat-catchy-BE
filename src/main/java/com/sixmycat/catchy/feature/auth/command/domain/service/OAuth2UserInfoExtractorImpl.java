@@ -28,7 +28,6 @@ public class OAuth2UserInfoExtractorImpl implements OAuth2UserInfoExtractor {
                 .social(platform.toUpperCase())
                 .name(extractName(user, platform))
                 .contactNumber(extractPhone(user, platform))
-                .profileImage(extractProfileImage(user, platform))
                 .build();
     }
 
@@ -59,24 +58,4 @@ public class OAuth2UserInfoExtractorImpl implements OAuth2UserInfoExtractor {
         Object phoneNumber = kakaoAccount.get("phone_number");
         return phoneNumber != null ? phoneNumber.toString() : null;
     }
-
-
-    private String extractProfileImage(DefaultOAuth2User user, String platform) {
-        if (!platform.equals("kakao")) {
-            Map<String, Object> response = (Map<String, Object>) user.getAttributes().get("response");
-            if (response == null) return null;
-            Object image = response.get("profile_image");
-            return image != null ? image.toString() : null;
-        }
-
-        Map<String, Object> kakaoAccount = (Map<String, Object>) user.getAttributes().get("kakao_account");
-        if (kakaoAccount == null) return null;
-
-        Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
-        if (profile == null) return null;
-
-        Object profileImage = profile.get("profile_image_url");
-        return profileImage != null ? profileImage.toString() : null;
-    }
-
 }
