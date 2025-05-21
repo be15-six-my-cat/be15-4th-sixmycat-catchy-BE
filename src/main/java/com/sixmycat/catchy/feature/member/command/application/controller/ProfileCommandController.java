@@ -20,13 +20,13 @@ public class ProfileCommandController {
 
     @PatchMapping("/me")
     public ResponseEntity<UpdateProfileResponse> updateProfile(
-//            @AuthenticationPrincipal Long memberId,
-            @RequestHeader(value = "X-Debug-Member-Id", required = false) Long debugMemberId, //추후 변경
+            @AuthenticationPrincipal String memberId,
+//            @RequestHeader(value = "X-Debug-Member-Id", required = false) Long debugMemberId, //추후 변경
             @RequestBody UpdateProfileRequest request
     ) {
-        Long memberId = debugMemberId != null ? debugMemberId : 1L; //추후 변경
+//        Long memberId = debugMemberId != null ? debugMemberId : 1L; //추후 변경
 
-        UpdateProfileResponse response = memberCommandService.updateProfile(memberId, request);
+        UpdateProfileResponse response = memberCommandService.updateProfile(Long.parseLong(memberId), request);
         return ResponseEntity.ok(response);
     }
 }
