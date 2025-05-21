@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class NotificationDTO {
+    Long id;
     Long memberId;
     Long senderMemberId;
     String profileImage;
