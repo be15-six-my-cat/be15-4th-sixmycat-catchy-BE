@@ -1,13 +1,20 @@
 package com.sixmycat.catchy.feature.member;
 
+import com.sixmycat.catchy.common.dto.PageResponse;
+import com.sixmycat.catchy.exception.BusinessException;
+import com.sixmycat.catchy.exception.ErrorCode;
+import com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse;
+import com.sixmycat.catchy.feature.feed.query.service.FeedQueryService;
+import com.sixmycat.catchy.feature.game.query.dto.GameRankingResponse;
+import com.sixmycat.catchy.feature.game.query.service.GameQueryService;
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Cat;
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Member;
-import com.sixmycat.catchy.feature.member.command.domain.repository.FollowRepository;
-import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
-import com.sixmycat.catchy.feature.member.query.dto.response.Badges;
+import com.sixmycat.catchy.feature.member.query.dto.response.CatResponse;
+import com.sixmycat.catchy.feature.member.query.dto.response.FollowResponse;
+import com.sixmycat.catchy.feature.member.query.dto.response.MemberResponse;
 import com.sixmycat.catchy.feature.member.query.dto.response.MyProfileResponse;
 import com.sixmycat.catchy.feature.member.query.mapper.ProfileMapper;
-import com.sixmycat.catchy.feature.member.query.service.ProfileQueryService;
+import com.sixmycat.catchy.feature.member.query.service.ProfileQueryServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,80 +24,138 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class ProfileQueryServiceTest {
 
     @InjectMocks
-    private ProfileQueryService profileQueryService;
+    private ProfileQueryServiceImpl profileQueryService;
 
     @Mock
-    private MemberRepository memberRepository;
+    private FeedQueryService feedQueryService;
 
     @Mock
-    private FollowRepository followRepository;
+    private GameQueryService gameQueryService;
 
     @Mock
     private ProfileMapper profileMapper;
 
+
     @Test
-    @DisplayName("프로필 정보 조회")
+    @DisplayName("프로필 정보 조회 - 성공")
     void getMyProfile() {
+        Long memberId = 1L;
+
+        Member member = Member.builder()
+                .id(memberId)
+                .nickname("길동이")
+                .statusMessage("안녕하세요!")
+                .profileImage("default1.png")
+                .cats(List.of(
+                        new Cat("나비", "F", "코리안숏헤어", LocalDate.of(2020, 5, 1), 4, null)
+                ))
+                .build();
+
         // given
-        Long userId = 1L;
+        given(profileMapper.findMemberById(memberId))
+                .willReturn(new MemberResponse(
+                        memberId,
+                        member.getNickname(),
+                        member.getStatusMessage(),
+                        member.getProfileImage()
+                ));
 
-        // 생성자 사용
-        Member member = new Member("길동이", "안녕하세요!", "default1.png");
+        given(profileMapper.findFollowCountById(memberId))
+                .willReturn(new FollowResponse(0, 0));
 
-        // 고양이 정보 생성 및 연관관계 설정
-        Cat cat = new Cat("나비", "F", "코리안숏헤어", LocalDate.now(), 4, member);
-        member.addCat(cat); // 양방향 연관관계 설정 메서드 사용
+        given(profileMapper.findCatsByMemberId(memberId))
+                .willReturn(List.of(
+                        new CatResponse(1L,"나비", "F", "코리안숏헤어", LocalDate.of(2020, 5, 1), 4)
+                ));
 
-        given(memberRepository.findById(userId)).willReturn(Optional.of(member));
-        given(followRepository.countByFollower_Id(userId)).willReturn(60000);
-        given(followRepository.countByFollowing_Id(userId)).willReturn(123);
+        @SuppressWarnings("unchecked")
+        PageResponse<FeedSummaryResponse> mockedPageResponse = (PageResponse<FeedSummaryResponse>) mock(PageResponse.class);
+        when(mockedPageResponse.getTotalElements()).thenReturn(0L);
 
-        Badges badges = new Badges(true, true, true);
+        given(feedQueryService.getMyFeeds(memberId, 0, 1)).willReturn(mockedPageResponse);
 
-        MyProfileResponse expectedResponse = new MyProfileResponse(
-                "길동이",
-                "안녕하세요!",
-                "default1.png",
-                badges,
-                60000,
-                123,
-                0,
-                List.of(),
-                List.of(),
-                List.of(),
-                List.of(),
-                List.of()
-        );
-
-        given(profileMapper.toMyProfileResponse(
-                eq(member),
-                eq(60000),
-                eq(123),
-                eq(0),
-                any(Badges.class),
-                anyList(),
-                anyList(),
-                anyList(),
-                anyList()
-        )).willReturn(expectedResponse);
+        given(gameQueryService.getRanking(memberId, 1))
+                .willThrow(new BusinessException(ErrorCode.GAME_SCORE_NOT_FOUND));
 
         // when
-        MyProfileResponse actual = profileQueryService.getMyProfile(userId);
+        MyProfileResponse response = profileQueryService.getMyProfile(memberId);
 
         // then
-        assertThat(actual).isEqualTo(expectedResponse);
+        assertThat(response.getMember().getMemberId()).isEqualTo(memberId);
+        assertThat(response.getMember().getNickname()).isEqualTo("길동이");
+        assertThat(response.getMember().getStatusMessage()).isEqualTo("안녕하세요!");
+        assertThat(response.getMember().getProfileImage()).isEqualTo("default1.png");
+
+        assertThat(response.getContents().getFeedCount()).isEqualTo(0);
+
+        assertThat(response.getBadges().isTopRanker()).isFalse();
+        assertThat(response.getBadges().isBirthday()).isFalse();
+
+        assertThat(response.getCats()).hasSize(1);
+        assertThat(response.getCats().get(0).getName()).isEqualTo("나비");
     }
+
+    @Test
+    @DisplayName("타인 프로필 조회 - 성공")
+    void getOtherProfile_success() {
+        // given
+        Long targetMemberId = 2L;
+
+        // 더미 응답 데이터 구성
+        given(profileMapper.findMemberById(targetMemberId))
+                .willReturn(new MemberResponse(
+                        targetMemberId,
+                        "다른유저",
+                        "타인 소개글",
+                        "other-profile.png"
+                ));
+
+        given(profileMapper.findFollowCountById(targetMemberId))
+                .willReturn(new FollowResponse(12, 5));
+
+        given(profileMapper.findCatsByMemberId(targetMemberId))
+                .willReturn(List.of(
+                        new CatResponse(1L,"코코", "M", "러시안블루", LocalDate.of(2019, 3, 10), 5)
+                ));
+
+        @SuppressWarnings("unchecked")
+        PageResponse<FeedSummaryResponse> mockPageResponse = mock(PageResponse.class);
+        when(mockPageResponse.getTotalElements()).thenReturn(10L);
+
+        given(feedQueryService.getMyFeeds(targetMemberId, 0, 1)).willReturn(mockPageResponse);
+
+        given(gameQueryService.getRanking(targetMemberId, 1))
+                .willReturn(new GameRankingResponse(3, 100, 92.5, List.of())); // 1등 아님
+
+        // when
+        MyProfileResponse response = profileQueryService.getOtherProfile(targetMemberId);
+
+        // then
+        assertThat(response.getMember().getMemberId()).isEqualTo(targetMemberId);
+        assertThat(response.getMember().getNickname()).isEqualTo("다른유저");
+        assertThat(response.getMember().getStatusMessage()).isEqualTo("타인 소개글");
+        assertThat(response.getMember().getProfileImage()).isEqualTo("other-profile.png");
+
+        assertThat(response.getFollows().getFollowerCount()).isEqualTo(12);
+        assertThat(response.getFollows().getFollowingCount()).isEqualTo(5);
+
+        assertThat(response.getCats()).hasSize(1);
+        assertThat(response.getCats().get(0).getName()).isEqualTo("코코");
+
+        assertThat(response.getContents().getFeedCount()).isEqualTo(10);
+        assertThat(response.getBadges().isTopRanker()).isFalse(); // 랭킹 1등 아님
+    }
+
 }
+
 
