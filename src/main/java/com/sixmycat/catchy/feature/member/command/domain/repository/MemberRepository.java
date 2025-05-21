@@ -11,9 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByEmailAndDeletedAtIsNull(String email);
-
-    boolean existsByNicknameAndDeletedAtIsNull(String nickname);
+   boolean existsByNicknameAndDeletedAtIsNull(String nickname);
 
     @Query("SELECT m.profileImage FROM Member m WHERE m.id = :id AND m.deletedAt IS NULL")
     Optional<String> findProfileImageByIdAndDeletedAtIsNull(@Param("id") Long id);
@@ -22,4 +20,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @EntityGraph(attributePaths = "cats")
     Optional<Member> findById(Long id);
 
+    Optional<Member> findByEmailAndSocialAndDeletedAtIsNull(String email, String upperCase);
 }

@@ -46,12 +46,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 authToken.getAuthorizedClientRegistrationId()
         );
 
-        // refreshToken 쿠키 설정
-        String refreshToken = (String) RequestContextHolder.getRequestAttributes()
-                .getAttribute("refreshToken", RequestAttributes.SCOPE_REQUEST);
-        if (refreshToken != null) {
-            ResponseCookie cookie = CookieUtils.createRefreshTokenCookie(refreshToken);
-            response.addHeader("Set-Cookie", cookie.toString());
+        // 기존 유저인 경우에만 refreshToken 쿠키 설정
+        if (!loginResponse.isNewUser()) {
+            String refreshToken = (String) RequestContextHolder.getRequestAttributes()
+                    .getAttribute("refreshToken", RequestAttributes.SCOPE_REQUEST);
+            if (refreshToken != null) {
+                ResponseCookie cookie = CookieUtils.createRefreshTokenCookie(refreshToken);
+                response.addHeader("Set-Cookie", cookie.toString());
+            }
         }
 
         // 분기: 신규 유저는 추가 정보 입력 페이지로 리디렉트
@@ -67,8 +69,11 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             return;
         }
 
-
         // 기존 유저는 로그인 완료 페이지로 리디렉트
-        response.sendRedirect(loginSuccessPageUrl);
+        String redirectUrl = UriComponentsBuilder.fromUriString(loginSuccessPageUrl)
+                .queryParam("accessToken", loginResponse.getAccessToken())
+                .build().toUriString();
+
+        response.sendRedirect(redirectUrl);
     }
 }
