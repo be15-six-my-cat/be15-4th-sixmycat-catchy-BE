@@ -5,10 +5,18 @@
     <!-- 기본 회원 정보 -->
     <select id="findMemberById" parameterType="long"
             resultType="com.sixmycat.catchy.feature.member.query.dto.response.MemberResponse">
-        SELECT id AS memberId, nickname, status_message AS statusMessage, profile_image AS profileImage
+        SELECT
+        id AS id,
+        email,
+        nickname,
+        name,
+        contact_number AS contactNumber,
+        profile_image AS profileImage,
+        social
         FROM member
         WHERE id = #{memberId}
     </select>
+
 
     <!-- 팔로우 수 정보 -->
     <select id="findFollowCountById" parameterType="long"
