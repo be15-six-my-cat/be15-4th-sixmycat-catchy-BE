@@ -7,7 +7,8 @@
         SELECT
         n.id,
         n.member_id,
-        n.sender_member_id,
+        m.id AS senderId
+        m.nickname AS senderNickname,
         m.profile_image,
         n.content,
         n.type,
