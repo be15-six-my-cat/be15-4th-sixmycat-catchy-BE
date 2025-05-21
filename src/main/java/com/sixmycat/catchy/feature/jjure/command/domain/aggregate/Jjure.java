@@ -24,6 +24,8 @@ public class Jjure {
 
     private String caption;
 
+    private String thumbnail_url;
+
     private String fileKey;
 
     private String musicUrl;
