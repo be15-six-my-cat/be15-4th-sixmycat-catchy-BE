@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 public class NotificationDTO {
     Long id;
     Long memberId;
-    Long senderMemberId;
+    Long senderId;
+    String senderNickname;
     String profileImage;
     String content;
     NotificationType type;
