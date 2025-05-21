@@ -5,8 +5,6 @@ import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.feed.query.service.FeedQueryService;
 import com.sixmycat.catchy.feature.game.query.dto.GameRankingResponse;
 import com.sixmycat.catchy.feature.game.query.service.GameQueryService;
-import com.sixmycat.catchy.feature.member.command.domain.aggregate.Member;
-import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
 import com.sixmycat.catchy.feature.member.query.dto.response.*;
 import com.sixmycat.catchy.feature.member.query.mapper.ProfileMapper;
 import lombok.RequiredArgsConstructor;
@@ -66,10 +64,6 @@ public class ProfileQueryServiceImpl implements ProfileQueryService {
 
         FeedResponse contents = FeedResponse.builder()
                 .feedCount(feedCount)
-                .myFeeds(isMine ? List.of() : List.of())     // 추후 조건 분기 가능
-                .myVideos(isMine ? List.of() : List.of())
-                .likedFeeds(isMine ? List.of() : List.of())
-                .likedVideos(isMine ? List.of() : List.of())
                 .build();
 
         return MyProfileResponse.builder()
