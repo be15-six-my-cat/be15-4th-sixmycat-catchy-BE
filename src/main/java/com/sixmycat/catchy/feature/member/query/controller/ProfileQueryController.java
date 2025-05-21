@@ -1,10 +1,13 @@
 package com.sixmycat.catchy.feature.member.query.controller;
 
+import com.sixmycat.catchy.exception.BusinessException;
+import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.member.query.dto.response.MyProfileResponse;
 import com.sixmycat.catchy.feature.member.query.service.ProfileQueryService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,14 +18,14 @@ public class ProfileQueryController {
     private final ProfileQueryService profileQueryService;
 
     @GetMapping("/me")
-    public MyProfileResponse getMyProfile() {
-        Long userId = 1L; // 임시로 1번 유저 고정 (추후 변경 예정)
-        return profileQueryService.getMyProfile(userId);
+    public ResponseEntity<MyProfileResponse> getMyProfile(@AuthenticationPrincipal String memberId) {
+        MyProfileResponse response = profileQueryService.getMyProfile(Long.parseLong(memberId));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<MyProfileResponse> getOtherProfile(@PathVariable Long memberId) {
-        MyProfileResponse response = profileQueryService.getOtherProfile(memberId);
+    public ResponseEntity<MyProfileResponse> getOtherProfile(@PathVariable String memberId) {
+        MyProfileResponse response = profileQueryService.getOtherProfile(Long.parseLong(memberId));
         return ResponseEntity.ok(response);
     }
 }

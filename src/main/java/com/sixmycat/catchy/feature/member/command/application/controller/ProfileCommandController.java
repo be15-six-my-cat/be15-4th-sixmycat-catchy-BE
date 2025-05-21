@@ -16,16 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileCommandController {
 
     private final MemberCommandService memberCommandService;
-    private final ProfileQueryService profileQueryService;
 
     @PatchMapping("/me")
     public ResponseEntity<UpdateProfileResponse> updateProfile(
             @AuthenticationPrincipal String memberId,
-//            @RequestHeader(value = "X-Debug-Member-Id", required = false) Long debugMemberId, //추후 변경
             @RequestBody UpdateProfileRequest request
     ) {
-//        Long memberId = debugMemberId != null ? debugMemberId : 1L; //추후 변경
-
         UpdateProfileResponse response = memberCommandService.updateProfile(Long.parseLong(memberId), request);
         return ResponseEntity.ok(response);
     }
