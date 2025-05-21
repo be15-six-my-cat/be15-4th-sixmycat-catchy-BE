@@ -44,22 +44,31 @@ public class JjureCommandController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    /* 쭈르 수정 핸들러 */
-    @Operation(summary = "쭈르 수정", description = "캡션과 파일 키(fileKey)를 수정합니다.")
-    @PutMapping
-    public ResponseEntity<ApiResponse<Void>> updateJjure(
-            @RequestBody @Valid JjureUpdateRequest request,
-            @AuthenticationPrincipal String memberId
-    ) {
-        jjureService.updateJjure(request, Long.parseLong(memberId));
-        return ResponseEntity.ok(ApiResponse.success(null));
-    }
-
     /* S3에 썸네일 저장 */
     @PostMapping("/thumbnail")
     public ApiResponse<String> uploadThumbnailImage(@RequestPart MultipartFile file) {
         String url = jjureService.uploadThumbnailImage(file);
         return ApiResponse.success(url);
+    }
+
+    /* 쭈르 수정 핸들러 */
+    @Operation(summary = "쭈르 수정", description = "캡션과 파일 키(fileKey)를 수정합니다.")
+    @PutMapping("/{jjureId}")
+    public ResponseEntity<ApiResponse<Void>> updateJjure(
+            @PathVariable Long jjureId,
+            @RequestBody @Valid JjureUpdateRequest request,
+            @AuthenticationPrincipal String memberId
+    ) {
+        jjureService.updateJjure(request, Long.parseLong(memberId), jjureId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /* 쭈르 삭제*/
+    @DeleteMapping("/{jjureId}")
+    public ApiResponse<Void> deleteFeed(@PathVariable Long jjureId,
+                                        @AuthenticationPrincipal String memberId) {
+        jjureService.deleteJjure(Long.parseLong(memberId), jjureId);
+        return ApiResponse.success(null);
     }
 
 

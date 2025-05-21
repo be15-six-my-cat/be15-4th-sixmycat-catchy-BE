@@ -6,9 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface JjureRepository extends JpaRepository<Jjure, Long> {
 
     @Query("SELECT j.memberId FROM Jjure j WHERE j.id = :jjureId")
     Long findMemberIdById(@Param("jjureId") Long jjureId);
+
+    Optional<Jjure> findByMemberId(Long memberId);
 }

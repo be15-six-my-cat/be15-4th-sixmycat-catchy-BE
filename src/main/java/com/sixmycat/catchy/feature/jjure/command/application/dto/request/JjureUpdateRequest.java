@@ -14,6 +14,5 @@ public class JjureUpdateRequest {
     @NotBlank(message = "파일 키는 필수입니다.")
     private String fileKey;
 
-    @NotNull(message = "쭈르 ID는 필수입니다.")
-    private Long jjureId;
+    private String thumbnailUrl;
 }

@@ -47,6 +47,7 @@ public enum ErrorCode {
     JJURE_UPLOAD_FAILED("05001","쭈르를 등록에 실패했습니다", HttpStatus.BAD_REQUEST),
     NO_PERMISSION_TO_UPDATE_JJURE("05002", "수정 권한이 없습니다",HttpStatus.FORBIDDEN),
     INVALID_FILE_TYPE("05003","유효하지 않은 파일 타입입니다." ,HttpStatus.BAD_REQUEST),
+    NO_PERMISSION_TO_DELETE_JJURE("05004", "삭제 권한이 없습니다",HttpStatus.FORBIDDEN),
 
     //댓글
     COMMENT_NOT_FOUND("11000", "해당 상위댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
