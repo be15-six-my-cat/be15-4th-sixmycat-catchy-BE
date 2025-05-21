@@ -40,7 +40,6 @@
         JOIN member m ON c.member_id = m.id
         WHERE c.target_id = #{feedId}
         AND c.target_type = 'FEED'
-        AND c.deleted_at IS NULL
         ORDER BY c.created_at DESC
         LIMIT 1
     </select>
@@ -69,7 +68,6 @@
         JOIN member m ON c.member_id = m.id
         WHERE c.target_id = #{feedId}
         AND c.target_type = 'FEED'
-        AND c.deleted_at IS NULL
         ORDER BY c.created_at ASC
     </select>
 

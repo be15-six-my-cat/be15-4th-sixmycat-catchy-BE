@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-@SQLDelete(sql = "UPDATE comment SET deleted_at = NOW() WHERE id = ?")
-@Where(clause = "deleted_at IS NULL")
 public class FeedComment {
 
     @Id
@@ -42,9 +40,6 @@ public class FeedComment {
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
 
     @Column(nullable = false)
     private String content;

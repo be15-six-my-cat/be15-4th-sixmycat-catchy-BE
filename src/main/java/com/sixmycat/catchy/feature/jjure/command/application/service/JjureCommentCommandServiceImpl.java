@@ -2,12 +2,15 @@ package com.sixmycat.catchy.feature.jjure.command.application.service;
 
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
+import com.sixmycat.catchy.feature.feed.command.domain.aggregate.FeedComment;
 import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureCommentCreateRequest;
 import com.sixmycat.catchy.feature.jjure.command.domain.aggregate.JjureComment;
 import com.sixmycat.catchy.feature.jjure.command.domain.repository.JjureCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,11 +51,16 @@ public class JjureCommentCommandServiceImpl implements JjureCommentCommandServic
             throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
         }
 
-        // 자식 댓글들도 함께 삭제
-        commentRepository.deleteAllByParentCommentId(commentId);
+        // 재귀적으로 자식 댓글 포함 삭제
+        deleteRecursively(commentId);
+    }
 
-        // 부모 댓글 삭제
-        commentRepository.delete(comment);
+    private void deleteRecursively(Long commentId) {
+        List<JjureComment> children = commentRepository.findAllByParentCommentId(commentId);
+        for (JjureComment child : children) {
+            deleteRecursively(child.getCommentId());
+        }
+        commentRepository.deleteById(commentId);
     }
 
 }
