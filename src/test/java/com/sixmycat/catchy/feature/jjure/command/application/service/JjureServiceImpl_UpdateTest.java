@@ -1,5 +1,7 @@
 package com.sixmycat.catchy.feature.jjure.command.application.service;
 
+import com.sixmycat.catchy.common.s3.S3Uploader;
+import com.sixmycat.catchy.common.s3.dto.S3UploadResult;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureUpdateRequest;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -34,6 +37,9 @@ class JjureServiceImpl_UpdateTest {
 
     private static Validator validator;
 
+    @Mock
+    private S3Uploader s3Uploader;
+
     @BeforeAll
     static void setUpValidator() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -41,48 +47,88 @@ class JjureServiceImpl_UpdateTest {
     }
 
     @Test
-    @DisplayName("성공 - 유효한 요청 시 Jjure 객체의 caption과 fileKey가 업데이트된다")
-    void givenValidUpdateRequest_whenUpdateJjure_thenUpdatesFields() {
+    @DisplayName("성공 - 쭈르 수정")
+    void givenValidUpdateRequest_whenUpdateJjure_thenUpdateSuccess() {
         // given
         Long memberId = 1L;
-        Long jjureId = 10L;
-
-        Jjure jjure = Jjure.builder()
-                .id(jjureId)
-                .memberId(memberId)
-                .caption("이전 설명")
-                .fileKey("old-file.mp4")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+        Long jjureId = 100L;
+        Jjure jjure = mock(Jjure.class);
 
         when(jjureRepository.findById(jjureId)).thenReturn(Optional.of(jjure));
 
-        JjureUpdateRequest request = new JjureUpdateRequest("수정된 설명", "updated-file.mp4", jjureId);
+        JjureUpdateRequest request = new JjureUpdateRequest("업데이트 설명", "newKey.mp4", "thumbnail.jpg");
 
         // when
-        jjureService.updateJjure(request, memberId);
+        jjureService.updateJjure(request, memberId, jjureId);
 
         // then
-        assertEquals("수정된 설명", jjure.getCaption());
-        assertEquals("updated-file.mp4", jjure.getFileKey());
+        verify(memberValidationService).validateUploadable(memberId);
+        verify(memberValidationService).validateJjureOwner(memberId, jjure.getMemberId(), ErrorCode.NO_PERMISSION_TO_UPDATE_JJURE);
+        verify(jjure).update("업데이트 설명", "newKey.mp4", "thumbnail.jpg");
     }
 
     @Test
-    @DisplayName("예외 - 존재하지 않는 쭈르 ID로 수정하면 JJURE_NOT_FOUND 예외 발생")
-    void givenNonExistingJjureId_whenUpdate_thenThrowsNotFound() {
-        // given
+    @DisplayName("실패 - 수정 시 쭈르 존재하지 않음")
+    void givenNonExistingJjure_whenUpdateJjure_thenThrowsException() {
         Long memberId = 1L;
-        JjureUpdateRequest request = new JjureUpdateRequest("내용", "file.mp4", 999L);
+        Long jjureId = 100L;
+        when(jjureRepository.findById(jjureId)).thenReturn(Optional.empty());
 
-        when(jjureRepository.findById(999L)).thenReturn(Optional.empty());
+        JjureUpdateRequest request = new JjureUpdateRequest("업데이트 설명", "fileKey", "thumb.jpg");
 
-        // when & then
-        BusinessException ex = assertThrows(BusinessException.class, () -> {
-            jjureService.updateJjure(request, memberId);
-        });
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> jjureService.updateJjure(request, memberId, jjureId)
+        );
 
         assertEquals(ErrorCode.JJURE_NOT_FOUND, ex.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("성공 - 썸네일 업로드 성공")
+    void givenValidImageFile_whenUploadThumbnailImage_thenReturnsUrl() {
+        // given
+        MultipartFile mockFile = mock(MultipartFile.class);
+        S3UploadResult mockResult = new S3UploadResult("uploads/image.png", "https://domain.com/uploads/image.png");
+
+        when(mockFile.getContentType()).thenReturn("image/png");
+        when(s3Uploader.uploadFile(mockFile, "uploads")).thenReturn(mockResult);
+
+        // when
+        String url = jjureService.uploadThumbnailImage(mockFile);
+
+        // then
+        assertEquals("https://domain.com/uploads/image.png", url);
+    }
+
+    @Test
+    @DisplayName("성공 - 쭈르 삭제 성공")
+    void givenValidRequest_whenDeleteJjure_thenMarkAsDeletedCalled() {
+        Long memberId = 1L;
+        Long jjureId = 99L;
+
+        Jjure jjure = mock(Jjure.class);
+        when(jjureRepository.findById(jjureId)).thenReturn(Optional.of(jjure));
+        when(jjure.getMemberId()).thenReturn(memberId);
+
+        // when
+        jjureService.deleteJjure(memberId, jjureId);
+
+        // then
+        verify(jjure).markAsDeleted();
+    }
+
+    @Test
+    @DisplayName("실패 - 쭈르 삭제 시 대상 없음")
+    void givenInvalidJjureId_whenDeleteFeed_thenThrows() {
+        Long memberId = 1L;
+        Long jjureId = 999L;
+        when(jjureRepository.findById(jjureId)).thenReturn(Optional.empty());
+
+        BusinessException ex = assertThrows(BusinessException.class, () -> {
+            jjureService.deleteJjure(memberId, jjureId);
+        });
+
+        assertEquals(ErrorCode.FEED_NOT_FOUND, ex.getErrorCode());
     }
 
     @Test
@@ -102,11 +148,11 @@ class JjureServiceImpl_UpdateTest {
 
         when(jjureRepository.findById(jjureId)).thenReturn(Optional.of(jjure));
 
-        JjureUpdateRequest request = new JjureUpdateRequest("수정된 설명", "new.mp4", jjureId);
+        JjureUpdateRequest request = new JjureUpdateRequest("수정된 설명", "new.mp4", "thumbnail-file.png");
 
         // when & then
         BusinessException ex = assertThrows(BusinessException.class, () -> {
-            jjureService.updateJjure(request, otherMemberId);
+            jjureService.updateJjure(request, otherMemberId, jjureId);
         });
 
         assertEquals(ErrorCode.NO_PERMISSION_TO_UPDATE_JJURE, ex.getErrorCode());
@@ -116,7 +162,7 @@ class JjureServiceImpl_UpdateTest {
     @Test
     @DisplayName("유효성 실패 - fileKey가 빈 문자열이면 실패")
     void givenEmptyFileKey_whenValidate_thenFails() {
-        JjureUpdateRequest request = new JjureUpdateRequest("설명", "", 1L);
+        JjureUpdateRequest request = new JjureUpdateRequest("설명", "", "");
         Set<ConstraintViolation<JjureUpdateRequest>> violations = validator.validate(request);
 
         assertFalse(violations.isEmpty());
