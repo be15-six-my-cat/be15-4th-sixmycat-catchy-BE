@@ -4,6 +4,7 @@ import com.sixmycat.catchy.feature.member.query.dto.response.MyProfileResponse;
 import com.sixmycat.catchy.feature.member.query.service.ProfileQueryService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,9 +16,13 @@ public class ProfileQueryController {
 
     @GetMapping("/me")
     public MyProfileResponse getMyProfile() {
-//        public MyProfileResponse getMyProfile(@AuthenticationPrincipal CustomUser user) {
-//            return profileQueryService.getMyProfile(user.getId());
         Long userId = 1L; // 임시로 1번 유저 고정 (추후 변경 예정)
         return profileQueryService.getMyProfile(userId);
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MyProfileResponse> getOtherProfile(@PathVariable Long memberId) {
+        MyProfileResponse response = profileQueryService.getOtherProfile(memberId);
+        return ResponseEntity.ok(response);
     }
 }
