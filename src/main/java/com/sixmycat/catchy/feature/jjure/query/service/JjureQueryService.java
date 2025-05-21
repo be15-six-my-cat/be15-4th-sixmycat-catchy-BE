@@ -11,4 +11,5 @@ public interface JjureQueryService {
 
     PageResponse<JjureSummaryResponse> getLikedJjureList(Long memberId, int page, int size);
 
+    PageResponse<JjureSummaryResponse> getMyJjureList(Long memberId, int page, int size);
 }
