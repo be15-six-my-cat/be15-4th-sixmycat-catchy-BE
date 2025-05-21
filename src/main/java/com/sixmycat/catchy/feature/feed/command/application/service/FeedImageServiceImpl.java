@@ -15,7 +15,7 @@ public class FeedImageServiceImpl implements FeedImageService {
 
     @Override
     public String uploadSingleImage(MultipartFile file) {
-        return s3Uploader.uploadFile(file, "feed");
+        return s3Uploader.uploadFile(file, "feed").url();
     }
 
     @Override

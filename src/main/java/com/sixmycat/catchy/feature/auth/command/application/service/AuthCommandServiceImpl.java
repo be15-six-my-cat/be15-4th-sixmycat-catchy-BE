@@ -83,7 +83,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         // S3에 이미지 업로드 (null 허용)
         String profileImageUrl = null;
         if (profileImage != null && !profileImage.isEmpty()) {
-            profileImageUrl = s3Uploader.uploadFile(profileImage, "profile");
+            profileImageUrl = s3Uploader.uploadFile(profileImage, "profile").url();
         }
 
         // 최종 Member 저장
