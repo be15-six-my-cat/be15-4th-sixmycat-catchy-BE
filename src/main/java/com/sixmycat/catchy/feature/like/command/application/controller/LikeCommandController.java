@@ -4,6 +4,7 @@ import com.sixmycat.catchy.common.dto.ApiResponse;
 import com.sixmycat.catchy.feature.like.command.application.dto.request.LikeRequest;
 import com.sixmycat.catchy.feature.like.command.application.service.LikeCommandService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
+@Slf4j
 public class LikeCommandController {
 
     private final LikeCommandService likeCommandService;
