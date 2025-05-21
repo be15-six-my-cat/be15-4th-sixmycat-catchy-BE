@@ -1,9 +1,11 @@
 package com.sixmycat.catchy.feature.member;
 
+import com.sixmycat.catchy.exception.BusinessException;
+import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.member.command.application.dto.request.UpdateCatRequest;
 import com.sixmycat.catchy.feature.member.command.application.dto.request.UpdateProfileRequest;
 import com.sixmycat.catchy.feature.member.command.application.dto.response.UpdateProfileResponse;
-import com.sixmycat.catchy.feature.member.command.application.service.MemberCommandService;
+import com.sixmycat.catchy.feature.member.command.application.service.MemberCommandServiceImpl;
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Cat;
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Member;
 import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
@@ -29,7 +31,7 @@ class MemberCommandServiceTest {
     private MemberRepository memberRepository;
 
     @InjectMocks
-    private MemberCommandService memberCommandService;
+    private MemberCommandServiceImpl memberCommandService;
 
     private Member member;
     private Cat cat;
@@ -39,8 +41,6 @@ class MemberCommandServiceTest {
         MockitoAnnotations.openMocks(this);
 
         cat = new Cat("코코", "F", "코리안숏헤어", LocalDate.of(2020, 5, 1), 4, null);
-        cat.setMember(member);
-        // 직접 ID 설정
         ReflectionTestUtils.setField(cat, "id", 1L);
 
         member = Member.builder()
@@ -51,7 +51,7 @@ class MemberCommandServiceTest {
                 .cats(List.of(cat))
                 .build();
 
-        cat.setMember(member);
+        ReflectionTestUtils.setField(cat, "member", member);
     }
 
     @Test
@@ -99,8 +99,8 @@ class MemberCommandServiceTest {
 
         // when & then
         assertThatThrownBy(() -> memberCommandService.updateProfile(999L, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("사용자를 찾을 수 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
     }
 
     @Test
@@ -119,7 +119,7 @@ class MemberCommandServiceTest {
 
         // when & then
         assertThatThrownBy(() -> memberCommandService.updateProfile(1L, request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("고양이를 찾을 수 없습니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage(ErrorCode.CAT_NOT_FOUND.getMessage());
     }
 }
