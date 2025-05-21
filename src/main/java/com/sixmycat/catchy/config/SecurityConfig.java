@@ -54,7 +54,8 @@ public class SecurityConfig {
                                 "/static/token.html",
                                 "/static/login.html",
                                 "/api/v1/members/login/test",
-                                "/api/v1/profiles/me"
+                                "/api/v1/profiles/me",
+                                "/api/v1/profiles/{memberId}"
                         ).permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/members/members").permitAll()
                         .anyRequest().authenticated()
