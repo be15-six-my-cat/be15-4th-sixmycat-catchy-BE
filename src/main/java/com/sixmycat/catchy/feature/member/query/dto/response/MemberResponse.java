@@ -8,8 +8,11 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class MemberResponse {
-    private Long memberId;
+    private Long id;
+    private String email;
     private String nickname;
-    private String statusMessage;
+    private String name;
+    private String contactNumber;
     private String profileImage;
+    private String social;
 }
