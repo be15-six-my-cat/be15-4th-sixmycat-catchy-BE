@@ -26,6 +26,7 @@
     <!-- 상위 랭커 조회  -->
     <select id="findTopRankers" parameterType="int" resultType="RankerDto">
         SELECT
+            m.id,
             ranked.rank,
             m.nickname,
             ranked.score
