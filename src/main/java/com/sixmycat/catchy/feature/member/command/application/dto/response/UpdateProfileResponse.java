@@ -1,6 +1,7 @@
 package com.sixmycat.catchy.feature.member.command.application.dto.response;
 
 import com.sixmycat.catchy.feature.member.command.application.dto.request.UpdateCatRequest;
+import com.sixmycat.catchy.feature.member.query.dto.response.CatResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,6 +14,5 @@ public class UpdateProfileResponse {
     private String nickname;
     private String statusMessage;
     private String profileImage;
-
-    private List<UpdateCatRequest> cats;
+    private List<CatResponse> cats;
 }
