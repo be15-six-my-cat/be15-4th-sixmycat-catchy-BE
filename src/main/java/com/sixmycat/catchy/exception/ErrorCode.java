@@ -54,7 +54,7 @@ public enum ErrorCode {
     GAME_SCORE_NOT_FOUND("06000","회원에 대한 게임 점수를 조회할 수 없습니다",HttpStatus.NOT_FOUND),
 
     //프로필
-    CAT_NOT_FOUND("07000", "고양이를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+    CAT_NOT_FOUND("10000", "고양이를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
 
     private final String code;
