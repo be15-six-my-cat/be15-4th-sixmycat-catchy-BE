@@ -3,6 +3,8 @@ package com.sixmycat.catchy.feature.member.command.application.controller;
 import com.sixmycat.catchy.feature.member.command.application.dto.request.UpdateProfileRequest;
 import com.sixmycat.catchy.feature.member.command.application.dto.response.UpdateProfileResponse;
 import com.sixmycat.catchy.feature.member.command.application.service.MemberCommandService;
+import com.sixmycat.catchy.feature.member.query.dto.response.MyProfileResponse;
+import com.sixmycat.catchy.feature.member.query.service.ProfileQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,12 +19,10 @@ public class ProfileCommandController {
 
     @PatchMapping("/me")
     public ResponseEntity<UpdateProfileResponse> updateProfile(
-            @AuthenticationPrincipal Object principal,
+            @AuthenticationPrincipal String memberId,
             @RequestBody UpdateProfileRequest request
     ) {
-        System.out.println("Principal: " + principal);
-        Long memberId = 1L; // 테스트용
-        UpdateProfileResponse response = memberCommandService.updateProfile(memberId, request);
+        UpdateProfileResponse response = memberCommandService.updateProfile(Long.parseLong(memberId), request);
         return ResponseEntity.ok(response);
     }
 }

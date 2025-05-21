@@ -1,12 +1,18 @@
 package com.sixmycat.catchy.feature.member.query.dto.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.time.LocalDate;
 
-public record CatResponse(
-        Long id,
-        String name,
-        String gender,
-        String breed,
-        LocalDate birthDay,
-        Integer age
-) {}
+@Getter
+@AllArgsConstructor
+public class CatResponse {
+    private Long id;
+    private String name;
+    private String gender;
+    private String breed;
+    private LocalDate birthDate;
+    private Integer age;
+}
+
