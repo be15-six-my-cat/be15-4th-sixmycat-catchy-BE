@@ -51,7 +51,10 @@ public enum ErrorCode {
     INVALID_PARENT_COMMENT("11001", "부모 댓글의 targetType이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
 
     //게임
-    GAME_SCORE_NOT_FOUND("06000","회원에 대한 게임 점수를 조회할 수 없습니다",HttpStatus.NOT_FOUND);
+    GAME_SCORE_NOT_FOUND("06000","회원에 대한 게임 점수를 조회할 수 없습니다",HttpStatus.NOT_FOUND),
+
+    //프로필
+    CAT_NOT_FOUND("07000", "고양이를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
 
     private final String code;
