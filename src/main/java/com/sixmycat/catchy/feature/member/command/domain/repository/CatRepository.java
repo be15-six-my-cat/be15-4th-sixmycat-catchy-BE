@@ -11,5 +11,5 @@ public interface CatRepository extends JpaRepository<Cat, Long> {
     List<Cat> findAllByMember_Id(Long memberId);
 
     // 생일이 오늘인 고양이들 조회 (뱃지용)
-    List<Cat> findAllByBirthDay(java.time.LocalDate birthDay);
+    List<Cat> findAllByBirthDate(java.time.LocalDate birthDay);
 }
