@@ -17,7 +17,6 @@
         JOIN member m ON c.member_id = m.id
         WHERE c.target_id = #{jjureId}
         AND c.target_type = 'JJURE'
-        AND c.deleted_at IS NULL
         ORDER BY c.created_at ASC
     </select>
 
@@ -52,7 +51,6 @@
         JOIN member m ON c.member_id = m.id
         WHERE c.target_id = #{jjureId}
         AND c.target_type = 'JJURE'
-        AND c.deleted_at IS NULL
         ORDER BY c.created_at DESC
         LIMIT 1
     </select>

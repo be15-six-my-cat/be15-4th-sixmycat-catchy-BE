@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class FeedCommentCommandServiceImpl implements FeedCommentCommandService {
@@ -48,10 +50,15 @@ public class FeedCommentCommandServiceImpl implements FeedCommentCommandService 
             throw new BusinessException(ErrorCode.UNAUTHORIZED_USER);
         }
 
-        // 자식 댓글들도 함께 삭제
-        commentRepository.deleteAllByParentCommentId(commentId);
+        // 재귀적으로 자식 댓글 포함 삭제
+        deleteRecursively(commentId);
+    }
 
-        // 부모 댓글 삭제
-        commentRepository.delete(comment);
+    private void deleteRecursively(Long commentId) {
+        List<FeedComment> children = commentRepository.findAllByParentCommentId(commentId);
+        for (FeedComment child : children) {
+            deleteRecursively(child.getCommentId());
+        }
+        commentRepository.deleteById(commentId);
     }
 }
