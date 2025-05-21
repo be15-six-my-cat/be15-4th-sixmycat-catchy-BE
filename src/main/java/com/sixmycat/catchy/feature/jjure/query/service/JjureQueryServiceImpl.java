@@ -9,6 +9,7 @@ import com.sixmycat.catchy.common.dto.AuthorInfo;
 import com.sixmycat.catchy.common.dto.CommentPreview;
 import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureBaseInfo;
 import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureDetailResponse;
+import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureSummaryResponse;
 import com.sixmycat.catchy.feature.jjure.query.mapper.JjureQueryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -84,5 +85,19 @@ public class JjureQueryServiceImpl implements JjureQueryService {
         }).toList();
 
         return PageResponse.from(new PageInfo<>(result));
+    }
+
+    @Override
+    public PageResponse<JjureSummaryResponse> getLikedJjureList(Long memberId, int page, int size) {
+        PageHelper.startPage(page + 1, size); // PageHelper는 1부터 시작
+        List<JjureSummaryResponse> list = jjureQueryMapper.findLikedJjures(memberId);
+        return PageResponse.from(new PageInfo<>(list));
+    }
+
+    @Override
+    public PageResponse<JjureSummaryResponse> getMyJjureList(Long memberId, int page, int size) {
+        PageHelper.startPage(page + 1, size); // PageHelper는 1부터 시작
+        List<JjureSummaryResponse> list = jjureQueryMapper.findMyJjures(memberId);
+        return PageResponse.from(new PageInfo<>(list));
     }
 }

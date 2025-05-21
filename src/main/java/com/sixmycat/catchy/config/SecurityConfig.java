@@ -57,7 +57,8 @@ public class SecurityConfig {
                                 "/api/v1/profiles/me",
                                 "/api/v1/profiles/{memberId}"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/members/members").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/members").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/members/me").authenticated()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth

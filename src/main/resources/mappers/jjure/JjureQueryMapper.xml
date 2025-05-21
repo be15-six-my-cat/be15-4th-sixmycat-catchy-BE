@@ -83,4 +83,27 @@
         JOIN member m ON j.member_id = m.id
         ORDER BY j.created_at DESC
     </select>
+
+
+    <select id="findLikedJjures" resultType="com.sixmycat.catchy.feature.jjure.query.dto.response.JjureSummaryResponse">
+        SELECT
+        j.id AS jjureId,
+        j.thumbnail_url,
+        j.created_at
+        FROM jjure j
+        JOIN `like` l ON l.target_id = j.id
+        WHERE l.member_id = #{memberId}
+        AND l.target_type = 'JJURE'
+        ORDER BY j.created_at DESC
+    </select>
+
+    <select id="findMyJjures" resultType="com.sixmycat.catchy.feature.jjure.query.dto.response.JjureSummaryResponse">
+        SELECT
+        j.id AS jjureId,
+        j.thumbnail_url AS thumbnailUrl,
+        j.created_at
+        FROM jjure j
+        WHERE j.member_id = #{memberId}
+        ORDER BY j.created_at DESC
+    </select>
 </mapper>

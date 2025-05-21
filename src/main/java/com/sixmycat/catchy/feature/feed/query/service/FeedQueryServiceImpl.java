@@ -67,6 +67,13 @@ public class FeedQueryServiceImpl implements FeedQueryService {
     }
 
     @Override
+    public PageResponse<FeedSummaryResponse> getLikedFeedList(Long memberId, int page, int size) {
+        PageHelper.startPage(page + 1, size); // PageHelper는 1부터 시작
+        List<FeedSummaryResponse> list = feedQueryMapper.findLikedFeeds(memberId);
+        return PageResponse.from(new PageInfo<>(list));
+    }
+
+    @Override
     public PageResponse<FeedDetailResponse> getFeedList(Long userId, int page, int size) {
         PageHelper.startPage(page + 1, size); // PageHelper는 1부터 시작
         List<FeedBaseInfo> baseInfos = feedQueryMapper.findFeedList();

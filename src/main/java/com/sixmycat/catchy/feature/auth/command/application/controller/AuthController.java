@@ -4,6 +4,7 @@ import com.sixmycat.catchy.common.dto.ApiResponse;
 import com.sixmycat.catchy.common.utils.CookieUtils;
 import com.sixmycat.catchy.feature.auth.command.application.dto.request.ExtraSignupRequest;
 import com.sixmycat.catchy.feature.auth.command.application.dto.response.SocialLoginResponse;
+import com.sixmycat.catchy.feature.auth.command.application.dto.response.SocialLoginResultResponse;
 import com.sixmycat.catchy.feature.auth.command.application.service.AuthCommandService;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import com.sixmycat.catchy.security.jwt.JwtTokenProvider;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.sixmycat.catchy.common.utils.CookieUtils.createRefreshTokenCookie;
 
@@ -26,23 +28,18 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthCommandService authCommandService;
 
-    @PostMapping("/signup/extra")
-    public ResponseEntity<ApiResponse<SocialLoginResponse>> completeSignup(@RequestBody ExtraSignupRequest request) {
-        SocialLoginResponse result = authCommandService.registerNewMember(request);
+    @PostMapping(value = "/signup/extra", consumes = "multipart/form-data")
+    public ResponseEntity<ApiResponse<SocialLoginResponse>> completeSignup(
+            @ModelAttribute ExtraSignupRequest request,
+            @RequestPart(required = false) MultipartFile profileImage
+    ) {
+        SocialLoginResultResponse result = authCommandService.registerNewMember(request, profileImage);
 
-        // refreshToken만 쿠키로 내려주고
         ResponseCookie refreshTokenCookie = CookieUtils.createRefreshTokenCookie(result.getRefreshToken());
 
-        // accessToken은 바디로 전달
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                .body(ApiResponse.success(
-                        SocialLoginResponse.builder()
-                                .id(result.getId())
-                                .accessToken(result.getAccessToken())
-                                .refreshToken(null) // 바디에는 포함시키지 않음
-                                .build()
-                ));
+                .body(ApiResponse.success(result.getResponse()));
     }
 
     @GetMapping("/temp-info")
@@ -69,10 +66,6 @@ public class AuthController {
     public ResponseEntity<ApiResponse<SocialLoginResponse>> reissueAccessToken(
             @CookieValue(name = "refreshToken", required = false) String refreshToken
     ) {
-        if (refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         // userId 추출
         Long userId = Long.parseLong(jwtTokenProvider.getUserIdFromJwt(refreshToken));
 
@@ -92,7 +85,7 @@ public class AuthController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse<Void>> withdraw(
+    public ResponseEntity<ApiResponse<Void>> delete(
             @CookieValue(name = "refreshToken", required = false) String refreshToken
     ) {
         if (refreshToken != null) {

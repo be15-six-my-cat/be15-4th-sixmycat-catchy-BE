@@ -1,0 +1,28 @@
+package com.sixmycat.catchy.feature.like.command.application.controller;
+
+import com.sixmycat.catchy.common.dto.ApiResponse;
+import com.sixmycat.catchy.feature.like.command.application.dto.request.LikeRequest;
+import com.sixmycat.catchy.feature.like.command.application.service.LikeCommandService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1")
+public class LikeCommandController {
+
+    private final LikeCommandService likeCommandService;
+
+    @PostMapping("/likes")
+    public ResponseEntity<ApiResponse<Void>> like(@RequestBody LikeRequest request, @RequestHeader("X-USER-ID") Long userId) {
+        likeCommandService.like(userId, request.getTargetId(), request.getTargetType());
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @DeleteMapping("/likes")
+    public ResponseEntity<ApiResponse<Void>> unlike(@RequestBody LikeRequest request, @RequestHeader("X-USER-ID") Long userId) {
+        likeCommandService.unlike(userId, request.getTargetId(), request.getTargetType());
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
+}
