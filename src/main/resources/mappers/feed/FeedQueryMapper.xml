@@ -94,6 +94,23 @@
         ORDER BY f.created_at DESC
     </select>
 
+    <select id="findFeedsByMemberId" resultType="com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse">
+        SELECT
+        f.id AS feedId,
+        (
+        SELECT fi.image_url
+        FROM feed_image fi
+        WHERE fi.feed_id = f.id
+        ORDER BY fi.sequence ASC
+        LIMIT 1
+        ) AS thumbnailUrl,
+        f.created_at
+        FROM feed f
+        WHERE f.member_id = #{memberId}
+        AND f.deleted_at IS NULL
+        ORDER BY f.created_at DESC
+    </select>
+
     <select id="findLikedFeeds" resultType="com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse">
         SELECT
         f.id AS feedId,

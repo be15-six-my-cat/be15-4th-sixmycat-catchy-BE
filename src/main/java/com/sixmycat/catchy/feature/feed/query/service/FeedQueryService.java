@@ -9,4 +9,5 @@ public interface FeedQueryService {
     PageResponse<FeedSummaryResponse> getMyFeeds(Long memberId, int page, int size);
     PageResponse<FeedDetailResponse> getFeedList(Long userId, int page, int size);
     PageResponse<FeedSummaryResponse> getLikedFeedList(Long memberId, int page, int size);
+    PageResponse<FeedSummaryResponse> getFeedsByMemberId(Long memberId, int page, int size);
 }

@@ -102,4 +102,11 @@ public class FeedQueryServiceImpl implements FeedQueryService {
 
         return PageResponse.from(new PageInfo<>(result));
     }
+
+    @Override
+    public PageResponse<FeedSummaryResponse> getFeedsByMemberId(Long memberId, int page, int size) {
+        PageHelper.startPage(page + 1, size);
+        List<FeedSummaryResponse> list = feedQueryMapper.findFeedsByMemberId(memberId);
+        return PageResponse.from(new PageInfo<>(list));
+    }
 }
