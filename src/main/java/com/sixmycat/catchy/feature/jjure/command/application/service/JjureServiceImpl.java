@@ -1,5 +1,6 @@
 package com.sixmycat.catchy.feature.jjure.command.application.service;
 
+import com.sixmycat.catchy.common.s3.S3Uploader;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureUpdateRequest;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +23,7 @@ public class JjureServiceImpl implements JjureService {
 
     private final JjureRepository jjureRepository;
     private final MemberValidationService memberValidationService;
+    private final S3Uploader s3Uploader;
 
     @Override
     public void uploadJjure(JjureUploadRequest request, Long memberId) {
@@ -34,6 +37,7 @@ public class JjureServiceImpl implements JjureService {
                 .caption(request.getCaption())
                 .fileKey(request.getFileKey())
                 .musicUrl(null) // 음악 설정 연결 전까지 일단 Null로 처리
+                .thumbnail_url(request.getThumbnail_url())
                 .createdAt(now)
                 .updatedAt(now)
                 .deletedAt(null)
@@ -58,6 +62,11 @@ public class JjureServiceImpl implements JjureService {
         }
 
         jjure.update(request.getCaption(), request.getFileKey());
+    }
+
+    @Override
+    public String uploadThumbnailImage(MultipartFile file) {
+        return s3Uploader.uploadFile(file, "uploads");
     }
 }
 

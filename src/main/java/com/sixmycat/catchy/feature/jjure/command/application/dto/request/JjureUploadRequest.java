@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +20,8 @@ public class JjureUploadRequest {
     @Schema(description = "S3에 저장된 영상에 접근할 수 있는 FileKey")
     @NotBlank
     private String fileKey;
+
+    @Schema(description = "썸네일 이미지")
+    @NotBlank
+    private String thumbnail_url;
 }

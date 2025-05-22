@@ -45,7 +45,7 @@ public class NotificationCommandService {
         notificationRepository.save(notification);
 
         Optional<String> optionalProfileImage = memberRepository.findProfileImageByIdAndDeletedAtIsNull(senderMemberId);
-        String profileImage = optionalProfileImage.orElse(null);
+        String profileImage = optionalProfileImage.orElse("");
 
         Map<String, Object> payload = Map.of(
                 "memberId", receiverMemberId,

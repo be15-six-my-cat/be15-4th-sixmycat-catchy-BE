@@ -9,13 +9,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/games")
+@RequestMapping("/api/v1/games/scores")
 @RequiredArgsConstructor
 public class GameCommandController {
 
     private final GameCommandService gameScoreService;
 
-    /* 게임 최고 점수 저장 핸들러 */
+    /* 게임 점수 저장 핸들러 */
     @PostMapping("")
     public ResponseEntity<ApiResponse<Void>> saveGameScore(
             @RequestBody GameScoreRequest request,

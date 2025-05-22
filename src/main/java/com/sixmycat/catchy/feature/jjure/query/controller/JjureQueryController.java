@@ -17,6 +17,7 @@ public class JjureQueryController {
 
     private final JjureQueryService jjureQueryService;
 
+    /* 쮸르 상세 조회 */
     @GetMapping("/{jjureId}")
     public ResponseEntity<ApiResponse<JjureDetailResponse>> getJjureDetail(
             @PathVariable Long jjureId,
@@ -26,6 +27,7 @@ public class JjureQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    /* 쮸르 목록 조회 */
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<JjureDetailResponse>>> getJjures(
             @AuthenticationPrincipal String memberId,
