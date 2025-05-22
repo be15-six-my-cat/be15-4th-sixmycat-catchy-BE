@@ -63,4 +63,16 @@ public class FeedQueryController {
         PageResponse<FeedSummaryResponse> response = feedQueryService.getLikedFeedList(Long.parseLong(memberId), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<ApiResponse<PageResponse<FeedSummaryResponse>>> getFeedsByMemberId(
+            @PathVariable Long memberId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+
+    ) {
+        PageResponse<FeedSummaryResponse> response = feedQueryService.getFeedsByMemberId(memberId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
 }
