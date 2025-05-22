@@ -1,6 +1,7 @@
 package com.sixmycat.catchy.feature.jjure.command.application.service;
 
 import com.sixmycat.catchy.common.s3.S3Uploader;
+import com.sixmycat.catchy.common.s3.dto.S3UploadResult;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureUpdateRequest;
@@ -51,22 +52,34 @@ public class JjureServiceImpl implements JjureService {
     }
 
     @Override
-    public void updateJjure(JjureUpdateRequest request, Long memberId) {
+    public void updateJjure(JjureUpdateRequest request, Long memberId, Long jjureId) {
         memberValidationService.validateUploadable(memberId);
 
-        Jjure jjure = jjureRepository.findById(request.getJjureId())
+        Jjure jjure = jjureRepository.findById(jjureId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.JJURE_NOT_FOUND));
 
-        if (!jjure.getMemberId().equals(memberId)) {
-            throw new BusinessException(ErrorCode.NO_PERMISSION_TO_UPDATE_JJURE);
-        }
+        memberValidationService.validateJjureOwner(memberId, jjure.getMemberId(), ErrorCode.NO_PERMISSION_TO_UPDATE_JJURE);
 
-        jjure.update(request.getCaption(), request.getFileKey());
+        jjure.update(request.getCaption(), request.getFileKey(), request.getThumbnailUrl());
     }
 
     @Override
     public String uploadThumbnailImage(MultipartFile file) {
-        return s3Uploader.uploadFile(file, "uploads");
+        S3UploadResult result = s3Uploader.uploadFile(file, "uploads");
+
+        return result.url();
     }
+
+    @Override
+    public void deleteJjure(Long memberId, Long jjureId) {
+        Jjure jjure = jjureRepository.findById(jjureId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.JJURE_NOT_FOUND));
+
+        memberValidationService.validateJjureOwner(memberId, jjure.getMemberId(), ErrorCode.NO_PERMISSION_TO_DELETE_JJURE);
+
+//        s3Uploader.deleteFile(); 파일키로 삭제를 해줘야 되는데...
+        jjure.markAsDeleted();
+    }
+
 }
 

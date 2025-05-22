@@ -37,9 +37,12 @@ spring:
     aws:
       s3:
         bucket: ${AWS_BUCKET_NAME}
+        jjure-bucket: ${JJURE_AWS_BUCKET_NAME}
       credentials:
         access-key: ${AWS_ACCESS_KEY}
         secret-key: ${AWS_SECRET_KEY}
+        jjure-access-key: ${JJURE_AWS_ACCESS_KEY}
+        jjure-secret-key: ${JJURE_AWS_SECRET_KEY}
       region:
         static: ap-northeast-2
         auto: false

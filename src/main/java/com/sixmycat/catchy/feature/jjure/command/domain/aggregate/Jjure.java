@@ -36,9 +36,14 @@ public class Jjure {
 
     private LocalDateTime deletedAt;
 
-    public void update(String caption, String fileKey) {
+    public void update(String caption, String fileKey, String thumbnail_url) {
         this.caption = caption;
         this.fileKey = fileKey;
         this.updatedAt = LocalDateTime.now();
+        this.thumbnail_url = thumbnail_url;
+    }
+
+    public void markAsDeleted() {
+        this.deletedAt = LocalDateTime.now();
     }
 }

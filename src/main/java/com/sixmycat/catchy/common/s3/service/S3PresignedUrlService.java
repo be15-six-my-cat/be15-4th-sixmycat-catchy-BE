@@ -19,7 +19,7 @@ public class S3PresignedUrlService {
 
     private final S3Presigner s3Presigner;
 
-    @Value("${spring.cloud.aws.s3.bucket}")
+    @Value("${spring.cloud.aws.s3.jjure-bucket}")
     private String bucketName;
 
     public PresignedUrlResponse generatePresignedUploadUrl(String originalFilename, String contentType) {

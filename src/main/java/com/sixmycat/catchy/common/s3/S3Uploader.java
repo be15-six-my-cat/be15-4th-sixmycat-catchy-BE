@@ -1,5 +1,6 @@
 package com.sixmycat.catchy.common.s3;
 
+import com.sixmycat.catchy.common.s3.dto.S3UploadResult;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -27,8 +29,8 @@ public class S3Uploader {
     @Value("${spring.cloud.aws.cloudfront.domain}")
     private String cloudFrontDomain;
 
-    public String uploadFile(MultipartFile file, String dirName) {
-        String fileName = generateFileName(dirName, file.getOriginalFilename());
+    public S3UploadResult uploadFile(MultipartFile file, String dirName) {
+        String fileKey = generateFileName(dirName, file.getOriginalFilename());
 
         if (!file.getContentType().startsWith("image/")) {
             throw new BusinessException(ErrorCode.INVALID_FILE_TYPE); // 예: image/png, image/jpeg만 허용
@@ -37,7 +39,7 @@ public class S3Uploader {
         try {
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucket)
-                    .key(fileName)
+                    .key(fileKey)
                     .contentType(file.getContentType())
                     .build();
 
@@ -46,13 +48,14 @@ public class S3Uploader {
             throw new RuntimeException("S3 업로드 실패", e);
         }
 
-        return "https://" + cloudFrontDomain + "/" + fileName;
+        String url =  "https://" + cloudFrontDomain + "/" + fileKey;
+        return new S3UploadResult(fileKey, url);
     }
 
     public List<String> uploadFiles(List<MultipartFile> files, String dirName) {
         List<String> uploadedUrls = new ArrayList<>();
         for (MultipartFile file : files) {
-            uploadedUrls.add(uploadFile(file, dirName));
+            uploadedUrls.add(uploadFile(file, dirName).url());
         }
         return uploadedUrls;
     }
@@ -60,4 +63,18 @@ public class S3Uploader {
     private String generateFileName(String dirName, String originalName) {
         return dirName + "/" + UUID.randomUUID() + "-" + originalName;
     }
+
+    public void deleteFile(String fileKey) {
+        try {
+            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(fileKey)
+                    .build();
+
+            s3Client.deleteObject(deleteRequest);
+        } catch (Exception e) {
+            throw new RuntimeException("S3 파일 삭제 실패: " + fileKey, e);
+        }
+    }
+
 }

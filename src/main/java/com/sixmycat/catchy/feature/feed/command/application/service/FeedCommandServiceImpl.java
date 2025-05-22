@@ -92,6 +92,7 @@ public class FeedCommandServiceImpl implements FeedCommandService {
 
         feedDomainService.validateFeedOwner(feed, memberId);
         feed.markAsDeleted();
+
     }
 
     private String extractKeyFromUrl(String url) {

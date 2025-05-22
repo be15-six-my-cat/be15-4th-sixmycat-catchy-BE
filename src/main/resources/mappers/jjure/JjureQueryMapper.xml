@@ -79,6 +79,7 @@
         j.created_at
         FROM jjure j
         JOIN member m ON j.member_id = m.id
+        WHERE j.deleted_at IS NULL
         ORDER BY j.created_at DESC
     </select>
 

@@ -47,6 +47,7 @@ public enum ErrorCode {
     JJURE_UPLOAD_FAILED("05001","쭈르를 등록에 실패했습니다", HttpStatus.BAD_REQUEST),
     NO_PERMISSION_TO_UPDATE_JJURE("05002", "수정 권한이 없습니다",HttpStatus.FORBIDDEN),
     INVALID_FILE_TYPE("05003","유효하지 않은 파일 타입입니다." ,HttpStatus.BAD_REQUEST),
+    NO_PERMISSION_TO_DELETE_JJURE("05004", "삭제 권한이 없습니다",HttpStatus.FORBIDDEN),
 
     //댓글
     COMMENT_NOT_FOUND("11000", "해당 상위댓글을 찾을 수 없습니다.", HttpStatus.BAD_REQUEST),
@@ -60,7 +61,14 @@ public enum ErrorCode {
 
     //좋아요
     ALREADY_LIKED("09000", "이미 좋아요한 항목입니다.", HttpStatus.BAD_REQUEST),
-    LIKE_NOT_FOUND("09001", "좋아요 하지 않은 항목입니다.", HttpStatus.BAD_REQUEST);
+    LIKE_NOT_FOUND("09001", "좋아요 하지 않은 항목입니다.", HttpStatus.BAD_REQUEST),
+
+    //팔로우
+    INVALID_FOLLOW("11000", "자기 자신은 팔로우할 수 없습니다", HttpStatus.BAD_REQUEST),
+    ALREADY_FOLLOWED("11001","이미 팔로우 중입니다" ,HttpStatus.BAD_REQUEST ),
+    NOT_FOLLOWED("11002","팔로우 중이 아닙니다", HttpStatus.BAD_REQUEST ),
+    FOLLOW_REQUEST_NOT_FOUND("11003", "요청한 팔로우가 없습니다", HttpStatus.BAD_REQUEST),
+    ALREADY_REJECTED("11004","이미 언팔로우한 대상입니다", HttpStatus.BAD_REQUEST),;
 
 
     private final String code;
