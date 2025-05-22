@@ -6,6 +6,7 @@ import com.sixmycat.catchy.feature.block.query.dto.response.BlockResponse;
 import com.sixmycat.catchy.feature.block.query.service.BlockQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,11 +18,11 @@ public class BlockQueryController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<BlockResponse>>> getBlockedUsers(
-            @RequestHeader("X-USER-ID") Long blockerId,
+            @AuthenticationPrincipal String memberId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        PageResponse<BlockResponse> response = blockQueryService.getBlockedUsers(blockerId, page, size);
+        PageResponse<BlockResponse> response = blockQueryService.getBlockedUsers(Long.parseLong(memberId), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

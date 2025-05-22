@@ -5,6 +5,7 @@ import com.sixmycat.catchy.feature.block.command.application.service.BlockServic
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,10 +17,10 @@ public class BlockController {
 
     @PostMapping("/{blockedId}")
     public ResponseEntity<ApiResponse<Void>> block(
-            @RequestHeader("X-USER-ID") Long blockerId,
+            @AuthenticationPrincipal String memberId,
             @PathVariable Long blockedId
     ) {
-        blockService.blockUser(blockerId, blockedId);
+        blockService.blockUser(Long.parseLong(memberId), blockedId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(null));
@@ -27,10 +28,10 @@ public class BlockController {
 
     @DeleteMapping("/{blockedId}")
     public ResponseEntity<ApiResponse<Void>> unblock(
-            @RequestHeader("X-USER-ID") Long blockerId,
+            @AuthenticationPrincipal String memberId,
             @PathVariable Long blockedId
     ) {
-        blockService.unblockUser(blockerId, blockedId);
+        blockService.unblockUser(Long.parseLong(memberId), blockedId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(ApiResponse.success(null));
