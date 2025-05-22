@@ -5,6 +5,7 @@ import com.sixmycat.catchy.feature.feed.command.application.dto.request.FeedCrea
 import com.sixmycat.catchy.feature.feed.command.application.dto.request.FeedUpdateRequest;
 import com.sixmycat.catchy.feature.feed.command.application.service.FeedCommandService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,8 +17,8 @@ public class FeedCommandController {
 
     @PostMapping
     public ApiResponse<Long> createFeed(@RequestBody FeedCreateRequest request,
-                                        @RequestHeader("X-USER-ID") Long memberId) {
-        Long feedId = feedCommandService.createFeed(request, memberId);
+                                        @AuthenticationPrincipal String memberId) {
+        Long feedId = feedCommandService.createFeed(request, Long.parseLong(memberId));
         return ApiResponse.success(feedId);
     }
 
@@ -25,16 +26,16 @@ public class FeedCommandController {
     public ApiResponse<Long> updateFeed(
             @PathVariable Long id,
             @RequestBody FeedUpdateRequest request,
-            @RequestHeader("X-USER-ID") Long memberId
+            @AuthenticationPrincipal String memberId
     ) {
-        feedCommandService.updateFeed(id, request, memberId);
+        feedCommandService.updateFeed(id, request, Long.parseLong(memberId));
         return ApiResponse.success(id);
     }
 
-    @DeleteMapping("/id")
-    public ApiResponse<Void> deleteFeed(@PathVariable Long feedId,
-                                        @RequestHeader("X-USER-ID") Long memberId) {
-        feedCommandService.deleteFeed(feedId, memberId);
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deleteFeed(@PathVariable Long id,
+                                        @AuthenticationPrincipal String memberId) {
+        feedCommandService.deleteFeed(id, Long.parseLong(memberId));
         return ApiResponse.success(null);
     }
 }

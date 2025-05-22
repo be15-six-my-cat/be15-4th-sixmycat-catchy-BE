@@ -7,6 +7,7 @@ import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureSummaryResponse
 import com.sixmycat.catchy.feature.jjure.query.service.JjureQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,39 +20,39 @@ public class JjureQueryController {
     @GetMapping("/{jjureId}")
     public ResponseEntity<ApiResponse<JjureDetailResponse>> getJjureDetail(
             @PathVariable Long jjureId,
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId
+            @AuthenticationPrincipal String memberId
     ) {
-        JjureDetailResponse response = jjureQueryService.getJjureDetail(jjureId, userId);
+        JjureDetailResponse response = jjureQueryService.getJjureDetail(jjureId, Long.parseLong(memberId));
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<JjureDetailResponse>>> getJjures(
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId,
+            @AuthenticationPrincipal String memberId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        PageResponse<JjureDetailResponse> response = jjureQueryService.getJjureList(userId, page, size);
+        PageResponse<JjureDetailResponse> response = jjureQueryService.getJjureList(Long.parseLong(memberId), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping("/likes")
     public ResponseEntity<ApiResponse<PageResponse<JjureSummaryResponse>>> getLikedJjures(
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId,
+            @AuthenticationPrincipal String memberId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
-        PageResponse<JjureSummaryResponse> response = jjureQueryService.getLikedJjureList(userId, page, size);
+        PageResponse<JjureSummaryResponse> response = jjureQueryService.getLikedJjureList(Long.parseLong(memberId), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<PageResponse<JjureSummaryResponse>>> getMyJjures(
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId,
+            @AuthenticationPrincipal String memberId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
-        PageResponse<JjureSummaryResponse> response = jjureQueryService.getMyJjureList(userId, page, size);
+        PageResponse<JjureSummaryResponse> response = jjureQueryService.getMyJjureList(Long.parseLong(memberId), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

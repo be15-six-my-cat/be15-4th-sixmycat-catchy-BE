@@ -7,6 +7,7 @@ import com.sixmycat.catchy.feature.feed.query.dto.response.FeedSummaryResponse;
 import com.sixmycat.catchy.feature.feed.query.service.FeedQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,39 +20,39 @@ public class FeedQueryController {
     @GetMapping("/{feedId}")
     public ApiResponse<FeedDetailResponse> getFeedDetail(
             @PathVariable Long feedId,
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId
+            @AuthenticationPrincipal String memberId
     ) {
-        FeedDetailResponse response = feedQueryService.getFeedDetail(feedId, userId);
+        FeedDetailResponse response = feedQueryService.getFeedDetail(feedId, Long.parseLong(memberId));
         return ApiResponse.success(response);
     }
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<PageResponse<FeedSummaryResponse>>> getMyFeeds(
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId,
+            @AuthenticationPrincipal String memberId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size
     ) {
-        PageResponse<FeedSummaryResponse> result = feedQueryService.getMyFeeds(userId, page, size);
+        PageResponse<FeedSummaryResponse> result = feedQueryService.getMyFeeds(Long.parseLong(memberId), page, size);
         return ResponseEntity.ok(ApiResponse.success(result));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<FeedDetailResponse>>> getFeeds(
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId,
+            @AuthenticationPrincipal String memberId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
-        PageResponse<FeedDetailResponse> response = feedQueryService.getFeedList(userId, page, size);
+        PageResponse<FeedDetailResponse> response = feedQueryService.getFeedList(Long.parseLong(memberId), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping("/likes")
     public ResponseEntity<ApiResponse<PageResponse<FeedSummaryResponse>>> getLikedFeeds(
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId,
+            @AuthenticationPrincipal String memberId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
-        PageResponse<FeedSummaryResponse> response = feedQueryService.getLikedFeedList(userId, page, size);
+        PageResponse<FeedSummaryResponse> response = feedQueryService.getLikedFeedList(Long.parseLong(memberId), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

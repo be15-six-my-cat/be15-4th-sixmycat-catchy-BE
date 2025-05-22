@@ -5,6 +5,7 @@ import com.sixmycat.catchy.feature.like.command.application.dto.request.LikeRequ
 import com.sixmycat.catchy.feature.like.command.application.service.LikeCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,14 +16,14 @@ public class LikeCommandController {
     private final LikeCommandService likeCommandService;
 
     @PostMapping("/likes")
-    public ResponseEntity<ApiResponse<Void>> like(@RequestBody LikeRequest request, @RequestHeader("X-USER-ID") Long userId) {
-        likeCommandService.like(userId, request.getTargetId(), request.getTargetType());
+    public ResponseEntity<ApiResponse<Void>> like(@RequestBody LikeRequest request, @AuthenticationPrincipal String memberId) {
+        likeCommandService.like(Long.parseLong(memberId), request.getTargetId(), request.getTargetType());
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @DeleteMapping("/likes")
-    public ResponseEntity<ApiResponse<Void>> unlike(@RequestBody LikeRequest request, @RequestHeader("X-USER-ID") Long userId) {
-        likeCommandService.unlike(userId, request.getTargetId(), request.getTargetType());
+    public ResponseEntity<ApiResponse<Void>> unlike(@RequestBody LikeRequest request, @AuthenticationPrincipal String memberId) {
+        likeCommandService.unlike(Long.parseLong(memberId), request.getTargetId(), request.getTargetType());
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 }
