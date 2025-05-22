@@ -4,7 +4,7 @@ public interface
 FollowService {
     void follow(Long followerId, Long follwingId );
     void unfollow(Long followerId, Long followingId);
+
+    void deleteFollower(Long followingId, Long followerId);
 //    void acceptFollowRequest(Long memberId, Long requesterId);
-//
-//    void rejectFollow(Long followingId, Long requesterId);
 }

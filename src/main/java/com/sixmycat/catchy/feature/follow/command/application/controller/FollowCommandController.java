@@ -47,15 +47,15 @@ public class FollowCommandController {
 //        return ResponseEntity.ok(ApiResponse.success(null));
 //    }
 //
-//    /* 팔로우 거절 */
-//    @DeleteMapping("/{followerId}/reject")
-//    public ResponseEntity<ApiResponse<Void>> rejectFollow(
-//            @AuthenticationPrincipal String memberId,
-//            @PathVariable Long followerId
-//    ) {
-//        followService.rejectFollow(Long.parseLong(memberId),followerId);
-//        return ResponseEntity.ok(ApiResponse.success(null));
-//    }
+    /* 팔로우 거절 */
+    @DeleteMapping("/{followerId}/reject")
+    public ResponseEntity<ApiResponse<Void>> deleteFollower(
+            @AuthenticationPrincipal String memberId,
+            @PathVariable Long followerId
+    ) {
+        followService.deleteFollower(Long.parseLong(memberId),followerId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 
 
 }

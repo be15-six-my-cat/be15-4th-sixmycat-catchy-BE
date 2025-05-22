@@ -9,3 +9,4 @@ public record AddCatRequest(
         LocalDate birthDate,
         Integer age
 ) {}
+

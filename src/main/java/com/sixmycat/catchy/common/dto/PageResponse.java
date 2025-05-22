@@ -59,5 +59,19 @@ public class PageResponse<T> {
                 .build();
     }
 
+
+    public static <T, U> PageResponse<U> from(PageInfo<T> pageInfo, List<U> content) {
+        return PageResponse.<U>builder()
+                .totalElements(pageInfo.getTotal())
+                .totalPages(pageInfo.getPages())
+                .currentPage(pageInfo.getPageNum() - 1) // PageHelper는 1부터 시작, Spring은 0부터 시작
+                .pageSize(pageInfo.getPageSize())
+                .content(content) // 변환된 DTO 리스트
+                .hasNext(pageInfo.isHasNextPage())
+                .hasPrevious(pageInfo.isHasPreviousPage())
+                .build();
+    }
+
+
 }
 
