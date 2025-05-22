@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: CATCHY
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
