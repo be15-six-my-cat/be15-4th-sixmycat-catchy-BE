@@ -38,13 +38,21 @@ public class FeedQueryController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<FeedDetailResponse>>> getFeeds(
-            @AuthenticationPrincipal String memberId,
+            @AuthenticationPrincipal Object principal,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
-        PageResponse<FeedDetailResponse> response = feedQueryService.getFeedList(Long.parseLong(memberId), page, size);
+        Long memberId = null;
+        if (principal instanceof String str && !str.equals("anonymousUser")) {
+            try {
+                memberId = Long.parseLong(str);
+            } catch (NumberFormatException ignored) {}
+        }
+
+        PageResponse<FeedDetailResponse> response = feedQueryService.getFeedList(memberId, page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
 
     @GetMapping("/likes")
     public ResponseEntity<ApiResponse<PageResponse<FeedSummaryResponse>>> getLikedFeeds(
@@ -53,16 +61,6 @@ public class FeedQueryController {
             @RequestParam(defaultValue = "5") int size
     ) {
         PageResponse<FeedSummaryResponse> response = feedQueryService.getLikedFeedList(Long.parseLong(memberId), page, size);
-        return ResponseEntity.ok(ApiResponse.success(response));
-    }
-
-    @GetMapping("/member/{memberId}")
-    public ResponseEntity<ApiResponse<PageResponse<FeedSummaryResponse>>> getFeedsByMemberId(
-            @PathVariable Long memberId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
-    ){
-        PageResponse<FeedSummaryResponse> response = feedQueryService.getFeedsByMemberId(memberId, page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
