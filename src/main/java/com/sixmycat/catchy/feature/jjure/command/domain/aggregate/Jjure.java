@@ -24,7 +24,7 @@ public class Jjure {
 
     private String caption;
 
-    private String thumbnail_url;
+    private String thumbnailUrl;
 
     private String fileKey;
 
@@ -36,12 +36,25 @@ public class Jjure {
 
     private LocalDateTime deletedAt;
 
-    public void update(String caption, String fileKey, String thumbnail_url) {
+    public void update(String caption, String fileKey, String thumbnailUrl) {
         this.caption = caption;
         this.fileKey = fileKey;
         this.updatedAt = LocalDateTime.now();
-        this.thumbnail_url = thumbnail_url;
+        this.thumbnailUrl = thumbnailUrl;
     }
+
+    public void updateIfNotNull(String caption, String fileKey, String thumbnailUrl) {
+        if (caption != null) {
+            this.caption = caption;
+        }
+        if (fileKey != null) {
+            this.fileKey = fileKey;
+        }
+        if (thumbnailUrl != null) {
+            this.thumbnailUrl = thumbnailUrl;
+        }
+    }
+
 
     public void markAsDeleted() {
         this.deletedAt = LocalDateTime.now();

@@ -38,7 +38,7 @@ public class JjureServiceImpl implements JjureService {
                 .caption(request.getCaption())
                 .fileKey(request.getFileKey())
                 .musicUrl(null) // 음악 설정 연결 전까지 일단 Null로 처리
-                .thumbnail_url(request.getThumbnail_url())
+                .thumbnailUrl(request.getThumbnail_url())
                 .createdAt(now)
                 .updatedAt(now)
                 .deletedAt(null)
@@ -58,10 +58,15 @@ public class JjureServiceImpl implements JjureService {
         Jjure jjure = jjureRepository.findById(jjureId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.JJURE_NOT_FOUND));
 
-        memberValidationService.validateJjureOwner(memberId, jjure.getMemberId(), ErrorCode.NO_PERMISSION_TO_UPDATE_JJURE);
+        memberValidationService.validateJjureOwner(
+                memberId,
+                jjure.getMemberId(),
+                ErrorCode.NO_PERMISSION_TO_UPDATE_JJURE
+        );
 
-        jjure.update(request.getCaption(), request.getFileKey(), request.getThumbnailUrl());
+        jjure.updateIfNotNull(request.getCaption(), request.getFileKey(), request.getThumbnailUrl());
     }
+
 
     @Override
     public String uploadThumbnailImage(MultipartFile file) {

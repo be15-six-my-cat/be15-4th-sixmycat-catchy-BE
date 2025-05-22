@@ -26,16 +26,16 @@ public class FollowCommandController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 //
-//    /* 팔로우 취소*/
-//    @DeleteMapping("/{targetId}/cancel")
-//    @Operation(summary = "팔로우 취소")
-//    public ResponseEntity<ApiResponse<Void>> unfollow(
-//            @AuthenticationPrincipal String memberId,
-//            @PathVariable Long targetId
-//    ) {
-//        followService.unfollow(Long.parseLong(memberId), targetId);
-//        return ResponseEntity.ok(ApiResponse.success(null));
-//    }
+    /* 팔로우 취소*/
+    @DeleteMapping("/{targetId}/cancel")
+    @Operation(summary = "팔로우 취소")
+    public ResponseEntity<ApiResponse<Void>> unfollow(
+            @AuthenticationPrincipal String memberId,
+            @PathVariable Long targetId
+    ) {
+        followService.unfollow(Long.parseLong(memberId), targetId);
+        return ResponseEntity.ok(ApiResponse.success(null));
+    }
 //
 //    /* 팔로우 수락 */
 //    @PostMapping("/{requesterId}/accept")

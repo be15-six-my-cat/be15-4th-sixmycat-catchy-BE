@@ -20,6 +20,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 //    @Query("select count(f) from Follow f where f.followerId = :memberId")
 //    long countFollowings(@Param("memberId") Long memberId);
 //
-//    Optional<Follow> findByFollowerIdAndFollowingId(Long requesterId, Long memberId);
+    Optional<Follow> findByFollowerIdAndFollowingId(Long requesterId, Long memberId);
 
 }

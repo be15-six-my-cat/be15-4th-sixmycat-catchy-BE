@@ -11,7 +11,6 @@ public class JjureUpdateRequest {
 
     private String caption;
 
-    @NotBlank(message = "파일 키는 필수입니다.")
     private String fileKey;
 
     private String thumbnailUrl;
