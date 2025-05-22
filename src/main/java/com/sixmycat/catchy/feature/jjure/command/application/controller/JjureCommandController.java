@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,8 +44,8 @@ public class JjureCommandController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
-    @Operation(summary = "쭈르 수정", description = "캡션과 파일 키(fileKey)를 수정합니다.")
     /* 쭈르 수정 핸들러 */
+    @Operation(summary = "쭈르 수정", description = "캡션과 파일 키(fileKey)를 수정합니다.")
     @PutMapping
     public ResponseEntity<ApiResponse<Void>> updateJjure(
             @RequestBody @Valid JjureUpdateRequest request,
@@ -52,6 +53,13 @@ public class JjureCommandController {
     ) {
         jjureService.updateJjure(request, Long.parseLong(memberId));
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /* S3에 썸네일 저장 */
+    @PostMapping("/thumbnail")
+    public ApiResponse<String> uploadThumbnailImage(@RequestPart MultipartFile file) {
+        String url = jjureService.uploadThumbnailImage(file);
+        return ApiResponse.success(url);
     }
 
 

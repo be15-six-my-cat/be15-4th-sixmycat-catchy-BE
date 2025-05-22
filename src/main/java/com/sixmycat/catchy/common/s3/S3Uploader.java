@@ -1,5 +1,7 @@
 package com.sixmycat.catchy.common.s3;
 
+import com.sixmycat.catchy.exception.BusinessException;
+import com.sixmycat.catchy.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,10 @@ public class S3Uploader {
 
     public String uploadFile(MultipartFile file, String dirName) {
         String fileName = generateFileName(dirName, file.getOriginalFilename());
+
+        if (!file.getContentType().startsWith("image/")) {
+            throw new BusinessException(ErrorCode.INVALID_FILE_TYPE); // 예: image/png, image/jpeg만 허용
+        }
 
         try {
             PutObjectRequest request = PutObjectRequest.builder()

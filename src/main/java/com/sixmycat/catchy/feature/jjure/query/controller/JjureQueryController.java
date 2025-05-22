@@ -7,6 +7,7 @@ import com.sixmycat.catchy.feature.jjure.query.dto.response.JjureSummaryResponse
 import com.sixmycat.catchy.feature.jjure.query.service.JjureQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,22 +17,24 @@ public class JjureQueryController {
 
     private final JjureQueryService jjureQueryService;
 
+    /* 쮸르 상세 조회 */
     @GetMapping("/{jjureId}")
     public ResponseEntity<ApiResponse<JjureDetailResponse>> getJjureDetail(
             @PathVariable Long jjureId,
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId
+            @AuthenticationPrincipal String userId
     ) {
-        JjureDetailResponse response = jjureQueryService.getJjureDetail(jjureId, userId);
+        JjureDetailResponse response = jjureQueryService.getJjureDetail(jjureId, Long.parseLong(userId));
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    /* 쮸르 목록 조회 */
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<JjureDetailResponse>>> getJjures(
-            @RequestHeader(value = "X-USER-ID", required = false) Long userId,
+            @AuthenticationPrincipal String userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        PageResponse<JjureDetailResponse> response = jjureQueryService.getJjureList(userId, page, size);
+        PageResponse<JjureDetailResponse> response = jjureQueryService.getJjureList(Long.parseLong(userId), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
