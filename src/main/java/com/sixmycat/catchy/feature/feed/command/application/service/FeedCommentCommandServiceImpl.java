@@ -5,6 +5,8 @@ import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.feed.command.application.dto.request.FeedCommentCreateRequest;
 import com.sixmycat.catchy.feature.feed.command.domain.aggregate.FeedComment;
 import com.sixmycat.catchy.feature.feed.command.domain.repository.FeedCommentRepository;
+import com.sixmycat.catchy.feature.notification.command.application.service.NotificationCommandService;
+import com.sixmycat.catchy.feature.notification.command.domain.aggregate.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,8 @@ import java.util.List;
 public class FeedCommentCommandServiceImpl implements FeedCommentCommandService {
 
     private final FeedCommentRepository commentRepository;
+    private final NotificationCommandService notificationCommandService;
+    private final FeedInternalService feedInternalService;
 
     @Override
     @Transactional
@@ -37,7 +41,36 @@ public class FeedCommentCommandServiceImpl implements FeedCommentCommandService 
                 request.getParentCommentId()
         );
 
-        return commentRepository.save(comment).getCommentId();
+        Long savedId = commentRepository.save(comment).getCommentId();
+
+        // 알림 전송
+        Long receiverId;
+        NotificationType notificationType;
+
+        if (request.getParentCommentId() != null) {
+            // 대댓글 → 부모 댓글 작성자에게 알림
+            FeedComment parent = commentRepository.findById(request.getParentCommentId())
+                    .orElseThrow(() -> new BusinessException(ErrorCode.COMMENT_NOT_FOUND));
+
+            receiverId = parent.getMemberId();
+            notificationType = NotificationType.RECOMMENT;
+        } else {
+            // 댓글 → 피드 작성자에게 알림
+            receiverId = feedInternalService.findMemberIdByFeedId(request.getTargetId());
+            notificationType = NotificationType.COMMENT;
+        }
+
+        if (!receiverId.equals(memberId)) {
+            notificationCommandService.createAndSendNotification(
+                    memberId,
+                    receiverId,
+                    "댓글 추가",
+                    notificationType,
+                    savedId
+            );
+        }
+
+        return savedId;
     }
 
     @Override

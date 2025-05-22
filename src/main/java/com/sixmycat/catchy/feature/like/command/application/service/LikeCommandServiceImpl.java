@@ -34,7 +34,10 @@ public class LikeCommandServiceImpl implements LikeCommandService {
         likeRepository.save(like);
 
         Long receiverMemberId = resolveReceiverId(targetId, targetType);
-        notificationCommandService.createAndSendNotification(memberId, receiverMemberId, "좋아요 추가되었습니다", NotificationType.LIKE, like.getId());
+        if(!receiverMemberId.equals(memberId)) {
+            notificationCommandService.createAndSendNotification(memberId, receiverMemberId, "좋아요 추가되었습니다", NotificationType.LIKE, like.getId());
+        }
+
     }
 
     @Override

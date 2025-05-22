@@ -2,10 +2,11 @@ package com.sixmycat.catchy.feature.jjure.command.application.service;
 
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
-import com.sixmycat.catchy.feature.feed.command.domain.aggregate.FeedComment;
 import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureCommentCreateRequest;
 import com.sixmycat.catchy.feature.jjure.command.domain.aggregate.JjureComment;
 import com.sixmycat.catchy.feature.jjure.command.domain.repository.JjureCommentRepository;
+import com.sixmycat.catchy.feature.notification.command.application.service.NotificationCommandService;
+import com.sixmycat.catchy.feature.notification.command.domain.aggregate.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,8 @@ import java.util.List;
 public class JjureCommentCommandServiceImpl implements JjureCommentCommandService {
 
     private final JjureCommentRepository commentRepository;
+    private final NotificationCommandService notificationCommandService;
+    private final JjureInternalService jjureInternalService;
 
     @Override
     @Transactional
@@ -38,7 +41,36 @@ public class JjureCommentCommandServiceImpl implements JjureCommentCommandServic
                 request.getParentCommentId()
         );
 
-        return commentRepository.save(comment).getCommentId();
+        Long savedId = commentRepository.save(comment).getCommentId();
+
+        // 알림 전송
+        Long receiverId;
+        NotificationType notificationType;
+
+        if (request.getParentCommentId() != null) {
+            // 대댓글 → 부모 댓글 작성자에게 알림
+            JjureComment parent = commentRepository.findById(request.getParentCommentId())
+                    .orElseThrow(() -> new BusinessException(ErrorCode.COMMENT_NOT_FOUND));
+
+            receiverId = parent.getMemberId();
+            notificationType = NotificationType.RECOMMENT;
+        } else {
+            // 댓글 → 피드 작성자에게 알림
+            receiverId = jjureInternalService.findMemberIdByJjureId(request.getTargetId());
+            notificationType = NotificationType.COMMENT;
+        }
+
+        if (!receiverId.equals(memberId)) {
+            notificationCommandService.createAndSendNotification(
+                    memberId,
+                    receiverId,
+                    "댓글 추가",
+                    notificationType,
+                    savedId
+            );
+        }
+
+        return savedId;
     }
 
     @Override
@@ -62,5 +94,4 @@ public class JjureCommentCommandServiceImpl implements JjureCommentCommandServic
         }
         commentRepository.deleteById(commentId);
     }
-
 }
