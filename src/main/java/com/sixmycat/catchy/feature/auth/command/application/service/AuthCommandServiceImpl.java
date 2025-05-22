@@ -10,6 +10,7 @@ import com.sixmycat.catchy.feature.auth.command.domain.aggregate.RefreshToken;
 import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import com.sixmycat.catchy.feature.auth.command.application.dto.request.ExtraSignupRequest;
 import com.sixmycat.catchy.feature.auth.command.application.dto.response.SocialLoginResponse;
+import com.sixmycat.catchy.feature.auth.command.domain.service.JwtTokenDomainService;
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Member;
 import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
 import com.sixmycat.catchy.security.jwt.JwtTokenProvider;
@@ -37,6 +38,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
     private final RedisTemplate<String, RefreshToken> refreshTokenRedisTemplate;
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenDomainService jwtTokenDomainService;
     private final S3Uploader s3Uploader;
 
     @Override
@@ -100,8 +102,9 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         redisTemplate.delete(redisKey); // 사용 완료 후 삭제
 
         Long memberId = member.getId();
-        String accessToken = jwtTokenProvider.createToken(memberId);
-        String refreshToken = jwtTokenProvider.createRefreshToken(memberId);
+        String accessToken = jwtTokenDomainService.createAccessToken(memberId);
+        String refreshToken = jwtTokenDomainService.createRefreshToken(memberId);
+        jwtTokenDomainService.storeRefreshToken(memberId, refreshToken);
 
         // 요청 범위에 refreshToken 저장 → 컨트롤러에서 쿠키로 전달 가능
         RequestContextHolder.getRequestAttributes().setAttribute(
