@@ -11,7 +11,8 @@
         name,
         contact_number AS contactNumber,
         profile_image AS profileImage,
-        social
+        social,
+        status_message AS statusMessage
         FROM member
         WHERE id = #{id} AND deleted_at IS NULL
     </select>

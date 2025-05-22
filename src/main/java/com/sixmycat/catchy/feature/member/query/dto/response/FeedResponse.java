@@ -11,8 +11,4 @@ import java.util.List;
 @AllArgsConstructor
 public class FeedResponse {
     private int feedCount;
-    private List<FeedSummary> myFeeds;
-    private List<VideoSummary> myVideos;
-    private List<FeedSummary> likedFeeds;
-    private List<VideoSummary> likedVideos;
 }
