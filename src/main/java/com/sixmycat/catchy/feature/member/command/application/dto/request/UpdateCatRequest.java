@@ -12,6 +12,6 @@ public class UpdateCatRequest {
     private String name;
     private String gender;
     private String breed;
-    private LocalDate birthDay;
+    private LocalDate birthDate;
     private Integer age;
 }

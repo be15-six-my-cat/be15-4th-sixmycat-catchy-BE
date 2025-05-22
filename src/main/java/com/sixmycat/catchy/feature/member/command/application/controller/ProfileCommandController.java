@@ -1,10 +1,9 @@
 package com.sixmycat.catchy.feature.member.command.application.controller;
 
+import com.sixmycat.catchy.feature.member.command.application.dto.request.AddCatRequest;
 import com.sixmycat.catchy.feature.member.command.application.dto.request.UpdateProfileRequest;
 import com.sixmycat.catchy.feature.member.command.application.dto.response.UpdateProfileResponse;
 import com.sixmycat.catchy.feature.member.command.application.service.MemberCommandService;
-import com.sixmycat.catchy.feature.member.query.dto.response.MyProfileResponse;
-import com.sixmycat.catchy.feature.member.query.service.ProfileQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,5 +23,23 @@ public class ProfileCommandController {
     ) {
         UpdateProfileResponse response = memberCommandService.updateProfile(Long.parseLong(memberId), request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/cats")
+    public ResponseEntity<Void> addCat(
+            @AuthenticationPrincipal String memberId,
+            @RequestBody AddCatRequest request
+    ) {
+        memberCommandService.addCat(Long.parseLong(memberId), request);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/cats/{catId}")
+    public ResponseEntity<Void> deleteCat(
+            @AuthenticationPrincipal String memberId,
+            @PathVariable Long catId
+    ) {
+        memberCommandService.deleteCat(Long.parseLong(memberId), catId);
+        return ResponseEntity.noContent().build();
     }
 }
