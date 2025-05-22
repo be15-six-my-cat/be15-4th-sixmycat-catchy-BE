@@ -58,4 +58,8 @@ public class Cat {
     public void assignTo(Member member) {
         this.member = member;
     }
+
+    public void delete() {
+        this.deletedAt = new Date(); // soft delete (DB에서는 남기고 숨김 처리)
+    }
 }

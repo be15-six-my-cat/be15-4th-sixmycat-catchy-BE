@@ -58,9 +58,9 @@ public class Member {
     }
 
     public void updateProfile(String nickname, String statusMessage, String profileImage) {
-        this.nickname = nickname;
-        this.statusMessage = statusMessage;
-        this.profileImage = profileImage;
+        if (nickname != null) this.nickname = nickname;
+        if (statusMessage != null) this.statusMessage = statusMessage;
+        if (profileImage != null) this.profileImage = profileImage;
     }
 
     public void addCat(Cat cat) {

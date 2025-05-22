@@ -2,7 +2,7 @@ package com.sixmycat.catchy.feature.member.command.application.service;
 
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
-import com.sixmycat.catchy.feature.member.command.application.dto.request.UpdateCatRequest;
+import com.sixmycat.catchy.feature.member.command.application.dto.request.AddCatRequest;
 import com.sixmycat.catchy.feature.member.command.application.dto.request.UpdateProfileRequest;
 import com.sixmycat.catchy.feature.member.command.application.dto.response.UpdateProfileResponse;
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Cat;
@@ -37,6 +37,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         if (request.getCats() != null) {
             catResponses = request.getCats().stream()
+                    .filter(catReq -> catReq.getId() != null) // ✅ 기존 고양이만 처리
                     .map(catReq -> {
                         Cat cat = member.getCats().stream()
                                 .filter(c -> c.getId().equals(catReq.getId()))
@@ -47,7 +48,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
                                 catReq.getName(),
                                 catReq.getGender(),
                                 catReq.getBreed(),
-                                catReq.getBirthDay(),
+                                catReq.getBirthDate(),
                                 catReq.getAge()
                         );
 
@@ -70,5 +71,39 @@ public class MemberCommandServiceImpl implements MemberCommandService {
                 member.getProfileImage(),
                 catResponses
         );
+    }
+
+    @Transactional
+    public void addCat(Long memberId, AddCatRequest request) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        Cat cat = new Cat(
+                request.name(),
+                request.gender(),
+                request.breed(),
+                request.birthDate(),
+                request.age(),
+                member
+        );
+
+        member.addCat(cat); // 연관관계 설정
+    }
+
+    @Override
+    @Transactional
+    public void deleteCat(Long memberId, Long catId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        Cat cat = member.getCats().stream()
+                .filter(c -> c.getId().equals(catId))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.CAT_NOT_FOUND));
+
+        member.getCats().remove(cat); // List에서 제거
+
+        // 선택: 연관관계 정리
+        cat.delete(); // 만약 soft delete라면 이 메서드를 Cat 엔티티에 정의
     }
 }
