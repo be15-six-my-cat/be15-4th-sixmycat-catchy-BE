@@ -55,7 +55,8 @@ public class NotificationQueryServiceTest {
     private NotificationDTO createNotification(Long senderId, String content) {
         NotificationDTO dto = new NotificationDTO();
         dto.setMemberId(1L);
-        dto.setSenderMemberId(senderId);
+        dto.setSenderId(senderId);
+        dto.setSenderNickname("김멘토");
         dto.setProfileImage("image.png");
         dto.setContent(content);
         dto.setType(NotificationType.COMMENT); // enum 값 예시
