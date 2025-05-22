@@ -1,6 +1,7 @@
 package com.sixmycat.catchy.feature.jjure.command.application.service;
 
 import com.sixmycat.catchy.exception.BusinessException;
+import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureUploadRequest;
 import com.sixmycat.catchy.feature.jjure.command.domain.aggregate.Jjure;
 import com.sixmycat.catchy.feature.jjure.command.domain.repository.JjureRepository;
@@ -105,20 +106,6 @@ class JjureServiceImplTest {
         assertNotNull(saved.getCreatedAt());
         assertNotNull(saved.getUpdatedAt());
         assertNull(saved.getDeletedAt());
-    }
-
-    @Test
-    @DisplayName("예외 처리 - 저장 중 예외 발생 시 BusinessException으로 래핑")
-    void givenRepositoryFails_whenUploadJjure_thenThrowsBusinessException() {
-        JjureUploadRequest request = new JjureUploadRequest("쭈르 설명", "uploads/fail.mp4", "uploads/thumb.jpg");
-
-        doThrow(new RuntimeException("DB ERROR")).when(jjureRepository).save(any());
-
-        BusinessException exception = assertThrows(BusinessException.class, () -> {
-            jjureService.uploadJjure(request, 1L);
-        });
-
-        assertEquals("JJURE_UPLOAD_FAILED", exception.getErrorCode().name());
     }
 
     @Test

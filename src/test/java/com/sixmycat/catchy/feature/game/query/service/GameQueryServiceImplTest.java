@@ -90,9 +90,9 @@ class GameQueryServiceImplTest {
             when(gameScoreMapper.findScoreByMemberId(memberId)).thenReturn(Optional.of(myScore));
             when(gameScoreMapper.findRankByScore(myScore)).thenReturn(myRank);
             when(gameScoreMapper.findTopRankers(limit)).thenReturn(List.of(
-                    new RankerDto(1, "user1", 1500),
-                    new RankerDto(2, "user2", 1400),
-                    new RankerDto(3, "user3", 1300)
+                    new RankerDto(1,1, "user1", 1500),
+                    new RankerDto(2,2, "user2", 1400),
+                    new RankerDto(3, 3, "user3", 1300)
             ));
 
             // when

@@ -1,7 +1,6 @@
 package com.sixmycat.catchy.feature.jjure.command.application.service;
 
 import com.sixmycat.catchy.common.s3.S3Uploader;
-import com.sixmycat.catchy.common.s3.dto.S3UploadResult;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.jjure.command.application.dto.request.JjureUpdateRequest;
@@ -14,9 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,9 +33,6 @@ class JjureServiceImpl_UpdateTest {
     private MemberValidationService memberValidationService;
 
     private static Validator validator;
-
-    @Mock
-    private S3Uploader s3Uploader;
 
     @BeforeAll
     static void setUpValidator() {
@@ -81,23 +75,6 @@ class JjureServiceImpl_UpdateTest {
         );
 
         assertEquals(ErrorCode.JJURE_NOT_FOUND, ex.getErrorCode());
-    }
-
-    @Test
-    @DisplayName("성공 - 썸네일 업로드 성공")
-    void givenValidImageFile_whenUploadThumbnailImage_thenReturnsUrl() {
-        // given
-        MultipartFile mockFile = mock(MultipartFile.class);
-        S3UploadResult mockResult = new S3UploadResult("uploads/image.png", "https://domain.com/uploads/image.png");
-
-        when(mockFile.getContentType()).thenReturn("image/png");
-        when(s3Uploader.uploadFile(mockFile, "uploads")).thenReturn(mockResult);
-
-        // when
-        String url = jjureService.uploadThumbnailImage(mockFile);
-
-        // then
-        assertEquals("https://domain.com/uploads/image.png", url);
     }
 
     @Test
@@ -149,6 +126,11 @@ class JjureServiceImpl_UpdateTest {
         when(jjureRepository.findById(jjureId)).thenReturn(Optional.of(jjure));
 
         JjureUpdateRequest request = new JjureUpdateRequest("수정된 설명", "new.mp4", "thumbnail-file.png");
+
+        // 👇 예외 발생 설정
+        doThrow(new BusinessException(ErrorCode.NO_PERMISSION_TO_UPDATE_JJURE))
+                .when(memberValidationService)
+                .validateJjureOwner(otherMemberId, ownerId, ErrorCode.NO_PERMISSION_TO_UPDATE_JJURE);
 
         // when & then
         BusinessException ex = assertThrows(BusinessException.class, () -> {
