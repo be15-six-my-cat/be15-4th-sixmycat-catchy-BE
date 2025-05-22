@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -77,7 +78,11 @@ class MemberCommandServiceTest {
         given(memberRepository.findById(1L)).willReturn(Optional.of(member));
 
         // when
-        UpdateProfileResponse response = memberCommandService.updateProfile(1L, request);
+        MultipartFile mockImage = mock(MultipartFile.class);
+        given(mockImage.isEmpty()).willReturn(true); // 이미지 없이 저장하는 테스트라면
+
+        UpdateProfileResponse response = memberCommandService.updateProfile(1L, request, mockImage);
+
 
         // then
         assertThat(response.getMemberId()).isEqualTo(1L);
@@ -95,10 +100,12 @@ class MemberCommandServiceTest {
                 "닉", "상태", "이미지", Collections.emptyList()
         );
 
+        MultipartFile mockImage = mock(MultipartFile.class); // ✅ 추가
+        given(mockImage.isEmpty()).willReturn(true); // 이미지 없이 테스트
         given(memberRepository.findById(999L)).willReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> memberCommandService.updateProfile(999L, request))
+        assertThatThrownBy(() -> memberCommandService.updateProfile(999L, request, mockImage)) // ✅ 수정
                 .isInstanceOf(BusinessException.class)
                 .hasMessage(ErrorCode.MEMBER_NOT_FOUND.getMessage());
     }
@@ -115,10 +122,12 @@ class MemberCommandServiceTest {
                 "닉", "상태", "이미지", List.of(catRequest)
         );
 
+        MultipartFile mockImage = mock(MultipartFile.class);
+        given(mockImage.isEmpty()).willReturn(true);
         given(memberRepository.findById(1L)).willReturn(Optional.of(member));
 
         // when & then
-        assertThatThrownBy(() -> memberCommandService.updateProfile(1L, request))
+        assertThatThrownBy(() -> memberCommandService.updateProfile(1L, request, mockImage)) // ✅ 수정
                 .isInstanceOf(BusinessException.class)
                 .hasMessage(ErrorCode.CAT_NOT_FOUND.getMessage());
     }
