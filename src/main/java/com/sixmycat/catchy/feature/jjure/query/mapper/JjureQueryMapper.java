@@ -28,4 +28,6 @@ public interface JjureQueryMapper {
     List<JjureSummaryResponse> findLikedJjures(Long memberId);
 
     List<JjureSummaryResponse> findMyJjures(Long memberId);
+
+    List<JjureSummaryResponse> findJjuresByMemberId(Long memberId);
 }

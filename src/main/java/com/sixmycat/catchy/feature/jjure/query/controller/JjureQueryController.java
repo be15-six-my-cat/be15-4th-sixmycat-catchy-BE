@@ -57,4 +57,16 @@ public class JjureQueryController {
         PageResponse<JjureSummaryResponse> response = jjureQueryService.getMyJjureList(Long.parseLong(memberId), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<ApiResponse<PageResponse<JjureSummaryResponse>>> getJjuresByMemberId(
+            @PathVariable Long memberId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+
+    ) {
+        PageResponse<JjureSummaryResponse> response = jjureQueryService.getJjuresByMemberId(memberId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
 }

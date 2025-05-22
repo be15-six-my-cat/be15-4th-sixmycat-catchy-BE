@@ -106,4 +106,15 @@
         AND j.deleted_at IS NULL
         ORDER BY j.created_at DESC
     </select>
+
+    <select id="findJjuresByMemberId" resultType="com.sixmycat.catchy.feature.jjure.query.dto.response.JjureSummaryResponse">
+        SELECT
+        j.id AS jjureId,
+        j.thumbnail_url AS thumbnailUrl,
+        j.created_at
+        FROM jjure j
+        WHERE j.member_id = #{memberId}
+        AND j.deleted_at IS NULL
+        ORDER BY j.created_at DESC
+    </select>
 </mapper>
