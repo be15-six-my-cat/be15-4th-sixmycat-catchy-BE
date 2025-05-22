@@ -6,6 +6,7 @@ import com.sixmycat.catchy.feature.feed.command.application.service.FeedCommentC
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,9 +19,9 @@ public class FeedCommentCommandController {
     @PostMapping
     public ResponseEntity<ApiResponse<Long>> createComment(
             @RequestBody FeedCommentCreateRequest request,
-            @RequestHeader("X-USER-ID") Long memberId
+            @AuthenticationPrincipal String memberId
     ) {
-        Long id = commentService.createComment(request, memberId);
+        Long id = commentService.createComment(request, Long.parseLong(memberId));
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(id));
@@ -29,9 +30,9 @@ public class FeedCommentCommandController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable("id") Long commentId,
-            @RequestHeader("X-USER-ID") Long memberId
+            @AuthenticationPrincipal String memberId
     ) {
-        commentService.deleteComment(commentId, memberId);
+        commentService.deleteComment(commentId, Long.parseLong(memberId));
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(ApiResponse.success(null));

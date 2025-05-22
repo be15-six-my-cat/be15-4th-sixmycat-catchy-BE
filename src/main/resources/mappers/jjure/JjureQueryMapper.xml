@@ -92,6 +92,7 @@
         JOIN `like` l ON l.target_id = j.id
         WHERE l.member_id = #{memberId}
         AND l.target_type = 'JJURE'
+        AND j.deleted_at IS NULL
         ORDER BY j.created_at DESC
     </select>
 
@@ -102,6 +103,7 @@
         j.created_at
         FROM jjure j
         WHERE j.member_id = #{memberId}
+        AND j.deleted_at IS NULL
         ORDER BY j.created_at DESC
     </select>
 </mapper>
