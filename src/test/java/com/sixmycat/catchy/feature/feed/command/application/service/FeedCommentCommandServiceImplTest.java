@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -95,20 +96,27 @@ class FeedCommentCommandServiceImplTest {
 
     @Test
     @DisplayName("댓글 삭제 시 자식 댓글까지 함께 삭제된다")
-    void shouldDeleteCommentSuccessfully() {
+    void shouldDeleteCommentRecursively() {
         // given
-        Long commentId = 1L;
+        Long parentId = 1L;
         Long memberId = 1L;
-        FeedComment comment = FeedComment.create(memberId, 2L, TargetType.FEED, "hi", null);
 
-        when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
+        FeedComment parent = FeedComment.create(memberId, 2L, TargetType.FEED, "parent", null);
+        FeedComment child1 = FeedComment.create(memberId, 2L, TargetType.FEED, "child1", parentId);
+        FeedComment child2 = FeedComment.create(memberId, 2L, TargetType.FEED, "child2", parentId);
+
+        when(commentRepository.findById(parentId)).thenReturn(Optional.of(parent));
+        when(commentRepository.findAllByParentCommentId(parentId)).thenReturn(List.of(child1, child2));
+        when(commentRepository.findAllByParentCommentId(child1.getCommentId())).thenReturn(List.of());
+        when(commentRepository.findAllByParentCommentId(child2.getCommentId())).thenReturn(List.of());
 
         // when
-        commentService.deleteComment(commentId, memberId);
+        commentService.deleteComment(parentId, memberId);
 
         // then
-        verify(commentRepository).deleteAllByParentCommentId(commentId); // 자식 댓글 삭제 확인
-        verify(commentRepository).delete(comment);                      // 부모 댓글 삭제 확인
+        verify(commentRepository).deleteById(child1.getCommentId());
+        verify(commentRepository).deleteById(child2.getCommentId());
+        verify(commentRepository).deleteById(parentId);
     }
 
     @Test
