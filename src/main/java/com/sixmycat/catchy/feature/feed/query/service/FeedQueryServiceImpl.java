@@ -75,8 +75,10 @@ public class FeedQueryServiceImpl implements FeedQueryService {
 
     @Override
     public PageResponse<FeedDetailResponse> getFeedList(Long userId, int page, int size) {
-        PageHelper.startPage(page + 1, size); // PageHelper는 1부터 시작
+        PageHelper.startPage(page + 1, size); // PageHelper 적용
         List<FeedBaseInfo> baseInfos = feedQueryMapper.findFeedList();
+
+        PageInfo<FeedBaseInfo> pageInfo = new PageInfo<>(baseInfos);
 
         List<FeedDetailResponse> result = baseInfos.stream().map(base -> {
             List<String> imageUrls = feedQueryMapper.findFeedImageUrls(base.getId());
@@ -100,7 +102,7 @@ public class FeedQueryServiceImpl implements FeedQueryService {
                     .build();
         }).toList();
 
-        return PageResponse.from(new PageInfo<>(result));
+        return PageResponse.from(pageInfo, result);
     }
 
     @Override
