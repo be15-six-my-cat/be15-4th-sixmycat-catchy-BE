@@ -38,6 +38,7 @@ public class JjureQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    /* 좋아요한 쮸르 목록 조회 */
     @GetMapping("/likes")
     public ResponseEntity<ApiResponse<PageResponse<JjureSummaryResponse>>> getLikedJjures(
             @AuthenticationPrincipal String memberId,
@@ -48,6 +49,7 @@ public class JjureQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    /* 회원이 생성한 쮸르 목록 조회 */
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<PageResponse<JjureSummaryResponse>>> getMyJjures(
             @AuthenticationPrincipal String memberId,
@@ -58,6 +60,7 @@ public class JjureQueryController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    /* */
     @GetMapping("/member/{memberId}")
     public ResponseEntity<ApiResponse<PageResponse<JjureSummaryResponse>>> getJjuresByMemberId(
             @PathVariable Long memberId,

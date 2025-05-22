@@ -26,7 +26,6 @@ public class FollowServiceImpl implements FollowService {
 
         // 이미 팔로우 신청한 경우 다시 팔로우 할 수 없음
         boolean alreadyFollowed = followRepository.existsByFollowerId(followerId);
-
         if (alreadyFollowed) {
             throw new BusinessException(ErrorCode.ALREADY_FOLLOWED);
         }
@@ -36,14 +35,18 @@ public class FollowServiceImpl implements FollowService {
         followRepository.save(follow);
     }
 
-//    @Override
-//    public void unfollow(Long followerId, Long followingId) {
-//        Follow follow = followRepository.findByFollowerIdAndFollowingId(followerId, followingId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOLLOWED));
-//
-//        //소프트 딜리트
-//        follow.reject();
-//    }
+    @Override
+    public void unfollow(Long followerId, Long followingId) {
+        //자기 자신을 팔로우 취소할 수 없음
+        if (followerId.equals(followingId)) {
+            throw new BusinessException(ErrorCode.INVALID_FOLLOW);
+        }
+
+        Follow follow = followRepository.findByFollowerIdAndFollowingId(followerId, followingId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOLLOWED));
+
+        followRepository.delete(follow);
+    }
 //
 //    @Override
 //    public void rejectFollow(Long followingId, Long followerId) {

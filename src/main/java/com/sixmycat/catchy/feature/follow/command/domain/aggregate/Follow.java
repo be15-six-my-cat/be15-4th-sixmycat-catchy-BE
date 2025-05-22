@@ -27,4 +27,6 @@ public class Follow {
         this.followingId = followingId;
         this.followedAt = LocalDateTime.now();
     }
+
+
 }
