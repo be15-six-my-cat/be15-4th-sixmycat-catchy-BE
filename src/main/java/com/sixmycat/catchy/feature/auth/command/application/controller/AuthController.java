@@ -10,11 +10,14 @@ import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import com.sixmycat.catchy.security.jwt.JwtTokenProvider;
 import com.sixmycat.catchy.common.dto.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.sixmycat.catchy.common.utils.CookieUtils.createRefreshTokenCookie;
@@ -27,19 +30,25 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthCommandService authCommandService;
 
-    @PostMapping(value = "/signup/extra", consumes = "multipart/form-data")
-    public ResponseEntity<ApiResponse<SocialLoginResponse>> completeSignup(
+    @PostMapping("/signup/extra")
+    public ResponseEntity<ApiResponse<SocialLoginResponse>> registerExtraInfo(
             @ModelAttribute ExtraSignupRequest request,
-            @RequestPart(required = false) MultipartFile profileImage
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage,
+            HttpServletResponse response
     ) {
         SocialLoginResultResponse result = authCommandService.registerNewMember(request, profileImage);
 
-        ResponseCookie refreshTokenCookie = CookieUtils.createRefreshTokenCookie(result.getRefreshToken());
+        String refreshToken = (String) RequestContextHolder.getRequestAttributes()
+                .getAttribute("refreshToken", RequestAttributes.SCOPE_REQUEST);
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
-                .body(ApiResponse.success(result.getResponse()));
+        if (refreshToken != null) {
+            ResponseCookie cookie = CookieUtils.createRefreshTokenCookie(refreshToken);
+            response.addHeader("Set-Cookie", cookie.toString());
+        }
+
+        return ResponseEntity.ok(ApiResponse.success(result.getResponse()));
     }
+
 
     @GetMapping("/temp-info")
     public ResponseEntity<ApiResponse<TempMember>> getTempInfo(@RequestParam String email, @RequestParam String social) {
