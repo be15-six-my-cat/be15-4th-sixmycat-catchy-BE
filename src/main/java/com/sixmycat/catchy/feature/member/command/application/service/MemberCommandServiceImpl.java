@@ -1,5 +1,6 @@
 package com.sixmycat.catchy.feature.member.command.application.service;
 
+import com.sixmycat.catchy.common.s3.S3Uploader;
 import com.sixmycat.catchy.exception.BusinessException;
 import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.member.command.application.dto.request.AddCatRequest;
@@ -12,6 +13,7 @@ import com.sixmycat.catchy.feature.member.query.dto.response.CatResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,17 +22,23 @@ import java.util.List;
 public class MemberCommandServiceImpl implements MemberCommandService {
 
     private final MemberRepository memberRepository;
+    private final S3Uploader s3Uploader;
 
     @Override
     @Transactional
-    public UpdateProfileResponse updateProfile(Long memberId, UpdateProfileRequest request) {
+    public UpdateProfileResponse updateProfile(Long memberId, UpdateProfileRequest request, MultipartFile imageFile) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        String imageUrl = member.getProfileImage(); // 기본 유지
+        if (imageFile != null && !imageFile.isEmpty()) {
+            imageUrl = s3Uploader.uploadFile(imageFile, "profile").url();
+        }
 
         member.updateProfile(
                 request.getNickname(),
                 request.getStatusMessage(),
-                request.getProfileImage()
+                imageUrl
         );
 
         List<CatResponse> catResponses = null;
