@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class NicknameValidator {
 
-    private static final String NICKNAME_REGEX = "^[a-zA-Z^._]+$";
+    private static final String NICKNAME_REGEX = "^[a-zA-Z0-9^._]+$";
     private static final Pattern PATTERN = Pattern.compile(NICKNAME_REGEX);
 
     private static final int MIN_LENGTH = 3;

@@ -18,9 +18,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Duration;
 import java.util.Set;
 
 @Service
@@ -102,12 +103,12 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         String accessToken = jwtTokenProvider.createToken(memberId);
         String refreshToken = jwtTokenProvider.createRefreshToken(memberId);
 
-        refreshTokenRedisTemplate.opsForValue().set(
-                "REFRESH_TOKEN:" + memberId,
-                new RefreshToken(refreshToken),
-                Duration.ofMillis(jwtTokenProvider.getRefreshTokenExpiration())
+        // 요청 범위에 refreshToken 저장 → 컨트롤러에서 쿠키로 전달 가능
+        RequestContextHolder.getRequestAttributes().setAttribute(
+                "refreshToken", refreshToken, RequestAttributes.SCOPE_REQUEST
         );
 
+        // accessToken 포함된 응답 반환
         return new SocialLoginResultResponse(
                 SocialLoginResponse.loggedIn(memberId, accessToken),
                 refreshToken
