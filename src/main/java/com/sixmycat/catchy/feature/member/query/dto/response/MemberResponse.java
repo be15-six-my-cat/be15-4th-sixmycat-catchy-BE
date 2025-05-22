@@ -15,4 +15,5 @@ public class MemberResponse {
     private String contactNumber;
     private String profileImage;
     private String social;
+    private String statusMessage;
 }
