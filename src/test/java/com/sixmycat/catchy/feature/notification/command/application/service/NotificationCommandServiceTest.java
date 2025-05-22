@@ -1,5 +1,6 @@
 package com.sixmycat.catchy.feature.notification.command.application.service;
 
+import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
 import com.sixmycat.catchy.feature.notification.command.domain.aggregate.Notification;
 import com.sixmycat.catchy.feature.notification.command.domain.aggregate.NotificationType;
 import com.sixmycat.catchy.feature.notification.command.domain.repository.NotificationRepository;
@@ -22,6 +23,9 @@ class NotificationCommandServiceTest {
     private NotificationRepository notificationRepository;
 
     @Mock
+    private MemberRepository memberRepository;
+
+    @Mock
     private SseEmitterRepository sseEmitterRepository;
 
     @InjectMocks
@@ -37,6 +41,7 @@ class NotificationCommandServiceTest {
         NotificationType type = NotificationType.COMMENT;
         Map<String, SseEmitter> emitters = Map.of();
 
+        when(memberRepository.findProfileImageByIdAndDeletedAtIsNull(memberId)).thenReturn(Optional.of(""));
         when(sseEmitterRepository.findAllEmittersStartWithId(memberId)).thenReturn(emitters);
 
         // when
