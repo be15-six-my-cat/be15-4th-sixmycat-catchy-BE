@@ -48,18 +48,19 @@ public class FollowServiceImpl implements FollowService {
         followRepository.delete(follow);
     }
 //
-//    @Override
-//    public void rejectFollow(Long followingId, Long followerId) {
-//        Follow follow = followRepository.findByFollowerIdAndFollowingId(followerId, followingId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.FOLLOW_REQUEST_NOT_FOUND));
-//
-//        if (follow.isRejected()) {
-//            throw new BusinessException(ErrorCode.ALREADY_REJECTED);
-//        }
-//
-//        //소프트 딜리트
-//        follow.reject();
-//    }
+    @Override
+    public void deleteFollower(Long followingId, Long followerId) {
+
+        //자기 자신을 팔로우 취소할 수 없음
+        if (followingId.equals(followerId)) {
+            throw new BusinessException(ErrorCode.INVALID_FOLLOW);
+        }
+
+        Follow follow = followRepository.findByFollowerIdAndFollowingId(followerId, followingId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FOLLOW_REQUEST_NOT_FOUND));
+
+        followRepository.delete(follow);
+    }
 //
 //    @Override
 //    public void acceptFollowRequest(Long memberId, Long requesterId) {
