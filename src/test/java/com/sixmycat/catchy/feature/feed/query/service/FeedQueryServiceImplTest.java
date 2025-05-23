@@ -119,7 +119,7 @@ class FeedQueryServiceImplTest {
         Long userId = 1L;
         FeedBaseInfo baseInfo = new FeedBaseInfo(
                 10L, // feedId
-                1L, // authorId
+                userId, // authorId (userId와 일치해야 isMine = true)
                 "nickname",
                 "profile.jpg",
                 "hello world",
@@ -132,7 +132,8 @@ class FeedQueryServiceImplTest {
         List<String> imageUrls = List.of("img1.jpg", "img2.jpg");
         CommentPreview preview = new CommentPreview("댓글쓴이", "댓글 내용");
 
-        when(feedQueryMapper.findFeedList()).thenReturn(List.of(baseInfo));
+        // ✅ 수정: userId를 인자로 전달
+        when(feedQueryMapper.findFeedList(userId)).thenReturn(List.of(baseInfo));
         when(feedQueryMapper.findFeedImageUrls(10L)).thenReturn(imageUrls);
         when(feedQueryMapper.findLatestCommentPreview(10L)).thenReturn(Optional.of(preview));
         when(feedQueryMapper.isFeedLikedByUser(10L, userId)).thenReturn(true);
@@ -144,7 +145,7 @@ class FeedQueryServiceImplTest {
         assertThat(result.getContent()).hasSize(1);
         FeedDetailResponse response = result.getContent().get(0);
         assertThat(response.getId()).isEqualTo(10L);
-        assertThat(response.getAuthor()).isEqualTo(new AuthorInfo(1L, "nickname", "profile.jpg"));
+        assertThat(response.getAuthor()).isEqualTo(new AuthorInfo(userId, "nickname", "profile.jpg"));
         assertThat(response.getImageUrls()).isEqualTo(imageUrls);
         assertThat(response.getCommentPreview()).isEqualTo(preview);
         assertThat(response.isLiked()).isTrue();

@@ -70,7 +70,8 @@ class ProfileQueryServiceTest {
                         "홍길동",              // name
                         "01012345678",        // contactNumber
                         "default1.png",       // profileImage
-                        "KAKAO"               // social
+                        "KAKAO",              // social
+                        null
                 ));
 
 
@@ -79,7 +80,7 @@ class ProfileQueryServiceTest {
 
         given(profileMapper.findCatsByMemberId(memberId))
                 .willReturn(List.of(
-                        new CatResponse(1L,"나비", "F", "코리안숏헤어", LocalDate.of(2020, 5, 1), 4)
+                        new CatResponse(1L, "나비", "F", "코리안숏헤어", LocalDate.of(2020, 5, 1), 4)
                 ));
 
         @SuppressWarnings("unchecked")
@@ -126,7 +127,8 @@ class ProfileQueryServiceTest {
                         "홍길순",                 // name
                         "01022223333",          // contactNumber
                         "other-profile.png",    // profileImage
-                        "KAKAO"                 // social
+                        "KAKAO",                // social
+                        null
                 ));
 
         given(profileMapper.findFollowCountById(targetMemberId))

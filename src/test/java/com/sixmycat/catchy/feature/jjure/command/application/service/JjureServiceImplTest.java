@@ -101,7 +101,7 @@ class JjureServiceImplTest {
 
         assertEquals(caption, saved.getCaption());
         assertEquals(fileKey, saved.getFileKey());
-        assertEquals(thumbnailUrl, saved.getThumbnail_url());
+        assertEquals(thumbnailUrl, saved.getThumbnailUrl());
         assertNull(saved.getMusicUrl());
         assertNotNull(saved.getCreatedAt());
         assertNotNull(saved.getUpdatedAt());

@@ -23,7 +23,7 @@ public interface JjureQueryMapper {
 
     boolean isJjureLikedByUser(@Param("jjureId") Long jjureId, @Param("userId") Long userId);
 
-    List<JjureBaseInfo> findJjureList();
+    List<JjureBaseInfo> findJjureList(Long memberId);
 
     List<JjureSummaryResponse> findLikedJjures(Long memberId);
 

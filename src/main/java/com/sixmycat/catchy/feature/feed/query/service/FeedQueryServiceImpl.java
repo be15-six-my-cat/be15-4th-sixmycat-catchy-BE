@@ -10,12 +10,14 @@ import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.feed.query.dto.response.*;
 import com.sixmycat.catchy.feature.feed.query.mapper.FeedQueryMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FeedQueryServiceImpl implements FeedQueryService {
 
     private final FeedQueryMapper feedQueryMapper;
@@ -75,9 +77,10 @@ public class FeedQueryServiceImpl implements FeedQueryService {
 
     @Override
     public PageResponse<FeedDetailResponse> getFeedList(Long userId, int page, int size) {
-        PageHelper.startPage(page + 1, size); // PageHelper 적용
-        List<FeedBaseInfo> baseInfos = feedQueryMapper.findFeedList();
+        PageHelper.startPage(page + 1, size); // PageHelper 사용 (1-based page index)
 
+        // 🔥 userId를 전달해서 차단 필터 반영
+        List<FeedBaseInfo> baseInfos = feedQueryMapper.findFeedList(userId);
         PageInfo<FeedBaseInfo> pageInfo = new PageInfo<>(baseInfos);
 
         List<FeedDetailResponse> result = baseInfos.stream().map(base -> {
