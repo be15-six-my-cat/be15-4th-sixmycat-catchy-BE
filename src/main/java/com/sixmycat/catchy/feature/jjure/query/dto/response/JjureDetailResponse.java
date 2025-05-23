@@ -33,4 +33,6 @@ public class JjureDetailResponse {
     private boolean isMine;
 
     private LocalDateTime createdAt;
+
+    private String thumbnailUrl;
 }

@@ -18,4 +18,5 @@ public class JjureBaseInfo {
     private int likeCount;
     private int commentCount;
     private LocalDateTime createdAt;
+    private String thumbnailUrl;
 }

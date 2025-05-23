@@ -10,12 +10,14 @@ import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.feed.query.dto.response.*;
 import com.sixmycat.catchy.feature.feed.query.mapper.FeedQueryMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FeedQueryServiceImpl implements FeedQueryService {
 
     private final FeedQueryMapper feedQueryMapper;
