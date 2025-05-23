@@ -29,4 +29,13 @@ public class CookieUtils {
                 .sameSite("Strict")
                 .build();
     }
+
+    public static ResponseCookie createAccessTokenCookie(String accessToken) {
+        return ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(Duration.ofMinutes(30)) // 만료 시간 조정 가능
+                .sameSite("Strict")
+                .build();
+    }
 }
