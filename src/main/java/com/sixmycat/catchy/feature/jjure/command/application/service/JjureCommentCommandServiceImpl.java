@@ -47,6 +47,7 @@ public class JjureCommentCommandServiceImpl implements JjureCommentCommandServic
         Long receiverId;
         NotificationType notificationType;
 
+        Long jjureId = null;
         if (request.getParentCommentId() != null) {
             // 대댓글 → 부모 댓글 작성자에게 알림
             JjureComment parent = commentRepository.findById(request.getParentCommentId())
@@ -66,7 +67,7 @@ public class JjureCommentCommandServiceImpl implements JjureCommentCommandServic
                     receiverId,
                     "댓글 추가",
                     notificationType,
-                    savedId
+                    request.getTargetId()
             );
         }
 
