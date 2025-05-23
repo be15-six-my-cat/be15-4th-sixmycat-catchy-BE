@@ -94,7 +94,8 @@ class JjureQueryServiceImplTest {
         );
         CommentPreview comment = new CommentPreview("유저", "코멘트");
 
-        when(jjureQueryMapper.findJjureList()).thenReturn(List.of(base));
+        // ✅ 명확하게 userId를 넘김
+        when(jjureQueryMapper.findJjureList(userId)).thenReturn(List.of(base));
         when(jjureQueryMapper.findLatestCommentPreview(jjureId)).thenReturn(Optional.of(comment));
         when(jjureQueryMapper.isJjureLikedByUser(jjureId, userId)).thenReturn(true);
 
@@ -116,10 +117,11 @@ class JjureQueryServiceImplTest {
         assertThat(result.isMine()).isTrue();
     }
 
+
     @Test
     void shouldHandleEmptyListGracefully() {
         // given
-        when(jjureQueryMapper.findJjureList()).thenReturn(List.of());
+        when(jjureQueryMapper.findJjureList(null)).thenReturn(List.of());
 
         // when
         PageResponse<JjureDetailResponse> response = jjureQueryService.getJjureList(null, 0, 10);
@@ -127,4 +129,5 @@ class JjureQueryServiceImplTest {
         // then
         assertThat(response.getContent()).isEmpty();
     }
+
 }

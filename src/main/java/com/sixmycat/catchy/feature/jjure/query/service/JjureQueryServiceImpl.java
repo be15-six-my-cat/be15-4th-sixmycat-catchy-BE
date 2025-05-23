@@ -61,7 +61,7 @@ public class JjureQueryServiceImpl implements JjureQueryService {
     public PageResponse<JjureDetailResponse> getJjureList(Long userId, int page, int size) {
         PageHelper.startPage(page + 1, size); // PageHelper는 1부터 시작 (Spring은 0부터 시작)
 
-        List<JjureBaseInfo> baseInfos = jjureQueryMapper.findJjureList();
+        List<JjureBaseInfo> baseInfos = jjureQueryMapper.findJjureList(userId);
         PageInfo<JjureBaseInfo> pageInfo = new PageInfo<>(baseInfos);
 
         List<JjureDetailResponse> result = baseInfos.stream().map(base -> {

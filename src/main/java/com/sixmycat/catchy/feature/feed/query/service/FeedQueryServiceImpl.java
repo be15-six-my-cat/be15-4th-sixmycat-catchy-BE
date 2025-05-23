@@ -75,9 +75,10 @@ public class FeedQueryServiceImpl implements FeedQueryService {
 
     @Override
     public PageResponse<FeedDetailResponse> getFeedList(Long userId, int page, int size) {
-        PageHelper.startPage(page + 1, size); // PageHelper 적용
-        List<FeedBaseInfo> baseInfos = feedQueryMapper.findFeedList();
+        PageHelper.startPage(page + 1, size); // PageHelper 사용 (1-based page index)
 
+        // 🔥 userId를 전달해서 차단 필터 반영
+        List<FeedBaseInfo> baseInfos = feedQueryMapper.findFeedList(userId);
         PageInfo<FeedBaseInfo> pageInfo = new PageInfo<>(baseInfos);
 
         List<FeedDetailResponse> result = baseInfos.stream().map(base -> {
