@@ -145,7 +145,17 @@
         FROM feed f
         JOIN member m ON f.member_id = m.id
         WHERE f.deleted_at IS NULL
+        AND (
+        #{memberId} IS NULL
+        OR NOT EXISTS (
+        SELECT 1
+        FROM block b
+        WHERE b.blocker_id = #{memberId}
+        AND b.blocked_id = f.member_id
+        )
+        )
         ORDER BY f.created_at DESC
     </select>
+
 
 </mapper>
