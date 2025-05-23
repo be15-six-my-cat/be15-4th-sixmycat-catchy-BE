@@ -37,7 +37,8 @@
         j.music_url AS musicUrl,
         (SELECT COUNT(*) FROM `like` l WHERE l.target_id = j.id AND l.target_type = 'JJURE') AS likeCount,
         (SELECT COUNT(*) FROM comment c WHERE c.target_id = j.id AND c.target_type = 'JJURE') AS commentCount,
-        j.created_at
+        j.created_at,
+        j.thumbnail_url as thumbnailUrl
         FROM jjure j
         JOIN member m ON j.member_id = m.id
         WHERE j.id = #{jjureId}
@@ -76,7 +77,8 @@
         j.music_url AS musicUrl,
         (SELECT COUNT(*) FROM `like` l WHERE l.target_id = j.id AND l.target_type = 'JJURE') AS likeCount,
         (SELECT COUNT(*) FROM comment c WHERE c.target_id = j.id AND c.target_type = 'JJURE') AS commentCount,
-        j.created_at
+        j.created_at,
+        j.thumbnail_url
         FROM jjure j
         JOIN member m ON j.member_id = m.id
         WHERE j.deleted_at IS NULL
