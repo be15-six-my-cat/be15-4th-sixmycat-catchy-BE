@@ -66,7 +66,7 @@ public class FeedCommentCommandServiceImpl implements FeedCommentCommandService 
                     receiverId,
                     "댓글 추가",
                     notificationType,
-                    savedId
+                    request.getTargetId()
             );
         }
 

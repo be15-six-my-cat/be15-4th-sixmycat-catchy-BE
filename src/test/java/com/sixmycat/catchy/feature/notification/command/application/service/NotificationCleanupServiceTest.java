@@ -22,7 +22,7 @@ public class NotificationCleanupServiceTest {
     private NotificationRepository notificationRepository;
 
     @InjectMocks
-    private NotificationCleanupService notificationCleanupService;
+    private NotificationSchedulerService notificationSchedulerService;
 
     @Test
     public void deleteOldNotifications_shouldCallRepositoryWithCorrectDate() {
@@ -31,7 +31,7 @@ public class NotificationCleanupServiceTest {
         LocalDateTime expectedThreshold = now.minusDays(30);
 
         // when
-        notificationCleanupService.deleteOldNotifications();
+        notificationSchedulerService.deleteOldNotifications();
 
         // then
         ArgumentCaptor<LocalDateTime> captor = ArgumentCaptor.forClass(LocalDateTime.class);
