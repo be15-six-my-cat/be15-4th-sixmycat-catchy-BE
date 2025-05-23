@@ -17,4 +17,13 @@
         WHERE id = #{id} AND deleted_at IS NULL
     </select>
 
+    <select id="findByCatBirth" resultType="Long">
+        SELECT
+            id
+        FROM member m
+        JOIN cat c ON (m.id == c.member_id)
+        WHERE MONTH(c.birth_date) = MONTH(CURDATE())
+        AND DAY(c.birth_date) = DAY(CURDATE())
+    </select>
+
 </mapper>
