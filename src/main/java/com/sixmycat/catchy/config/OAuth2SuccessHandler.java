@@ -46,17 +46,24 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 authToken.getAuthorizedClientRegistrationId()
         );
 
-        // 기존 유저인 경우에만 refreshToken 쿠키 설정
+        // accessToken & refreshToken 쿠키 설정 (기존 유저만)
         if (!loginResponse.isNewUser()) {
             String refreshToken = (String) RequestContextHolder.getRequestAttributes()
                     .getAttribute("refreshToken", RequestAttributes.SCOPE_REQUEST);
+            String accessToken = (String) RequestContextHolder.getRequestAttributes()
+                    .getAttribute("accessToken", RequestAttributes.SCOPE_REQUEST);
+
             if (refreshToken != null) {
                 ResponseCookie cookie = CookieUtils.createRefreshTokenCookie(refreshToken);
                 response.addHeader("Set-Cookie", cookie.toString());
             }
+            if (accessToken != null) {
+                ResponseCookie cookie = CookieUtils.createAccessTokenCookie(accessToken);
+                response.addHeader("Set-Cookie", cookie.toString());
+            }
         }
 
-        // 분기: 신규 유저는 추가 정보 입력 페이지로 리디렉트
+        // 신규 유저는 추가 정보 입력 페이지로 리디렉트
         if (loginResponse.isNewUser()) {
             String social = authToken.getAuthorizedClientRegistrationId().toUpperCase(); // "NAVER" 또는 "KAKAO"
 
@@ -69,11 +76,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             return;
         }
 
-        // 기존 유저는 로그인 완료 페이지로 리디렉트
-        String redirectUrl = UriComponentsBuilder.fromUriString(loginSuccessPageUrl)
-                .queryParam("accessToken", loginResponse.getAccessToken())
-                .build().toUriString();
-
-        response.sendRedirect(redirectUrl);
+        response.sendRedirect(loginSuccessPageUrl);
     }
 }
