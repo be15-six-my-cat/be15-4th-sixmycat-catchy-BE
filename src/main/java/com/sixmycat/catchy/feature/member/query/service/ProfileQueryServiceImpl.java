@@ -31,6 +31,18 @@ public class ProfileQueryServiceImpl implements ProfileQueryService {
         return buildProfileResponse(memberId, false);
     }
 
+    @Override
+    public MyProfileResponse getProfileByNickname(String nickname) {
+        MemberResponse member = profileMapper.findMemberByNickname(nickname);
+        if (member == null) {
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        return buildProfileResponse(member.getId(), false);
+    }
+
+
+
     private MyProfileResponse buildProfileResponse(Long memberId, boolean isMine) {
         MemberResponse member = profileMapper.findMemberById(memberId);
         if (member == null) {

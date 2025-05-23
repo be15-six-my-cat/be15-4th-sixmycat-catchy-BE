@@ -1,7 +1,5 @@
 package com.sixmycat.catchy.feature.member.query.controller;
 
-import com.sixmycat.catchy.exception.BusinessException;
-import com.sixmycat.catchy.exception.ErrorCode;
 import com.sixmycat.catchy.feature.member.query.dto.response.MyProfileResponse;
 import com.sixmycat.catchy.feature.member.query.service.ProfileQueryService;
 
@@ -28,4 +26,11 @@ public class ProfileQueryController {
         MyProfileResponse response = profileQueryService.getOtherProfile(Long.parseLong(memberId));
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/nickname/{nickname}")
+    public ResponseEntity<MyProfileResponse> getProfileByNickname(@PathVariable String nickname) {
+        MyProfileResponse response = profileQueryService.getProfileByNickname(nickname);
+        return ResponseEntity.ok(response);
+    }
+
 }
