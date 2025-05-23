@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
-    boolean existsByFollowerId(Long followerId);
-//    boolean existsByFollowerIdAndFollowingId(Long followerId, Long followingId);
+//    boolean existsByFollowerId(Long followerId);
+    boolean existsByFollowerIdAndFollowingId(Long followerId, Long followingId);
 //
 //    boolean existsByFollowerIdAndFollowingIdAndAcceptedAtIsNullAndRejectedAtIsNull(Long followerId, Long followingId);
 //

@@ -17,4 +17,5 @@ public interface ProfileMapper {
 
     List<CatResponse> findCatsByMemberId(@Param("memberId") Long memberId);
 
+    MemberResponse findMemberByNickname(@Param("nickname") String nickname);
 }

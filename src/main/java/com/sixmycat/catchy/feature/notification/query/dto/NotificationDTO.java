@@ -18,4 +18,5 @@ public class NotificationDTO {
     NotificationType type;
     Long relatedId;
     LocalDateTime createdAt;
+    Boolean initialFollowing;
 }

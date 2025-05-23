@@ -25,7 +25,7 @@ public class FollowServiceImpl implements FollowService {
         }
 
         // 이미 팔로우 신청한 경우 다시 팔로우 할 수 없음
-        boolean alreadyFollowed = followRepository.existsByFollowerId(followerId);
+        boolean alreadyFollowed = followRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
         if (alreadyFollowed) {
             throw new BusinessException(ErrorCode.ALREADY_FOLLOWED);
         }
