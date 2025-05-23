@@ -16,13 +16,13 @@ public class FollowCommandController {
     private final FollowService followService;
 
     /* 팔로우 신청 핸들러 */
-    @PostMapping("/{follwingId}")
+    @PostMapping("/{followingId}")
     @Operation(summary = "팔로우 요청")
     public ResponseEntity<ApiResponse<Void>> follow(
             @AuthenticationPrincipal String memberId,
-            @PathVariable Long follwingId
+            @PathVariable Long followingId
     ) {
-        followService.follow(Long.parseLong(memberId), follwingId);
+        followService.follow(Long.parseLong(memberId), followingId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 //
