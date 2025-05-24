@@ -11,6 +11,7 @@ import com.sixmycat.catchy.feature.auth.command.domain.aggregate.TempMember;
 import com.sixmycat.catchy.feature.auth.command.application.dto.request.ExtraSignupRequest;
 import com.sixmycat.catchy.feature.auth.command.application.dto.response.SocialLoginResponse;
 import com.sixmycat.catchy.feature.auth.command.domain.service.JwtTokenDomainService;
+import com.sixmycat.catchy.feature.member.command.application.dto.request.AddCatRequest;
 import com.sixmycat.catchy.feature.member.command.domain.aggregate.Member;
 import com.sixmycat.catchy.feature.member.command.domain.repository.MemberRepository;
 import com.sixmycat.catchy.security.jwt.JwtTokenProvider;
@@ -23,6 +24,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -40,6 +42,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtTokenDomainService jwtTokenDomainService;
     private final S3Uploader s3Uploader;
+    private List<AddCatRequest> cats;
 
     @Override
     public SocialLoginResultResponse registerNewMember(ExtraSignupRequest request, MultipartFile profileImage) {
