@@ -81,7 +81,7 @@ public class AuthCommandServiceImpl implements AuthCommandService {
         if (!NicknameValidator.isPatternValid(nickname)) {
             throw new BusinessException(ErrorCode.INVALID_NICKNAME_FORMAT);
         }
-        if (memberRepository.existsByNicknameAndDeletedAtIsNull(nickname)) {
+        if (memberRepository.existsByNickname(nickname)) {
             throw new BusinessException(ErrorCode.USING_NICKNAME);
         }
 
