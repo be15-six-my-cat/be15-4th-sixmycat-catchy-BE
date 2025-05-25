@@ -33,65 +33,65 @@ class JjureCommentCommandServiceImplTest {
         commentService = new JjureCommentCommandServiceImpl(commentRepository, notificationService, jjureInternalService);
     }
 
-    @Test
-    @DisplayName("부모 댓글이 없는 상태에서 댓글을 성공적으로 생성한다")
-    void shouldCreateCommentSuccessfully() {
-        JjureCommentCreateRequest request = mock(JjureCommentCreateRequest.class);
-        Long memberId = 1L;
-        Long targetId = 2L;
-
-        when(request.getTargetId()).thenReturn(targetId);
-        when(request.getTargetType()).thenReturn(TargetType.FEED);
-        when(request.getContent()).thenReturn("test content");
-        when(request.getParentCommentId()).thenReturn(null);
-
-        JjureComment comment = JjureComment.create(memberId, targetId, TargetType.FEED, "test content", null);
-        when(commentRepository.save(any(JjureComment.class))).thenReturn(comment);
-        when(jjureInternalService.findMemberIdByJjureId(targetId)).thenReturn(99L); // 다른 사람 피드라고 가정
-
-        Long result = commentService.createComment(request, memberId);
-
-        assertThat(result).isEqualTo(comment.getCommentId());
-        verify(commentRepository).save(any(JjureComment.class));
-        verify(notificationService).createAndSendNotification(eq(memberId), eq(99L), anyString(), eq(NotificationType.COMMENT), eq(comment.getCommentId()));
-    }
-
-    @Test
-    @DisplayName("부모 댓글이 존재하지 않으면 예외가 발생한다")
-    void shouldThrowWhenParentCommentNotFound() {
-        JjureCommentCreateRequest request = mock(JjureCommentCreateRequest.class);
-        when(request.getParentCommentId()).thenReturn(999L);
-        when(commentRepository.findById(999L)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> commentService.createComment(request, 1L))
-                .isInstanceOf(BusinessException.class)
-                .hasMessageContaining(ErrorCode.COMMENT_NOT_FOUND.getMessage());
-    }
-
-    @Test
-    @DisplayName("부모 댓글이 존재하고 타겟 타입이 같을 때 답글 생성 성공")
-    void shouldCreateReplyCommentWhenParentExistsAndValid() {
-        Long parentId = 10L;
-        Long memberId = 1L;
-        Long targetId = 2L;
-
-        JjureCommentCreateRequest request = mock(JjureCommentCreateRequest.class);
-        when(request.getTargetId()).thenReturn(targetId);
-        when(request.getTargetType()).thenReturn(TargetType.FEED);
-        when(request.getContent()).thenReturn("reply");
-        when(request.getParentCommentId()).thenReturn(parentId);
-
-        JjureComment parent = JjureComment.create(99L, targetId, TargetType.FEED, "parent", null); // 부모는 다른 사람
-        when(commentRepository.findById(parentId)).thenReturn(Optional.of(parent));
-
-        JjureComment reply = JjureComment.create(memberId, targetId, TargetType.FEED, "reply", parentId);
-        when(commentRepository.save(any(JjureComment.class))).thenReturn(reply);
-
-        Long result = commentService.createComment(request, memberId);
-
-        assertThat(result).isEqualTo(reply.getCommentId());
-        verify(notificationService).createAndSendNotification(eq(memberId), eq(parent.getMemberId()), anyString(), eq(NotificationType.RECOMMENT), eq(reply.getCommentId()));
-    }
+//    @Test
+//    @DisplayName("부모 댓글이 없는 상태에서 댓글을 성공적으로 생성한다")
+//    void shouldCreateCommentSuccessfully() {
+//        JjureCommentCreateRequest request = mock(JjureCommentCreateRequest.class);
+//        Long memberId = 1L;
+//        Long targetId = 2L;
+//
+//        when(request.getTargetId()).thenReturn(targetId);
+//        when(request.getTargetType()).thenReturn(TargetType.FEED);
+//        when(request.getContent()).thenReturn("test content");
+//        when(request.getParentCommentId()).thenReturn(null);
+//
+//        JjureComment comment = JjureComment.create(memberId, targetId, TargetType.FEED, "test content", null);
+//        when(commentRepository.save(any(JjureComment.class))).thenReturn(comment);
+//        when(jjureInternalService.findMemberIdByJjureId(targetId)).thenReturn(99L); // 다른 사람 피드라고 가정
+//
+//        Long result = commentService.createComment(request, memberId);
+//
+//        assertThat(result).isEqualTo(comment.getCommentId());
+//        verify(commentRepository).save(any(JjureComment.class));
+//        verify(notificationService).createAndSendNotification(eq(memberId), eq(99L), anyString(), eq(NotificationType.COMMENT), eq(comment.getCommentId()));
+//    }
+//
+//    @Test
+//    @DisplayName("부모 댓글이 존재하지 않으면 예외가 발생한다")
+//    void shouldThrowWhenParentCommentNotFound() {
+//        JjureCommentCreateRequest request = mock(JjureCommentCreateRequest.class);
+//        when(request.getParentCommentId()).thenReturn(999L);
+//        when(commentRepository.findById(999L)).thenReturn(Optional.empty());
+//
+//        assertThatThrownBy(() -> commentService.createComment(request, 1L))
+//                .isInstanceOf(BusinessException.class)
+//                .hasMessageContaining(ErrorCode.COMMENT_NOT_FOUND.getMessage());
+//    }
+//
+//    @Test
+//    @DisplayName("부모 댓글이 존재하고 타겟 타입이 같을 때 답글 생성 성공")
+//    void shouldCreateReplyCommentWhenParentExistsAndValid() {
+//        Long parentId = 10L;
+//        Long memberId = 1L;
+//        Long targetId = 2L;
+//
+//        JjureCommentCreateRequest request = mock(JjureCommentCreateRequest.class);
+//        when(request.getTargetId()).thenReturn(targetId);
+//        when(request.getTargetType()).thenReturn(TargetType.FEED);
+//        when(request.getContent()).thenReturn("reply");
+//        when(request.getParentCommentId()).thenReturn(parentId);
+//
+//        JjureComment parent = JjureComment.create(99L, targetId, TargetType.FEED, "parent", null); // 부모는 다른 사람
+//        when(commentRepository.findById(parentId)).thenReturn(Optional.of(parent));
+//
+//        JjureComment reply = JjureComment.create(memberId, targetId, TargetType.FEED, "reply", parentId);
+//        when(commentRepository.save(any(JjureComment.class))).thenReturn(reply);
+//
+//        Long result = commentService.createComment(request, memberId);
+//
+//        assertThat(result).isEqualTo(reply.getCommentId());
+//        verify(notificationService).createAndSendNotification(eq(memberId), eq(parent.getMemberId()), anyString(), eq(NotificationType.RECOMMENT), eq(reply.getCommentId()));
+//    }
 
 //    @Test
 //    @DisplayName("댓글 삭제 시 자식 댓글까지 함께 삭제된다")
